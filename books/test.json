@@ -1,0 +1,51 @@
+[
+  {
+    "creationDate": 18977,
+    "status": "CLOSED",
+    "platform": {
+      "Fee": 7.0,
+      "Name": "Onvista Bank"
+    },
+	"stockName": "testInvestment",
+    "exchangeRate": 0.0,
+    "capital": 0.0,
+    "sellingPrice": 1633.0,
+    "absolutePerformance": -136.0,
+    "percentPerformance": -0.0775,
+    "cost": 14.0,
+    "sellingDate": 18977,
+    "holdingPeriod": 0
+  },
+  {
+    "creationDate": 18982,
+    "status": "OPEN",
+    "platform": {
+      "Fee": 7.0,
+      "Name": "Onvista Bank"
+    },
+	"stockName": "testInvestment",
+    "exchangeRate": 0.0,
+    "capital": 0.0,
+    "sellingPrice": 0.0,
+    "absolutePerformance": 0.0,
+    "percentPerformance": 0.0,
+    "cost": 7.0,
+    "holdingPeriod": 0
+  },
+  {
+    "creationDate": 18995,
+    "status": "OPEN",
+    "platform": {
+      "Fee": 7.0,
+      "Name": "Onvista Bank"
+    },
+    "stockName": "testInvestment",
+    "exchangeRate": 0.0,
+    "capital": 0.0,
+    "sellingPrice": 0.0,
+    "absolutePerformance": 0.0,
+    "percentPerformance": 0.0,
+    "cost": 7.0,
+    "holdingPeriod": 0
+  }
+]
