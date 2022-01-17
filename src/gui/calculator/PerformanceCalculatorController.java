@@ -61,7 +61,7 @@ public class PerformanceCalculatorController implements Initializable {
     //TODO JavaDoc
     private void handleCalculate() {
         double performance = currInvestment.calcPerformance(doubleOfTextField(sellingPrice));
-        setAndColorText(performance, performanceLbl);
+        setAndColorsText(performance, performanceLbl);
     }
 
     /**

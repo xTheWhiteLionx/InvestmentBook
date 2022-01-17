@@ -8,7 +8,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -34,7 +33,9 @@ import static javafx.scene.paint.Color.*;
  */
 public class GeneralMethods {
 
-    //TODO JavaDoc
+    /**
+     * icon/logo of the application
+     */
     public static final Image ICON = new Image("gui/textures/investmentBookIcon.png");
 
     /**
@@ -44,22 +45,17 @@ public class GeneralMethods {
     public static final String TXT_FIELD_REGEX = "^[0-9]+([,.][0-9][0-9])?$";
 
     /**
-     * StringArray of Attributes of an Investment
+     * Attributes of an {@link Investment}
      */
-    //TODO JavaDoc
-    public static final String[] ATTRIBUTES = {"creationDate", "status", "platform", "stockName", "exchangeRate", "capital",
-            "sellingPrice", "absolutePerformance", "percentPerformance", "cost"};
+    public static final String[] ATTRIBUTES = {"creationDate", "status", "platform", "stockName",
+            "exchangeRate", "capital", "sellingPrice", "absolutePerformance", "percentPerformance",
+            "cost"};
 
     /**
-     * Currency of the Investments
+     * symbol of the local currency
      */
-    public static final Currency CURRENCY = Currency.getInstance(Locale.getDefault());
-
-    //TODO JavaDoc
-    /**
-     *
-     */
-    public static final String SYMBOL_OF_CURRENCY = CURRENCY.getSymbol();
+    public static final String SYMBOL_OF_CURRENCY = Currency.getInstance(Locale.getDefault())
+            .getSymbol();
 
     /**
      * Length of the columns must be 20 or higher
@@ -67,19 +63,51 @@ public class GeneralMethods {
     protected static final int COL_LENGTH = 20; //min. 19 (length of the shortest line)
 
     /**
-     * The directory of the files
+     * The directory of the package of the json files
      */
-    //TODO delete and pull it to the write/read methode
     public static final String DIRECTORY = "books/";
 
-    public static void setCurrenciesForLbls(Label[] lbls) {
-        for (Label lbl : lbls) {
+//    /**
+//     * Sets the text of the given Labels to the
+//     * current currency symbol
+//     *
+//     * @param lbls array of currency labels
+//     */
+//    public static void setCurrenciesForLbls(Label[] lbls) {
+//        for (Label lbl : lbls) {
+//            lbl.setText(SYMBOL_OF_CURRENCY);
+//        }
+//    }
+
+    /**
+     * Sets the text of the given Labels to the
+     * current currency symbol
+     *
+     * @param labels currency labels
+     */
+    //TODO ask for pretty?
+    public static void setCurrenciesForLbls(Label... labels) {
+        for (Label lbl : labels) {
             lbl.setText(SYMBOL_OF_CURRENCY);
         }
     }
 
-    //TODO JavaDoc
+    /**
+     * Creates a modality stage/window out of the given fxml path.
+     * With the given title, width and height. And returns the loaded controller generic,
+     * depending on the given fxml path
+     *
+     * @param fxmlPath path of the fxml which should be loaded
+     * @param title    of the stage/window
+     * @param width    of the stage/window
+     * @param height   of the stage/window
+     * @param <T>      type of the controller, depending on the given fxml path
+     * @return controller, depending on the given fxml path
+     */
     public static <T> T createStage(String fxmlPath, String title, int width, int height) {
+        assert width > 0;
+        assert height > 0;
+
         final Stage newStage = new Stage();
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource(fxmlPath)));
 
@@ -98,72 +126,74 @@ public class GeneralMethods {
         return loader.getController();
     }
 
-    //TODO JavaDoc
-    public static boolean isValidDouble(TextField textField) {
-        assert textField != null;
-        return textField.getText().matches(TXT_FIELD_REGEX);
+    /**
+     * examines if the given text field matches the regex for
+     * a valid double
+     *
+     * @param txtFld to be examined text field
+     * @return true if the text, of the text field, is a valid double
+     * otherwise false
+     */
+    public static boolean isValidDouble(TextField txtFld) {
+        assert txtFld != null;
+        return txtFld.getText().matches(TXT_FIELD_REGEX);
     }
 
-    public static boolean areValidDoubles(TextField[] textFields) {
-        boolean areValidDoubles = true;
-        for (int i = 0; i < textFields.length && areValidDoubles; i++) {
-            areValidDoubles = isValidDouble(textFields[i]);
-        }
-        return areValidDoubles;
-    }
-
-    //TODO JavaDoc
-    public static <T> ChangeListener<T> createChangeListener(TextField textField, Button button) {
-        assert textField != null;
-        assert button != null;
+    /**
+     * Creates an changeListener which examines if the given text field is a valid double and
+     * depending on this validity, toggles the accessibility of the given button
+     *
+     * @param txtFld to be examined text field
+     * @param btn    the given button
+     * @return String changeListener
+     */
+    public static ChangeListener<String> createChangeListener(TextField txtFld, Button btn) {
+        assert txtFld != null;
+        assert btn != null;
         return (observable, oldValue, newValue) -> {
             //regex for only integers or double values
             // (only two decimal places are guaranteed)
-            button.setDisable(!isValidDouble(textField));
+            btn.setDisable(!isValidDouble(txtFld));
         };
     }
 
-    public static <T> ChangeListener<T> createChangeListener(DatePicker creationDatePicker,
-                                                             TextField stockNameTxtFld,
-                                                             TextField exchangeRateTxtFld,
-                                                             TextField capitalTxtFld,
-                                                             TextField sellingPriceTxtFld,
-                                                             DatePicker sellingDatePicker,
-                                                             Button button) {
-        assert stockNameTxtFld != null;
-        assert exchangeRateTxtFld != null;
-        assert capitalTxtFld != null;
-        assert sellingPriceTxtFld != null;
-        assert button != null;
-        return (observable, oldValue, newValue) -> {
-            //regex for only integers or double values
-            // (only two decimal places are guaranteed)
-            boolean someInputIsInvalid = creationDatePicker == null
-                    || stockNameTxtFld.getText().isEmpty()
-                    || !isValidDouble(exchangeRateTxtFld)
-                    || !isValidDouble(capitalTxtFld)
-                    //To be a valid investment the sellingDate and sellingPrice has to be both
-                    // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ isValidDouble(sellingPriceTxtFld));
+    /**
+     * Returns a double out of the given text field and
+     * replace dots with commas
+     *
+     * @param txtFld the given text field
+     * @return double out of text field
+     */
+    public static double doubleOfTextField(TextField txtFld) {
+        assert txtFld != null;
+        return Double.parseDouble(txtFld.getText().replace(",", "."));
+    }
 
-            button.setDisable(someInputIsInvalid);
-        };
+    /**
+     * Returns a string out of the given double value and
+     * replace commas with dots
+     *
+     * @param value the given double value
+     * @return string out of double value
+     */
+    public static String stringOfDouble(double value) {
+        return String.valueOf(value).replace(".", ",");
     }
 
     //TODO JavaDoc
-    public static double doubleOfTextField(TextField textField) {
-        assert textField != null;
-        return Double.parseDouble(textField.getText().replace(",", "."));
-    }
 
-    //TODO JavaDoc
-    public static String stringOfDouble(double number) {
-        return String.valueOf(number).replace(".", ",");
-    }
-
-    //TODO JavaDoc
-    public static void setAndColorText(double value, Label valueLbl) {
-        valueLbl.setText(stringOfDouble(value));
+    /**
+     * Sets the given value as text of the given label and
+     * colors the text depending on his value.
+     * + = green
+     * 0 = black
+     * - = red
+     *
+     * @param value    the given value
+     * @param valueLbl label to show the value
+     */
+    public static void setAndColorsText(double value, Label valueLbl) {
+        valueLbl.setText(stringOfDouble(roundDouble(value)));
         Paint color = BLACK;
         if (value > 0) {
             color = GREEN;
@@ -194,14 +224,20 @@ public class GeneralMethods {
     }
 
     /**
-     * @param d
+     * Rounds the given double
+     *
+     * @param value
      * @return
      */
     //TODO JavaDoc
-    public static double roundDouble(double d) {
+    public static double roundDouble(double value) {
         //TODO?
-//        return d <= 0.01 ? d : round(d * 100d) / 100d;
-        return round(d * 100d) / 100d;
+//        return value <= 0.01 ? value : round(value * 100d) / 100d;
+        return round(value * 100d) / 100d;
+
+//        BigDecimal bd = BigDecimal.valueOf(value);
+//        bd = bd.setScale(2, RoundingMode.HALF_UP);
+//        return bd.doubleValue();
     }
 
     /**

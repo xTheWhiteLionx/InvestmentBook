@@ -11,24 +11,25 @@ import logic.platform.Platform;
 import java.util.List;
 import java.util.Set;
 
-import static logic.GeneralMethods.roundDouble;
-import static logic.GeneralMethods.setAndColorText;
+import static logic.GeneralMethods.setAndColorsText;
 
 
 /**
  * This class is responsible for changing the gui when the logic deems it
  * necessary. Created by the gui and then passed as a parameter into the logic.
  *
- * @author Fabian Hardt
+ * @author xtheWhiteLionx
  */
 public class JavaFXGUI implements GUIConnector {
 
     /**
-     * All investments in a Tableview
+     * All {@link Investment}s in a Tableview
      */
     private final TableView<Investment> INVESTMENTS_TABLEVIEW;
 
-    //TODO JavaDoc
+    /**
+     * All {@link Platform}s in a Listview
+     */
     private final ListView<Platform> platformListView;
 
     /**
@@ -48,10 +49,9 @@ public class JavaFXGUI implements GUIConnector {
     private final Label TOTAL_PERFORMANCE_LABEL;
 
     /**
-     *
+     * label to show the current status
      */
-    //TODO JavaDoc
-    private final Label status;
+    private final Label STATUS;
 
     /**
      * sum of the total performance
@@ -62,6 +62,14 @@ public class JavaFXGUI implements GUIConnector {
     /**
      * The constructor. Gets past all components of the gui that may change
      * due to actions in the logic.
+     *
+     * @param investmentTableView     all investments in a Tableview
+     * @param platformListView        all platforms in a Listview
+     * @param platformFilterChoiceBox choiceBox of all platforms for the filter
+     * @param platformChoiceBox       choiceBox of all platforms to create a new investment
+     * @param totalPerformanceLabel   label to change the total performance
+     *                                of the displayed investments
+     * @param status                  label to change the current status
      */
     public JavaFXGUI(TableView<Investment> investmentTableView, ListView<Platform> platformListView,
                      ChoiceBox<Platform> platformFilterChoiceBox,
@@ -72,7 +80,7 @@ public class JavaFXGUI implements GUIConnector {
         this.PLATFORM_FILTER_CHOICE_BOX = platformFilterChoiceBox;
         this.PLATFORM_CHOICE_BOX = platformChoiceBox;
         this.TOTAL_PERFORMANCE_LABEL = totalPerformanceLabel;
-        this.status = status;
+        this.STATUS = status;
     }
 
     /**
@@ -80,15 +88,25 @@ public class JavaFXGUI implements GUIConnector {
      * red or black, depending on his value
      */
     private void updateTotalPerformance() {
-        setAndColorText(roundDouble(totalPerformance),TOTAL_PERFORMANCE_LABEL);
+        setAndColorsText(totalPerformance, TOTAL_PERFORMANCE_LABEL);
     }
 
-    private void updateStatus(String text){
+    /**
+     * Updates the status and cleans it after
+     */
+    //TODO status enum?
+    private void updateStatus(String text) {
+        this.STATUS.setText(text);
         //TODO how, maybe TimerTask?
-        this.status.setText(text);
-        this.status.setText("");
+        this.STATUS.setText("");
     }
 
+    /**
+     * Adds the over handed investment to the tableView and
+     * calculates the new total performance
+     *
+     * @param investment the investment to add
+     */
     private void addInvestment(Investment investment) {
         INVESTMENTS_TABLEVIEW.getItems().add(investment);
         totalPerformance += investment.getPerformance();
@@ -105,10 +123,9 @@ public class JavaFXGUI implements GUIConnector {
         INVESTMENTS_TABLEVIEW.getItems().clear();
         totalPerformance = 0;
         for (Investment investment : investmentList) {
-           addInvestment(investment);
+            addInvestment(investment);
         }
         updateTotalPerformance();
-        updateStatus("test");
     }
 
     @Override

@@ -16,7 +16,6 @@ import static logic.GeneralMethods.*;
 //TODO JavaDoc
 public class SellingPriceCalculatorController implements Initializable {
 
-
     @FXML
     private TextField targetPerformance;
     @FXML
@@ -67,7 +66,7 @@ public class SellingPriceCalculatorController implements Initializable {
                 investment.getPlatform().calcSellingExchangeRate(investment,
                 doubleOfTextField(targetPerformance)
         );
-        this.sellingExchangeRateLbl.setText(stringOfDouble(sellingExchangeRate));
+        sellingExchangeRateLbl.setText(stringOfDouble(sellingExchangeRate));
     }
 
     /**

@@ -8,9 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import logic.Investment;
 import logic.InvestmentBook;
 import logic.InvestmentBookView;
@@ -28,15 +26,17 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static gui.DialogWindow.saveDialogFile;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import static logic.GeneralMethods.*;
 import static logic.enums.FeeTypes.*;
+import static logic.enums.Quarter.getQuarterByMonth;
 
 
 /**
  * Controller of the graphical user interface.
  *
- * @author Fabian Hardt
+ * @author xthewhitelionx
  */
 public class UserInterfaceController implements Initializable {
 
@@ -262,7 +262,7 @@ public class UserInterfaceController implements Initializable {
             if (rdBtnFilterQuarter.isSelected()) {
                 yearCheckBox.setSelected(true);
                 //sets the current quarter by the current month
-                quarterChcBox.setValue(Quarter.getQuarterByMonth(currMonth));
+                quarterChcBox.setValue(getQuarterByMonth(currMonth));
                 rdBtnFilterMonth.setSelected(false);
             } else {
                 quarterChcBox.setValue(null);
@@ -523,22 +523,6 @@ public class UserInterfaceController implements Initializable {
         createInvestmentBookView(new File("newBook"));
     }
 
-    //TODO rename
-    //TODO JavaDoc
-    private void setCurrFile(boolean saving) {
-        FileChooser fileChooser = new FileChooser();
-        //ensure the dialog opens in the correct directory
-        fileChooser.setInitialDirectory(new File(DIRECTORY));
-        Window window = investmentTblVw.getScene().getWindow();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-        fileChooser.setTitle((saving ? "Save" : "Open") + " JSON Graph-File");
-        File file = saving ? fileChooser.showSaveDialog(window) :
-                fileChooser.showOpenDialog(window);
-        if (file != null) {
-            currFile = file;
-        }
-    }
-
     /**
      * Handles the "load game" button.
      */
@@ -546,7 +530,7 @@ public class UserInterfaceController implements Initializable {
     //TODO JavaDoc
     private void handleLoadBook() {
         System.out.println("program is loading");
-        setCurrFile(false);
+        saveDialogFile(investmentTblVw.getScene().getWindow());
         createInvestmentBookView(currFile);
     }
 
@@ -557,7 +541,6 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleSaveBook() {
         writeInvestmentBookToJson(investmentBookVw.getInvestmentBook(), currFile);
-        status.setText("File saved: " + currFile);
     }
 
     /**
@@ -566,7 +549,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleSaveBookAs() {
-        setCurrFile(true);
+        saveDialogFile(investmentTblVw.getScene().getWindow());
         handleSaveBook();
     }
 

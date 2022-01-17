@@ -408,19 +408,19 @@ public class Investment {
                 .append(calcSpaces(stockName.length()))
                 .append("|");
 
-        String str = String.format("%.2f %s", exchangeRate, CURRENCY);
+        String str = String.format("%.2f %s", exchangeRate, SYMBOL_OF_CURRENCY);
         builder.append(str)
                 .append(calcSpaces(str.length())).append("|");
 
-        str = String.format("%.2f %s", capital, CURRENCY);
+        str = String.format("%.2f %s", capital, SYMBOL_OF_CURRENCY);
         builder.append(str)
                 .append(calcSpaces(str.length())).append("|");
 
-        str = String.format("%.2f %s", sellingPrice, CURRENCY);
+        str = String.format("%.2f %s", sellingPrice, SYMBOL_OF_CURRENCY);
         builder.append(str)
                 .append(calcSpaces(str.length())).append("|");
 
-        str = String.format("%.2f %s", performance, CURRENCY);
+        str = String.format("%.2f %s", performance, SYMBOL_OF_CURRENCY);
         builder.append(str)
                 .append(calcSpaces(str.length())).append("|");
 
@@ -447,7 +447,7 @@ public class Investment {
                 .append(calcSpaces(platform.getName().length()))
                 .append(toStringShort());
 
-        String str = String.format("%.2f %s", cost, CURRENCY);
+        String str = String.format("%.2f %s", cost, SYMBOL_OF_CURRENCY);
         builder.append(str)
                 .append(calcSpaces(str.length())).append("|");
         builder.append("\n");

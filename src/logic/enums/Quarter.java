@@ -16,7 +16,9 @@ public enum Quarter {
     Q3(Month.JULY, Month.AUGUST, Month.SEPTEMBER),
     Q4(Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER);
 
-    //TODO JavaDoc
+    /**
+     * Set of months of the Quarter
+     */
     private final Set<Month> months;
 
     /**
@@ -34,15 +36,15 @@ public enum Quarter {
      * @return Set of months of the Quarter
      */
     public Set<Month> getMonths() {
-        return months;
+        return this.months;
     }
 
     /**
+     * Returns the quarter of the given month
      *
-     * @param month
-     * @return
+     * @param month the given month
+     * @return quarter of the month
      */
-    //TODO JavaDoc
     public static @NotNull Quarter getQuarterByMonth(Month month){
         for (Quarter quarter: Quarter.values()) {
             for (Month monthOfQuarter: quarter.months) {

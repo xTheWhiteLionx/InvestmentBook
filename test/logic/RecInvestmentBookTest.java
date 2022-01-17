@@ -228,14 +228,14 @@ public class RecInvestmentBookTest {
      */
     @Test
     public void testToStringShort() {
-        InvestmentBookView programm = new InvestmentBookView(new HashSet<>(), createShortTestInvestments()
+        InvestmentBookView program = new InvestmentBookView(new HashSet<>(), createShortTestInvestments()
                 , new FakeGUI());
         assertEquals("""
                 |stockName           |exchangeRate        |capital             |sellingPrice        |absolutePerformance |percentPerformance  |
                 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
                 |Amazon              |1755,00 EUR         |1755,00 EUR         |0,00 EUR            |0,00 EUR            |0,00 %              |
                 |Bitcoin             |27550,20 EUR        |2000,00 EUR         |0,00 EUR            |0,00 EUR            |0,00 %              |
-                """, programm.toStringShort());
+                """, program.toStringShort());
     }
 
     /**
@@ -245,14 +245,14 @@ public class RecInvestmentBookTest {
     @Test
     public void testToString() {
 
-        InvestmentBookView programm = new InvestmentBookView(new HashSet<>(), createShortTestInvestments()
+        InvestmentBookView program = new InvestmentBookView(new HashSet<>(), createShortTestInvestments()
                 , new FakeGUI());
         assertEquals("""
                 |creationDate        |status              |platform            |stockName           |exchangeRate        |capital             |sellingPrice        |absolutePerformance |percentPerformance  |cost                |
                 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
                 |2021-12-26          |OPEN                |Onvista Bank        |Amazon              |1755,00 EUR         |1755,00 EUR         |0,00 EUR            |0,00 EUR            |0,00 %              |7,00 EUR            |
                 |2021-12-26          |OPEN                |Coinbase            |Bitcoin             |27550,20 EUR        |2000,00 EUR         |0,00 EUR            |0,00 EUR            |0,00 %              |29,80 EUR           |
-                """, programm.toString());
+                """, program.toString());
     }
 
     /**

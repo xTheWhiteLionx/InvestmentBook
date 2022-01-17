@@ -58,15 +58,21 @@ public class InvestmentController implements Initializable {
     @FXML
     private Button btnCancel;
 
-    private Label[] currencyLbls;
-
-    //TODO JavaDoc
+    /**
+     * the current controlled investment
+     */
     private Investment currInvestment;
 
-    //TODO JavaDoc
+    /**
+     * the current {@link InvestmentBookView}
+     */
     private InvestmentBookView investmentBookView;
 
-    //TODO JavaDoc
+    /**
+     * Sets and show the current {@link Investment} with his detailed information
+     *
+     * @param selectedInvestment the over handed investment
+     */
     public void setCurrInvestment(Investment selectedInvestment) {
         this.currInvestment = selectedInvestment;
         Status investStatus = currInvestment.getStatus();
@@ -89,6 +95,7 @@ public class InvestmentController implements Initializable {
                 (currInvestment.getPerformance() + " ").replace(".", ",");
         costLbl.setText(cost + " " + SYMBOL_OF_CURRENCY);
         LocalDate investmentSellDate = currInvestment.getSellingDate();
+        //TODO?
 //        sellingDatePicker.setValue(
 //                investmentSellDate != null ? investmentSellDate : LocalDate.now()
 //        );
@@ -99,15 +106,21 @@ public class InvestmentController implements Initializable {
         exchangeRateTxtFld.setDisable(investIsClosed);
         capitalTxtFld.setDisable(investIsClosed);
         sellingPriceTxtFld.setDisable(investIsClosed);
-
-        setCurrenciesForLbls(currencyLbls);
     }
 
-    //TODO JavaDoc
+    /**
+     * Sets the current {@link InvestmentBookView}
+     *
+     * @param investmentBookView the over handed investment
+     */
     public void setInvestmentBookView(InvestmentBookView investmentBookView) {
         this.investmentBookView = investmentBookView;
     }
 
+    /**
+     * creates and adds a changeListener to the controller
+     * items of the investment to regular the accessibility of the apply button
+     */
     private void initializeApplyListener() {
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
@@ -138,11 +151,12 @@ public class InvestmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        currencyLbls = new Label[]{
+        //all the currency labels as array
+        setCurrenciesForLbls(
                 exchangeRateCurrencyLbl,
                 capitalCurrencyLbl,
                 sellingPriceCurrencyLbl
-        };
+        );
         initializeApplyListener();
     }
 
@@ -156,11 +170,11 @@ public class InvestmentController implements Initializable {
     }
 
     /**
-     * Handles the "Apply" Button and hands over the Initializations.
+     * Handles the "Apply" Button and hands over
+     * the (new) {@link Investment} attributes
      */
     @FXML
     //TODO outsource to a methode in investmentBook
-    //TODO JavaDoc
     private void handleApply() {
         currInvestment.setCreationDate(creationDatePicker.getValue());
         currInvestment.setStockName(stockNameTxtFld.getText());
@@ -175,31 +189,32 @@ public class InvestmentController implements Initializable {
     }
 
     /**
-     * Handles the "Apply" Button and hands over the Initializations.
+     * Handles the "selling price calculator" Button and hands over
+     * the current investment.
      */
     @FXML
-    //TODO JavaDoc
     private void handleSellingPriceCalculator() {
-        SellingPriceCalculatorController investController =
+        SellingPriceCalculatorController sellingPriceCalculatorController =
                 createStage("calculator/SellingPriceCalculatorController.fxml",
-                        "Selling price Calculator: " + currInvestment.getStockName(),
+                        "selling price calculator: " + currInvestment.getStockName(),
                         350,
                         200
                 );
-        investController.setInvestment(currInvestment);
+        sellingPriceCalculatorController.setInvestment(currInvestment);
     }
 
     /**
-     * Handles the "Apply" Button and hands over the Initializations.
+     * Handles the "performance calculator" Button and hands over
+     * the current investment.
      */
     @FXML
-    //TODO JavaDoc
     private void handlePerformanceCalculator() {
-        PerformanceCalculatorController investController =
+        PerformanceCalculatorController performanceCalculatorController =
                 createStage("calculator/PerformanceCalculatorController.fxml",
-                        "Performance Calculator: " + currInvestment.getStockName(),
+                        "performance calculator: " + currInvestment.getStockName(),
                         350,
-                        200);
-        investController.setInvestment(currInvestment);
+                        200
+                );
+        performanceCalculatorController.setInvestment(currInvestment);
     }
 }
