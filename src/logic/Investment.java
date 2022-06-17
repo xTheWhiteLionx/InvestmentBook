@@ -1,6 +1,5 @@
 package logic;
 
-import logic.enums.Status;
 import logic.platform.Platform;
 
 import java.time.LocalDate;
@@ -8,14 +7,15 @@ import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static logic.GeneralMethods.*;
-import static logic.enums.Status.*;
+import static logic.Status.CLOSED;
+import static logic.Status.OPEN;
 
 /**
  * This class contains the Investment logic.
  *
  * @author Fabian Hardt
  */
-public class Investment {
+public class Investment implements Comparable<Investment>{
 
     /**
      * Creation Date of the investment as
@@ -27,7 +27,7 @@ public class Investment {
      * Status of the investment
      * (must be either open or closed)
      */
-    private Status status;
+    private Status status = OPEN;
 
     /**
      * Platform of the investment
@@ -53,18 +53,18 @@ public class Investment {
      * Selling price of the investment,
      * if it is 0 then it was not sold yet
      */
-    private double sellingPrice;
+    private double sellingPrice = 0;
 
     /**
      * Performance of the investment
      */
-    private double performance;
+    private double performance = 0;
 
     /**
      * Performance of the investment in percent,
      * depending on the capital
      */
-    private double percentPerformance;
+    private double percentPerformance = 0;
 
     /**
      * Costs of the investment
@@ -80,7 +80,7 @@ public class Investment {
     /**
      * Holding period of the investment in days
      */
-    private long holdingPeriod;
+    private long holdingPeriod = 0;
 
     /**
      * Constructor for a new (open) Investment, with calling of the constructor.
@@ -101,17 +101,11 @@ public class Investment {
         assert capital > 0;
 
         this.creationDate = creationDate;
-        this.status = OPEN;
         this.platform = platform;
         this.stockName = stockName;
         this.exchangeRate = exchangeRate;
         this.capital = capital;
-        this.sellingPrice = 0;
         this.cost = platform.getFee(capital);
-        this.performance = 0;
-        this.percentPerformance = 0;
-        this.sellingDate = null;
-        this.holdingPeriod = 0;
     }
 
     /**
@@ -251,9 +245,7 @@ public class Investment {
     //TODO JavaDoc
     public void setExchangeRate(double newExchangeRate) {
         if (newExchangeRate > 0) {
-            if (exchangeRate != newExchangeRate) {
-                exchangeRate = newExchangeRate;
-            }
+            exchangeRate = newExchangeRate;
         } else {
             //TODO write case
             throw new IllegalArgumentException("");
@@ -298,7 +290,7 @@ public class Investment {
     //TODO JavaDoc
     public double calcPerformance(double sellingPrice) {
         if (sellingPrice >= 0) {
-            return roundDouble(sellingPrice - (capital + cost));
+            return round(sellingPrice - (capital + cost));
         } else {
             //TODO write case
             throw new IllegalArgumentException("");
@@ -334,7 +326,7 @@ public class Investment {
                             cost = platform.getFee(capital);
                         }
                         //updates the cost of the investment
-                        cost = roundDouble(cost + platform.getFee(newSellingPrice));
+                        cost = round(cost + platform.getFee(newSellingPrice));
                         //calculated performance
                         performance = calcPerformance(newSellingPrice);
                         System.out.println(performance);
@@ -397,90 +389,55 @@ public class Investment {
     }
 
     /**
-     * Converts the Investments into a string, but only a short version.
      *
-     * @return a string representing some information of the Investments
+     * @param other
+     * @return
      */
-    protected String toStringShort() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("|")
-                .append(stockName)
-                .append(calcSpaces(stockName.length()))
-                .append("|");
-
-        String str = String.format("%.2f %s", exchangeRate, SYMBOL_OF_CURRENCY);
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-
-        str = String.format("%.2f %s", capital, SYMBOL_OF_CURRENCY);
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-
-        str = String.format("%.2f %s", sellingPrice, SYMBOL_OF_CURRENCY);
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-
-        str = String.format("%.2f %s", performance, SYMBOL_OF_CURRENCY);
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-
-        str = String.format("%.2f", percentPerformance) + " %";
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-
-        return builder.toString();
+    @Override
+    public int compareTo(Investment other) {
+        return this.creationDate.compareTo(other.creationDate);
     }
 
+    /**
+     * Converts the Investment into a string.
+     *
+     * @return a string representing of the Investment
+     */
     @Override
     public String toString() {
-
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("|")
-                .append(creationDate)
-                .append(calcSpaces(creationDate.toString().length()))
-                .append("|")
-                .append(status.name())
-                .append(calcSpaces(status.name().length()))
-                .append("|")
-                .append(platform.getName())
-                .append(calcSpaces(platform.getName().length()))
-                .append(toStringShort());
-
-        String str = String.format("%.2f %s", cost, SYMBOL_OF_CURRENCY);
-        builder.append(str)
-                .append(calcSpaces(str.length())).append("|");
-        builder.append("\n");
-
-        return builder.toString();
+        return "Investment{" +
+                "creationDate=" + creationDate + "\n" +
+                ", status=" + status + "\n" +
+                ", platform=" + platform + "\n" +
+                ", stockName='" + stockName + '\'' + "\n" +
+                ", exchangeRate=" + exchangeRate + "\n" +
+                ", capital=" + capital + "\n" +
+                ", sellingPrice=" + sellingPrice + "\n" +
+                ", performance=" + performance + "\n" +
+                ", percentPerformance=" + percentPerformance + "\n" +
+                ", cost=" + cost + "\n" +
+                ", sellingDate=" + sellingDate + "\n" +
+                ", holdingPeriod=" + holdingPeriod +
+                '}';
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Investment that)) return false;
-        return that.exchangeRate == exchangeRate
-                && that.capital == capital
-                && that.sellingPrice == sellingPrice
-                && that.performance == performance
-                && that.percentPerformance == percentPerformance
-                && that.cost == cost
-                && status == that.status
-                && platform.equals(that.platform)
-                && stockName.equals(that.stockName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(status,
-                platform,
-                stockName,
-                exchangeRate,
-                capital,
-                sellingPrice,
-                performance,
-                percentPerformance,
-                cost
-        );
+        return this.exchangeRate == that.exchangeRate
+                && this.capital == that.capital
+                && this.sellingPrice == that.sellingPrice
+                && this.performance == that.performance
+                && this.percentPerformance == that.percentPerformance
+                && this.cost == that.cost
+                && this.status == that.status
+                && this.platform.equals(that.platform)
+                && this.stockName.equals(that.stockName);
     }
 }

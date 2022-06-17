@@ -8,16 +8,33 @@ import java.util.Objects;
 
 import static logic.GeneralMethods.*;
 
-//TODO JavaDoc
+/**
+ * This class is contains the percent platform logic and
+ * is an offshoot of the class platform
+ *
+ * @see Platform
+ * @see AbsolutePlatform
+ * @see MixedPlatform
+ * @author xthe_white_lionx
+ */
 public class PercentPlatform extends Platform {
 
-    //TODO JavaDoc
-    private final String name;
+    /**
+     * Name of the platform
+     */
+    private String name;
 
-    //TODO JavaDoc
+    /**
+     * Value of the fee of the platform
+     */
     private double percent;
 
-    //TODO JavaDoc
+    /**
+     * Constructs an {@code PercentPlatform} with the specified arguments.
+     *
+     * @param name of the platform
+     * @param percent value of the fee of the platform
+     */
     public PercentPlatform(String name, double percent) {
         this.name = name;
         this.percent = percent;
@@ -29,17 +46,37 @@ public class PercentPlatform extends Platform {
     }
 
     @Override
-    public double getFee(double price) {
-        return roundDouble((percent /100d) * price);
+    public void setName(String name) {
+        this.name = name;
     }
 
-    //TODO JavaDoc
+    @Override
+    public double getFee(double price) {
+        return round((percent /100d) * price);
+    }
+
+    @Override
+    public String getFxmlPath() {
+        return "platformController/PercentPlatformController.fxml";
+    }
+
+    /**
+     * Returns the value of the fee of the platform
+     *
+     * @return value of the fee of the platform
+     */
     public double getPercent(){
         return percent;
     }
 
-    //TODO JavaDoc
+    /**
+     * Sets the value of the fee of the platform to the specified percent
+     *
+     * @param percent which should be set
+     */
     public void setPercent(double percent) {
+        assert percent >= 0;
+
         this.percent = percent;
     }
 
@@ -58,7 +95,7 @@ public class PercentPlatform extends Platform {
             percentPerformance += 100;
         }
 
-        return roundDouble(investment.getExchangeRate() * (percentPerformance / 100d));
+        return round(investment.getExchangeRate() * (percentPerformance / 100d));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package gui.calculator;
 
+import gui.Helper;
+import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,8 +14,6 @@ import logic.platform.Platform;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
-
-import static logic.GeneralMethods.*;
 
 /**
  * Controller of the graphical fee calculator.
@@ -53,13 +53,10 @@ public class FeeCalculatorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Label[] currencyLbls = {
-                capitalCurrencyLbl,
-                feeCurrencyLbl
-        };
-        setCurrenciesForLbls(currencyLbls);
+        Style.setCurrenciesForLbls(capitalCurrencyLbl,
+                feeCurrencyLbl);
         applyBtn.setDisable(true);
-        capitalTxtField.textProperty().addListener(createChangeListener(capitalTxtField, applyBtn));
+        capitalTxtField.textProperty().addListener(Helper.createChangeListener(capitalTxtField, applyBtn));
     }
 
     /**
@@ -69,8 +66,8 @@ public class FeeCalculatorController implements Initializable {
     //TODO JavaDoc
     @FXML
     private void handleCalculate() {
-        double capital = platformChoiceBox.getValue().getFee(doubleOfTextField(capitalTxtField));
-        feeLbl.setText(stringOfDouble(capital));
+        double capital = platformChoiceBox.getValue().getFee(Helper.doubleOfTextField(capitalTxtField));
+        feeLbl.setText(Helper.stringOfDouble(capital));
     }
 
     /**

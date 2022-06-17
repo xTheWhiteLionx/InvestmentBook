@@ -70,33 +70,33 @@
                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                </GridPane.margin>
                            </TextField>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                           <children>
-                                 <TextField fx:id="feeTxtFld" promptText="fee" />
-                              <Label fx:id="feeTypeSymbolLbl">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
+                           <HBox alignment="CENTER_LEFT" GridPane.columnIndex="2"
+                                 GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                                 GridPane.valignment="CENTER">
+                               <GridPane.margin>
+                                   <Insets/>
+                               </GridPane.margin>
+                               <TextField fx:id="feeTxtFld" promptText="fee"/>
+                               <Label fx:id="feeTypeSymbolLbl">
+                                   <HBox.margin>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                   </HBox.margin>
+                               </Label>
+                           </HBox>
                            <Label text="Fee type" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                <font>
                                    <Font name="System Bold" size="12.0" />
                                </font>
                            </Label>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <children>
-                                 <TextField fx:id="minTxtFld" promptText="min" />
-                              <Label fx:id="minCurrencyLbl">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin></Label>
-                           </children>
-                        </HBox>
+                           <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3"
+                                 GridPane.rowIndex="1">
+                               <TextField fx:id="minTxtFld" promptText="min"/>
+                               <Label fx:id="minCurrencyLbl">
+                                   <HBox.margin>
+                                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                   </HBox.margin>
+                               </Label>
+                           </HBox>
                            <Label layoutX="287.0" layoutY="21.0" text="min" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                <font>
                                    <Font name="System Bold" size="12.0" />
@@ -124,7 +124,7 @@
                            </opaqueInsets>
                        </GridPane>
                        <Button fx:id="btnDeletePlatform" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleDeletePlatform" text="delete selected Row" />
-                       <ListView fx:id="platformListView" onMouseClicked="#clickPlatform">
+                       <ListView fx:id="platformLstVw" onMouseClicked="#clickPlatform">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
@@ -177,7 +177,7 @@
                                     <Insets left="5.0" right="5.0" top="5.0" />
                                 </VBox.margin>
                             </Label>
-                            <ChoiceBox fx:id="platformChoiceBox" prefWidth="110.0">
+                            <ChoiceBox fx:id="platformChcBx" prefWidth="110.0">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList" />
                                 </items>
@@ -311,7 +311,7 @@
                                         <Font name="System Bold" size="12.0" />
                                     </font>
                                 </Label>
-                                <ChoiceBox fx:id="platformChoiceBox2" layoutX="12.0" layoutY="69.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                <ChoiceBox fx:id="platformChcBx2" layoutX="12.0" layoutY="69.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                         </FXCollections>
@@ -335,49 +335,46 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
                                 </TextField>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                           <children>
-                                      <TextField fx:id="exchangeRateTxtFld">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                                      </TextField>
-                              <Label fx:id="exchangeRateCurrencyLbl">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="4" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                           <children>
-                                      <TextField fx:id="capitalTxtFld" />
-                              <Label fx:id="capitalCurrencyLbl">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="6" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                           <children>
-                                      <TextField fx:id="sellingPriceTxtFld" />
-                              <Label fx:id="sellingPriceCurrencyLbl">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
+                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="3"
+                                      GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                    <TextField fx:id="exchangeRateTxtFld">
+                                        <HBox.margin>
+                                            <Insets/>
+                                        </HBox.margin>
+                                    </TextField>
+                                    <Label fx:id="exchangeRateCurrencyLbl">
+                                        <HBox.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        </HBox.margin>
+                                    </Label>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="4"
+                                      GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                    <TextField fx:id="capitalTxtFld"/>
+                                    <Label fx:id="capitalCurrencyLbl">
+                                        <HBox.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        </HBox.margin>
+                                    </Label>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="6"
+                                      GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                    <TextField fx:id="sellingPriceTxtFld"/>
+                                    <Label fx:id="sellingPriceCurrencyLbl">
+                                        <HBox.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        </HBox.margin>
+                                    </Label>
+                                </HBox>
                                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="77.0" text="selling price" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                     <font>
                                         <Font name="System Bold" size="12.0" />
@@ -472,7 +469,7 @@
                 <Menu mnemonicParsing="false" text="File">
                     <MenuItem mnemonicParsing="false" onAction="#handleNewBook" text="New" />
                     <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#handleLoadBook" text="Open...">
+                    <MenuItem mnemonicParsing="false" onAction="#handleOpenBook" text="Open...">
                         <graphic>
                             <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                 <Image url="@textures/openIcon.png" />

@@ -41,6 +41,8 @@ public interface GUIConnector {
     //TODO JavaDoc
     void addInvestmentOnDisplay(Investment investment);
 
+    void deleteInvestment(Investment investment);
+
     /**
      * Displays what should the player have to do next,
      * depending of a row or a column has already been pushed.
@@ -52,5 +54,4 @@ public interface GUIConnector {
 
     //TODO JavaDoc
     void deletePlatform(Platform platform);
-
 }

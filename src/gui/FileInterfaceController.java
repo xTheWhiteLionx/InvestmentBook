@@ -10,12 +10,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.openDialogFile;
-import static logic.GeneralMethods.createStage;
+import static gui.Helper.createStage;
 
 /**
- * Controller of the graphical file interface controller.
+ * Controller of the graphical file interface.
  *
- * @author xthewhitelionx
+ * @author xthe_white_lionx
  */
 public class FileInterfaceController implements Initializable {
 
@@ -38,8 +38,7 @@ public class FileInterfaceController implements Initializable {
         Stage stage = (Stage) loadBook.getScene().getWindow();
         stage.close();
         UserInterfaceController userInterfaceController = createStage(
-                "UserInterfaceController" +
-                        ".fxml",
+                "UserInterfaceController.fxml",
                 "Investment Book",
                 1200,
                 650);
@@ -59,6 +58,8 @@ public class FileInterfaceController implements Initializable {
      */
     public void handleLoadBook() {
         File selectedFile = openDialogFile(loadBook.getScene().getWindow());
-        createUserInterfaceController(selectedFile);
+        if (selectedFile != null) {
+            createUserInterfaceController(selectedFile);
+        }
     }
 }

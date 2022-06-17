@@ -1,5 +1,7 @@
 package gui.calculator;
 
+import gui.Helper;
+import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -10,8 +12,6 @@ import logic.Investment;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static logic.GeneralMethods.*;
 
 //TODO JavaDoc
 public class SellingPriceCalculatorController implements Initializable {
@@ -45,14 +45,11 @@ public class SellingPriceCalculatorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Label[] currencyLbls = {
-                targetPerformanceCurrency,
-                sellingExchangeRateCurrency
-        };
-        setCurrenciesForLbls(currencyLbls);
+        Style.setCurrenciesForLbls(targetPerformanceCurrency,
+                sellingExchangeRateCurrency);
         btnCalculate.setDisable(true);
         targetPerformance.textProperty().addListener(
-                createChangeListener(targetPerformance,btnCalculate)
+                Helper.createChangeListener(targetPerformance,btnCalculate)
         );
     }
 
@@ -64,9 +61,9 @@ public class SellingPriceCalculatorController implements Initializable {
     private void handleCalculate() {
         double sellingExchangeRate =
                 investment.getPlatform().calcSellingExchangeRate(investment,
-                doubleOfTextField(targetPerformance)
+                Helper.doubleOfTextField(targetPerformance)
         );
-        sellingExchangeRateLbl.setText(stringOfDouble(sellingExchangeRate));
+        sellingExchangeRateLbl.setText(Helper.stringOfDouble(sellingExchangeRate));
     }
 
     /**

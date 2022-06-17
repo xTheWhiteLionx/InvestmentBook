@@ -10,7 +10,7 @@ import static logic.GeneralMethods.DIRECTORY;
 /**
  * This class contains the dialog window methods.
  *
- * @author xthewhitelionx
+ * @author xthe_white_lionx
  */
 public class DialogWindow {
 
@@ -27,6 +27,8 @@ public class DialogWindow {
 
     //TODO JavaDoc
     public static File openDialogFile(Window window) {
+        assert window != null;
+
         FileChooser fileChooser = createFileChooser();
         fileChooser.setTitle("Open JSON Graph-File");
         return fileChooser.showOpenDialog(window);
@@ -34,6 +36,8 @@ public class DialogWindow {
 
     //TODO JavaDoc
     public static File saveDialogFile(Window window) {
+        assert window != null;
+
         FileChooser fileChooser = createFileChooser();
         fileChooser.setTitle("Save JSON Graph-File");
         return fileChooser.showSaveDialog(window);

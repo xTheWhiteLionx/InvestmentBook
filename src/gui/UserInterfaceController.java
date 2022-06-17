@@ -1,6 +1,7 @@
 package gui;
 
 import gui.calculator.FeeCalculatorController;
+import gui.platformController.PlatformController;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,12 +10,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import logic.Investment;
-import logic.InvestmentBook;
-import logic.InvestmentBookView;
-import logic.enums.FeeTypes;
-import logic.enums.Quarter;
-import logic.enums.Status;
+import logic.Status;
+import logic.*;
+import logic.platform.AbsolutePlatform;
+import logic.platform.MixedPlatform;
+import logic.platform.PercentPlatform;
 import logic.platform.Platform;
 
 import java.io.File;
@@ -23,14 +23,16 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static gui.DialogWindow.openDialogFile;
 import static gui.DialogWindow.saveDialogFile;
+import static gui.FeeType.*;
+import static gui.Message.acceptedDeleteAlert;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
-import static logic.GeneralMethods.*;
-import static logic.enums.FeeTypes.*;
-import static logic.enums.Quarter.getQuarterByMonth;
+import static logic.GeneralMethods.DIRECTORY;
+import static gui.Style.SYMBOL_OF_CURRENCY;
+import static logic.Quarter.getQuarterByMonth;
 
 
 /**
@@ -44,9 +46,11 @@ public class UserInterfaceController implements Initializable {
     private Label fileNameLbl;
     @FXML
     private CheckMenuItem autoSave;
+
     //TODO implement
     @FXML
     public Label status;
+    //TODO implement
     @FXML
     public ProgressBar progressBar;
 
@@ -55,7 +59,7 @@ public class UserInterfaceController implements Initializable {
      * content of the platform Tab
      */
     @FXML
-    private ChoiceBox<FeeTypes> feeTypesChcBox;
+    private ChoiceBox<FeeType> feeTypesChcBox;
     @FXML
     private TextField platformNameTxtFld;
     @FXML
@@ -71,7 +75,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private Button btnDeletePlatform;
     @FXML
-    private ListView<Platform> platformListView;
+    private ListView<Platform> platformLstVw;
 
     /**
      * content of the investment Tab
@@ -80,7 +84,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private ChoiceBox<Status> statusChoiceBox;
     @FXML
-    private ChoiceBox<Platform> platformChoiceBox;
+    private ChoiceBox<Platform> platformChcBx;
     @FXML
     private TextField filterStockNameTxtFld;
     @FXML
@@ -102,7 +106,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private DatePicker creationDatePicker;
     @FXML
-    private ChoiceBox<Platform> platformChoiceBox2;
+    private ChoiceBox<Platform> platformChcBx2;
     @FXML
     private TextField stockNameTxtFld;
     @FXML
@@ -132,51 +136,58 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private Label totalPerformanceCurrencyLbl;
 
-//    private final Label[] CurrencyLbls = {
-//            minCurrencyLbl,
-//            exchangeRateCurrencyLbl,
-//            capitalCurrencyLbl,
-//            sellingPriceCurrencyLbl,
-//            totalPerformanceCurrencyLbl
-//    };
+    /**
+     *
+     */
+    //TODO JavaDoc
+    private ChoiceBox<Platform>[] platformChcBxs;
 
     /**
-     * The current {@link InvestmentBookView}
+     *
      */
-    private InvestmentBookView investmentBookVw;
+    //TODO JavaDoc
+    private Label[] currencyLbls;
 
     /**
-     * The current file (name)
+     * The current {@link InvestmentBook}
      */
-    //TODO delete and pull it to the FileController
-    //TODO create FileController/LoginController
-//    private File currFile = new File("books/Investments.json");
+    private InvestmentBook investmentBook;
+
+    /**
+     * The current file
+     */
     private File currFile;
 
+    /**
+     * @param selectedFile
+     */
+    //TODO JavaDoc
     public void setFile(File selectedFile) {
         if (selectedFile == null) {
             selectedFile = new File(DIRECTORY + "newBook.json");
         }
         currFile = selectedFile;
-        createInvestmentBookView(currFile);
+        initInvestmentBook();
     }
 
-    //TODO JavaDoc
+    /**
+     * Creates and adds a changeListener to the add platform items
+     * to regular the accessibility of the add platform button
+     */
     private void initializeAddPlatformListener() {
         //Listener of the add platform attributes to make the btnAddPlatform enable or disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
-            FeeTypes feeType = feeTypesChcBox.getValue();
+            FeeType feeType = feeTypesChcBox.getValue();
             boolean isNotMixedPlatform = feeType != MIXED;
             boolean nameAndFeeAreInvalid =
-                    platformNameTxtFld.getText().isEmpty() || !isValidDouble(feeTxtFld);
-
+                    platformNameTxtFld.getText().isEmpty() || !Helper.isValidDouble(feeTxtFld);
 
             if (isNotMixedPlatform) {
                 minTxtFld.setText("");
                 btnAddPlatform.setDisable(nameAndFeeAreInvalid);
             } else {
                 // examines if all fields have invalid input
-                btnAddPlatform.setDisable(nameAndFeeAreInvalid || !isValidDouble(minTxtFld));
+                btnAddPlatform.setDisable(nameAndFeeAreInvalid || !Helper.isValidDouble(minTxtFld));
             }
             minTxtFld.setDisable(isNotMixedPlatform);
             feeTypeSymbolLbl.setText(feeType == ABSOLUTE ? SYMBOL_OF_CURRENCY : "%");
@@ -190,51 +201,45 @@ public class UserInterfaceController implements Initializable {
         minTxtFld.textProperty().addListener(FieldValidityListener);
     }
 
-    //TODO JavaDoc
+    /**
+     * Initialize the platform tab and
+     * sets the default values
+     */
     private void initializePlatformTab() {
 
-        feeTypesChcBox.getItems().addAll(FeeTypes.values());
+        feeTypesChcBox.getItems().addAll(FeeType.values());
         feeTypesChcBox.setValue(PERCENT);
         feeTypeSymbolLbl.setText("%");
         initializeAddPlatformListener();
 
-        //TODO rename
-        ChangeListener<Platform> selectedPlatformListener = (observable, oldValue, newValue) ->
-                btnDeletePlatform.setDisable(newValue == null);
-
-        platformListView.getSelectionModel().selectedItemProperty().addListener(
-                selectedPlatformListener
+        //changeListener to regular the accessibility of the delete row button
+        platformLstVw.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) ->
+                        btnDeletePlatform.setDisable(newValue == null)
         );
     }
 
-    //TODO JavaDoc
+    /**
+     * Creates and adds a changeListener to the add investment items
+     * to regular the accessibility of the add platform button
+     */
     private void initializeAddInvestmentListener() {
-
-//        Listener of the add investment attributes to make the btnAddInvestment enable/disable
+//        Listener to regular the accessibility of the add investment button
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
-                    || platformChoiceBox2.getValue() == null
-                    || !isValidDouble(exchangeRateTxtFld)
-                    || !isValidDouble(capitalTxtFld)
+                    || platformChcBx2.getValue() == null
+                    || !Helper.isValidDouble(exchangeRateTxtFld)
+                    || !Helper.isValidDouble(capitalTxtFld)
                     || stockNameTxtFld.getText().isEmpty()
                     //To be a valid investment the sellingDate and sellingPrice has to be both
                     // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ isValidDouble(sellingPriceTxtFld));
+                    || (sellingDatePicker.getValue() != null ^ Helper.isValidDouble(sellingPriceTxtFld));
 
             btnAddInvestment.setDisable(someInputIsInvalid);
         };
 
-//        ChangeListener<Object> FieldValidityListener = createChangeListener(
-//                creationDatePicker,
-//                stockNameTxtFld,
-//                exchangeRateTxtFld,
-//                capitalTxtFld,
-//                sellingPriceTxtFld,
-//                sellingDatePicker,
-//                btnAddInvestment);
-
         creationDatePicker.valueProperty().addListener(FieldValidityListener);
-        platformChoiceBox2.valueProperty().addListener(FieldValidityListener);
+        platformChcBx2.valueProperty().addListener(FieldValidityListener);
         stockNameTxtFld.textProperty().addListener(FieldValidityListener);
         exchangeRateTxtFld.textProperty().addListener(FieldValidityListener);
         capitalTxtFld.textProperty().addListener(FieldValidityListener);
@@ -242,7 +247,11 @@ public class UserInterfaceController implements Initializable {
         sellingDatePicker.valueProperty().addListener(FieldValidityListener);
     }
 
-    //TODO JavaDoc
+    /**
+     * Creates and adds the changeListeners to the filter items
+     * to regular the accessibility of the filter apply button and
+     * the toggle between the quarter and month filter option
+     */
     private void initializeFilterListener() {
         Month currMonth = LocalDate.now().getMonth();
 
@@ -287,9 +296,24 @@ public class UserInterfaceController implements Initializable {
         rdBtnFilterMonth.selectedProperty().addListener(filterMonthListener);
         rdBtnFilterQuarter.selectedProperty().addListener(filterQuarterListener);
         yearCheckBox.selectedProperty().addListener(filterYearListener);
+        yearSpinner.setValueFactory(new IntegerSpinnerValueFactory(0, 0, 0));
     }
 
-    //TODO JavaDoc
+    /**
+     * Creates and adds the changeListeners to the filter items
+     * to regular the accessibility of the filter apply button and
+     * the toggle between the quarter and month filter option
+     */
+    private void initializeFilterOptions() {
+        statusChoiceBox.getItems().addAll(Status.values());
+        monthChcBox.getItems().addAll(Month.values());
+        quarterChcBox.getItems().addAll(Quarter.values());
+    }
+
+    /**
+     * Initialize the investment tab, the Tableview and
+     * sets the default values
+     */
     private void initializeInvestmentTab() {
         TableColumn<Investment, LocalDate> creationDateColumn = new TableColumn<>("creationDate");
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
@@ -299,7 +323,7 @@ public class UserInterfaceController implements Initializable {
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
         TableColumn<Investment, String> stockNameColumn = new TableColumn<>("stock name");
         stockNameColumn.setCellValueFactory(new PropertyValueFactory<>("stockName"));
-        TableColumn<Investment, String> exchangeRateColumn = new TableColumn<>("exchange Rate" +
+        TableColumn<Investment, Double> exchangeRateColumn = new TableColumn<>("exchange Rate" +
                 " " + SYMBOL_OF_CURRENCY);
         exchangeRateColumn.setCellValueFactory(new PropertyValueFactory<>("exchangeRate"));
         TableColumn<Investment, Double> capitalColumn = new TableColumn<>("capital" + " " +
@@ -333,41 +357,21 @@ public class UserInterfaceController implements Initializable {
         );
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        statusChoiceBox.getItems().addAll(Status.values());
-        monthChcBox.getItems().addAll(Month.values());
-        quarterChcBox.getItems().addAll(Quarter.values());
-
+        initializeFilterOptions();
         initializeAddInvestmentListener();
         initializeFilterListener();
 
-        //TODO implement
-        ChangeListener<Investment> c = (observable, oldValue, newValue) -> btnDeleteInvestment.setDisable(newValue == null);
-
-        investmentTblVw.getSelectionModel().selectedItemProperty().addListener(c);
+        investmentTblVw.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> btnDeleteInvestment.setDisable(newValue == null)
+        );
     }
 
-//    //TODO JavaDoc
-//    private void initializeCurrenciesLbl() {
-//        Label[] CurrencyLbls = {
-//                minCurrencyLbl,
-//                exchangeRateCurrencyLbl,
-//                capitalCurrencyLbl,
-//                sellingPriceCurrencyLbl,
-//                totalPerformanceCurrencyLbl
-//        };
-//
-//        for (Label lbl : CurrencyLbls) {
-//            System.out.println(lbl);
-//            lbl.setText(SYMBOL_OF_CURRENCY);
-//        }
-//    }
-
     /**
-     * Cleans the options of the filter interface to their default values
+     * Cleans the options of the filter items to their default values
      */
     private void cleanFilter() {
         statusChoiceBox.setValue(null);
-        platformChoiceBox.setValue(null);
+        platformChcBx.setValue(null);
         filterStockNameTxtFld.setText("");
         monthChcBox.setValue(null);
         quarterChcBox.setValue(null);
@@ -377,15 +381,12 @@ public class UserInterfaceController implements Initializable {
         yearCheckBox.setSelected(false);
         monthChcBox.setDisable(true);
         quarterChcBox.setDisable(true);
-        SpinnerValueFactory<Integer> valueFactory =
-                new IntegerSpinnerValueFactory(0, 0, 0);
-        yearSpinner.setValueFactory(valueFactory);
         yearSpinner.setDisable(true);
     }
 
     /**
      * Handles the "reset" Button for the add investment interface and
-     * cleans the options to their default values
+     * cleans the items to their default values
      */
     @FXML
     private void handleResetAddInvestment() {
@@ -400,7 +401,7 @@ public class UserInterfaceController implements Initializable {
 
     /**
      * Handles the "reset" Button for the add platform interface and
-     * cleans the options to their default values
+     * cleans the items to their default values
      */
     @FXML
     private void handleResetAddPlatform() {
@@ -413,36 +414,57 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Loads the {@link InvestmentBook} from the given file name.
+     * Loads the {@link InvestmentBookData} from the given file name.
      *
      * @param file the given file name
      * @return investmentBook the loaded investmentBook or
      * a new created investmentBook
      */
-    private InvestmentBook loadInvestmentBook(File file) {
+    private InvestmentBookData loadInvestmentBook(File file) {
         if (file.exists()) {
-            return readInvestmentBookFromJson(file);
+            return InvestmentBookData.fromJson(file);
         } else {
-            return new InvestmentBook(new HashSet<>(), new ArrayList<>());
+            return new InvestmentBookData(new HashSet<>(), new ArrayList<>());
         }
     }
 
     //TODO JavaDoc
-    private void createInvestmentBookView(File file) {
+    private void initInvestmentBook() {
         //TODO implement
 //        progressBar.progressProperty().bind(loadTask.progressProperty());
-        this.investmentBookVw = new InvestmentBookView(
-                loadInvestmentBook(file),
+        this.investmentBook = new InvestmentBook(
+                loadInvestmentBook(currFile),
                 new JavaFXGUI(
                         investmentTblVw,
-                        platformListView,
-                        platformChoiceBox,
-                        platformChoiceBox2,
+                        platformLstVw,
+                        platformChcBxs,
                         totalPerformanceLbl,
+                        currencyLbls,
                         status)
         );
-        status.setText("File loaded: " + file.getName());
-        fileNameLbl.setText(file.getName());
+        status.setText("File loaded: " + currFile.getName());
+        fileNameLbl.setText(currFile.getName());
+        btnDeletePlatform.setDisable(true);
+        btnDeleteInvestment.setDisable(true);
+        handleResetAddPlatform();
+        cleanFilter();
+        handleResetAddInvestment();
+    }
+
+    //TODO JavaDoc
+    private void initInvestmentBook2() {
+        this.investmentBook = new InvestmentBook(
+                new HashSet<>(), new ArrayList<>(),
+                new JavaFXGUI(
+                        investmentTblVw,
+                        platformLstVw,
+                        platformChcBxs,
+                        totalPerformanceLbl,
+                        currencyLbls,
+                        status)
+        );
+        status.setText("File loaded: " + currFile.getName());
+        fileNameLbl.setText(currFile.getName());
         btnDeletePlatform.setDisable(true);
         btnDeleteInvestment.setDisable(true);
         handleResetAddPlatform();
@@ -458,35 +480,38 @@ public class UserInterfaceController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializePlatformTab();
-        initializeInvestmentTab();
-        Label[] currencyLbls = {
-                minCurrencyLbl,
+        platformChcBxs = new ChoiceBox[]{platformChcBx, platformChcBx2};
+
+        currencyLbls = new Label[]{minCurrencyLbl,
                 exchangeRateCurrencyLbl,
                 capitalCurrencyLbl,
                 sellingPriceCurrencyLbl,
-                totalPerformanceCurrencyLbl
-        };
-        setCurrenciesForLbls(currencyLbls);
+                totalPerformanceCurrencyLbl};
+
+        initializePlatformTab();
+        initializeInvestmentTab();
     }
 
     /**
-     * Handles the "Add" Button and hands over the Initializations.
+     * Handles the "Add" Button and hands over the value for
+     * a new Platform.
      */
     @FXML
-    //TODO JavaDoc
     private void handleAddPlatform() {
-        investmentBookVw.addPlatform(
-                feeTypesChcBox.getValue(),
-                platformNameTxtFld.getText(),
-                doubleOfTextField(feeTxtFld),
-                minTxtFld.getText().isEmpty() ? 0 : doubleOfTextField(minTxtFld)
-        );
+        String platformName = platformNameTxtFld.getText();
+        double fee = Helper.doubleOfTextField(feeTxtFld);
+
+        Platform newPlatform = switch (feeTypesChcBox.getValue()) {
+            case PERCENT -> new PercentPlatform(platformName, fee);
+            case ABSOLUTE -> new AbsolutePlatform(platformName, fee);
+            case MIXED -> new MixedPlatform(platformName, fee, Helper.doubleOfTextField(minTxtFld));
+        };
+        investmentBook.add(newPlatform);
         handleResetAddPlatform();
     }
 
     /**
-     * Examines if the given mouseEvent where clicked double.
+     * Examines if the given mouseEvent where double-clicked.
      * Returns true if the given mouseEvent where double-clicked
      * otherwise false.
      *
@@ -497,60 +522,65 @@ public class UserInterfaceController implements Initializable {
         return mouseEvent.getClickCount() == 2;
     }
 
+    /**
+     * Creates and displays new {@link PlatformController}
+     * also it hands over the selected platform and the current
+     * investmentBookView which should be transmitted to the created platformController
+     *
+     * @param event mouseEvent to examine a double-click
+     */
     @FXML
-    //TODO JavaDoc
     private void clickPlatform(MouseEvent event) {
-        //Checking double click
         if (isDoubleClicked(event)) {
-            Platform currentPlatform =
-                    platformListView.getSelectionModel().getSelectedItem();
-            PlatformController platformController = createStage("PlatformController.fxml",
-                    "Platform: " + currentPlatform.getName(),
-                    650,
-                    600
-            );
-            platformController.setCurrPlatform(currentPlatform);
-            platformController.setInvestmentBookView(investmentBookVw);
+            Platform currentPlatform = platformLstVw.getSelectionModel().getSelectedItem();
+
+            if (currentPlatform != null) {
+                PlatformController platformController = Helper.createStage(
+                        currentPlatform.getFxmlPath(),
+                        "Platform: " + currentPlatform.getName(),
+                        400,
+                        300
+                );
+                platformController.setDisplay(currentPlatform);
+            }
         }
     }
 
     /**
-     * Handles the "start new Game" button and opens a LoginInterface Window.
+     * Handles the "new" button and creates a
+     * new file and {@link InvestmentBook}
      */
     @FXML
-    //TODO JavaDoc
     private void handleNewBook() {
-        createInvestmentBookView(new File("newBook"));
+        currFile = new File("newBook");
+        initInvestmentBook2();
     }
 
     /**
-     * Handles the "load game" button.
+     * Handles the "open" button.
      */
     @FXML
-    //TODO JavaDoc
-    private void handleLoadBook() {
-        System.out.println("program is loading");
-        saveDialogFile(investmentTblVw.getScene().getWindow());
-        createInvestmentBookView(currFile);
+    private void handleOpenBook() {
+        currFile = openDialogFile(investmentTblVw.getScene().getWindow());
+        initInvestmentBook();
     }
 
     /**
      * Handles the "save" button and
-     * saves the current {@link InvestmentBookView}.
+     * saves the current {@link InvestmentBook}.
      */
     @FXML
     private void handleSaveBook() {
-        writeInvestmentBookToJson(investmentBookVw.getInvestmentBook(), currFile);
+        new InvestmentBookData(investmentBook).toJson(currFile);
     }
 
     /**
-     * Handles the "save as" button by
-     * calling the handleSaveBook methode.
+     * Handles the "save as" button and opens a save dialog
      */
     @FXML
     private void handleSaveBookAs() {
-        saveDialogFile(investmentTblVw.getScene().getWindow());
-        handleSaveBook();
+        File selectedFile = saveDialogFile(investmentTblVw.getScene().getWindow());
+        new InvestmentBookData(investmentBook).toJson(selectedFile);
     }
 
     /**
@@ -559,26 +589,24 @@ public class UserInterfaceController implements Initializable {
      * Controller the current platforms.
      */
     @FXML
-    //TODO JavaDoc
     private void handleFeeCalculator() {
         FeeCalculatorController feeCalculator =
-                createStage("calculator/FeeCalculatorController.fxml",
+                Helper.createStage("calculator/FeeCalculatorController.fxml",
                         "Fee Calculator",
                         400,
                         200
                 );
-        feeCalculator.setPlatformChoiceBox(investmentBookVw.getPlatforms());
+        feeCalculator.setPlatformChoiceBox(investmentBook.getPlatforms());
     }
 
     /**
-     * Handles the "Add" Button and hands over the Initializations.
+     * Handles the "apply" filter Button
      */
     @FXML
-    //TODO JavaDoc
     private void handleApplyFilter() {
-        investmentBookVw.filter(
+        investmentBook.filter(
                 statusChoiceBox.getValue(),
-                platformChoiceBox.getValue(),
+                platformChcBx.getValue(),
                 filterStockNameTxtFld.getText(),
                 monthChcBox.getValue(),
                 quarterChcBox.getValue(),
@@ -587,100 +615,87 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Handles the "Add" Button and hands over the Initializations.
+     * Handles the "reset" filter Button and
+     * displays the default investments
      */
-    //TODO JavaDoc
     @FXML
     private void handleResetFilter() {
         cleanFilter();
-        investmentBookVw.updateInvestmentList();
+        investmentBook.displayInvestmentList();
     }
 
+    /**
+     * Creates and displays new {@link InvestmentController}
+     * also it hands over the selected investment and the current
+     * investmentBookView which should be transmitted to the created investmentController
+     *
+     * @param event mouseEvent to examine a double-click
+     */
     @FXML
-    //TODO JavaDoc
     private void clickInvestment(MouseEvent event) {
-        //Checking double click
         if (isDoubleClicked(event)) {
-            Investment currentInvestment =
-                    investmentTblVw.getSelectionModel().getSelectedItem();
-            InvestmentController investController = createStage("InvestmentController.fxml",
-                    "Investment: " + currentInvestment.getStockName(),
+            Investment selectedInvestment = investmentTblVw.getSelectionModel().getSelectedItem();
+            InvestmentController investController = Helper.createStage("InvestmentController.fxml",
+                    "Investment: " + selectedInvestment.getStockName(),
                     650,
                     600
             );
-            investController.setCurrInvestment(currentInvestment);
-            investController.setInvestmentBookView(investmentBookVw);
+            investController.setCurrInvestment(selectedInvestment);
+            investController.setInvestmentBookView(investmentBook);
         }
     }
 
     /**
-     * Handles the "Add" Button and hands over the Initializations.
+     * Handles the "add" Button and hands over the value for
+     * a new Investment.
      */
     @FXML
-    //TODO JavaDoc
     private void handleAddInvestment() {
-        System.out.println(sellingPriceTxtFld.getText());
-        double sellingPrice = !isValidDouble(sellingPriceTxtFld) ? 0 :
-                doubleOfTextField(sellingPriceTxtFld);
+        double sellingPrice = Helper.doubleOfTextField(sellingPriceTxtFld);
+        LocalDate sellingDate = sellingDatePicker.getValue();
 
-        investmentBookVw.addInvestment(
-                creationDatePicker.getValue(),
-                platformChoiceBox2.getValue(),
-                stockNameTxtFld.getText(),
-                doubleOfTextField(exchangeRateTxtFld),
-                doubleOfTextField(capitalTxtFld),
-                sellingPrice,
-                sellingDatePicker.getValue()
-        );
+        Investment newInvestment;
+        if (sellingPrice > 0 && sellingDate != null) {
+            newInvestment = new Investment(creationDatePicker.getValue(),
+                    platformChcBx2.getValue(),
+                    stockNameTxtFld.getText(),
+                    Helper.doubleOfTextField(exchangeRateTxtFld),
+                    Helper.doubleOfTextField(capitalTxtFld),
+                    sellingPrice,
+                    sellingDate);
+        } else {
+            newInvestment = new Investment(creationDatePicker.getValue(),
+                    platformChcBx2.getValue(),
+                    stockNameTxtFld.getText(),
+                    Helper.doubleOfTextField(exchangeRateTxtFld),
+                    Helper.doubleOfTextField(capitalTxtFld));
+        }
+        investmentBook.add(newInvestment);
         handleResetAddInvestment();
     }
 
     /**
-     * creates a confirmation alert with the given content
-     *
-     * @param content of the alert
-     * @return alert
+     * Handles the "delete selected row" Button and
+     * deletes the selected investment.
      */
-    //TODO note more alerts!
-    private Alert createAlert(String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(alert.getAlertType().name().toLowerCase());
-        alert.setContentText(content);
-        return alert;
-    }
-
     @FXML
-    //TODO JavaDoc
     private void handleDeleteInvestment() {
-        Alert alert = createAlert("Are your sure you want to delete the selected item?");
-        ButtonType btnYes = new ButtonType("yes");
-        ButtonType btnNo = new ButtonType("no");
-        ButtonType btnCancel = new ButtonType("cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(btnYes, btnNo, btnCancel);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == btnYes) {
-            Investment selectedInvestment =
-                    investmentTblVw.getSelectionModel().getSelectedItem();
-            investmentBookVw.deleteInvestment(selectedInvestment);
+        if (acceptedDeleteAlert()) {
+            Investment investment = investmentTblVw.getSelectionModel().getSelectedItem();
+            investmentBook.remove(investment);
         }
     }
 
+    /**
+     * Handles the "delete selected row" Button and
+     * deletes the selected platform.
+     */
     @FXML
-    //TODO implement
-    //TODO JavaDoc
     private void handleDeletePlatform() {
-        Alert alert = createAlert("Are your sure you want to delete the selected item?");
-        ButtonType btnYes = new ButtonType("yes");
-        ButtonType btnNo = new ButtonType("no");
-        ButtonType btnCancel = new ButtonType("cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(btnYes, btnNo, btnCancel);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == btnYes) {
+        if (acceptedDeleteAlert()) {
             Platform selectedPlatform =
-                    platformListView.getSelectionModel().getSelectedItem();
-            investmentBookVw.deletePlatform(selectedPlatform);
+                    platformLstVw.getSelectionModel().getSelectedItem();
+            investmentBook.remove(selectedPlatform);
         }
     }
 
@@ -688,10 +703,8 @@ public class UserInterfaceController implements Initializable {
      * Handles the "exit" button.
      */
     @FXML
-    //TODO JavaDoc
     private void handleExit() {
         //TODO AutoSave?
-
         if (autoSave.isSelected()) {
             handleSaveBook();
         }

@@ -11,21 +11,22 @@ import logic.platform.Platform;
 import java.util.List;
 import java.util.Set;
 
-import static logic.GeneralMethods.setAndColorsText;
+import static gui.Style.setAndColorsText;
+import static gui.Style.setCurrenciesForLbls;
 
 
 /**
  * This class is responsible for changing the gui when the logic deems it
  * necessary. Created by the gui and then passed as a parameter into the logic.
  *
- * @author xtheWhiteLionx
+ * @author xthe_white_lionx
  */
 public class JavaFXGUI implements GUIConnector {
 
     /**
      * All {@link Investment}s in a Tableview
      */
-    private final TableView<Investment> INVESTMENTS_TABLEVIEW;
+    private final TableView<Investment> investmentTableView;
 
     /**
      * All {@link Platform}s in a Listview
@@ -35,23 +36,18 @@ public class JavaFXGUI implements GUIConnector {
     /**
      * ChoiceBox of all platforms for the filter
      */
-    private final ChoiceBox<Platform> PLATFORM_FILTER_CHOICE_BOX;
-
-    /**
-     * ChoiceBox of all platforms to create a new investment
-     */
-    private final ChoiceBox<Platform> PLATFORM_CHOICE_BOX;
+    private final ChoiceBox<Platform>[] platformFilterChoiceBoxes;
 
     /**
      * Label to show the total performance
      * of the displayed investments
      */
-    private final Label TOTAL_PERFORMANCE_LABEL;
+    private final Label totalPerformanceLabel;
 
     /**
      * label to show the current status
      */
-    private final Label STATUS;
+    private final Label status;
 
     /**
      * sum of the total performance
@@ -63,42 +59,48 @@ public class JavaFXGUI implements GUIConnector {
      * The constructor. Gets past all components of the gui that may change
      * due to actions in the logic.
      *
-     * @param investmentTableView     all investments in a Tableview
-     * @param platformListView        all platforms in a Listview
-     * @param platformFilterChoiceBox choiceBox of all platforms for the filter
-     * @param platformChoiceBox       choiceBox of all platforms to create a new investment
-     * @param totalPerformanceLabel   label to change the total performance
-     *                                of the displayed investments
-     * @param status                  label to change the current status
+     * @param investmentTableView          all investments in a Tableview
+     * @param platformListView             all platforms in a Listview
+     * @param platformFilterChoiceBoxes
+     * //     * @param platformFilterChoiceBox choiceBox of all platforms for the filter
+     * //     * @param platformChoiceBox       choiceBox of all platforms to create a new investment
+     * @param totalPerformanceLabel        label to change the total performance
+     *                                     of the displayed investments
+     * @param currencyLbls                 labels to show the local currency
+     * @param status                       label to change the current status
      */
     public JavaFXGUI(TableView<Investment> investmentTableView, ListView<Platform> platformListView,
-                     ChoiceBox<Platform> platformFilterChoiceBox,
-                     ChoiceBox<Platform> platformChoiceBox, Label totalPerformanceLabel,
-                     Label status) {
-        this.INVESTMENTS_TABLEVIEW = investmentTableView;
+                     ChoiceBox<Platform>[] platformFilterChoiceBoxes, Label totalPerformanceLabel,
+                     Label[] currencyLbls, Label status) {
+        this.investmentTableView = investmentTableView;
         this.platformListView = platformListView;
-        this.PLATFORM_FILTER_CHOICE_BOX = platformFilterChoiceBox;
-        this.PLATFORM_CHOICE_BOX = platformChoiceBox;
-        this.TOTAL_PERFORMANCE_LABEL = totalPerformanceLabel;
-        this.STATUS = status;
+        this.platformFilterChoiceBoxes = platformFilterChoiceBoxes;
+        this.totalPerformanceLabel = totalPerformanceLabel;
+        this.status = status;
+
+        //TODO?
+        setCurrenciesForLbls(currencyLbls);
     }
 
     /**
      * Updates the sum of the total performance and displays it in green,
      * red or black, depending on his value
      */
-    private void updateTotalPerformance() {
-        setAndColorsText(totalPerformance, TOTAL_PERFORMANCE_LABEL);
+    private void updateTotalPerformanceLabel() {
+        setAndColorsText(totalPerformance, totalPerformanceLabel);
     }
 
     /**
      * Updates the status and cleans it after
      */
     //TODO status enum?
-    private void updateStatus(String text) {
-        this.STATUS.setText(text);
+    private void updateStatus(Status status) {
+        this.status.setText(status.name());
         //TODO how, maybe TimerTask?
-        this.STATUS.setText("");
+//        Task<String> task = new Task<>() {
+//
+//        };
+        this.status.setText("");
     }
 
     /**
@@ -108,51 +110,63 @@ public class JavaFXGUI implements GUIConnector {
      * @param investment the investment to add
      */
     private void addInvestment(Investment investment) {
-        INVESTMENTS_TABLEVIEW.getItems().add(investment);
+        investmentTableView.getItems().add(investment);
         totalPerformance += investment.getPerformance();
     }
 
     @Override
     public void addInvestmentOnDisplay(Investment investment) {
         addInvestment(investment);
-        updateTotalPerformance();
+        updateTotalPerformanceLabel();
     }
 
     @Override
     public void displayInvestmentList(List<Investment> investmentList) {
-        INVESTMENTS_TABLEVIEW.getItems().clear();
+        investmentTableView.getItems().clear();
         totalPerformance = 0;
         for (Investment investment : investmentList) {
             addInvestment(investment);
         }
-        updateTotalPerformance();
+        updateTotalPerformanceLabel();
+    }
+
+    @Override
+    public void deleteInvestment(Investment investment) {
+        investmentTableView.getItems().remove(investment);
+        totalPerformance -= investment.getPerformance();
+        updateTotalPerformanceLabel();
     }
 
     @Override
     public void addPlatform(Platform newPlatform) {
+        assert newPlatform != null;
+
         platformListView.getItems().add(newPlatform);
-        PLATFORM_FILTER_CHOICE_BOX.getItems().add(newPlatform);
-        PLATFORM_CHOICE_BOX.getItems().add(newPlatform);
+        for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
+            //sets the platforms for the choiceBox
+            platform_choice_box.getItems().add(newPlatform);
+        }
     }
 
     @Override
     public void displayPlatforms(Set<Platform> platforms) {
+        platformListView.getItems().clear();
         if (!platforms.isEmpty()) {
-            platformListView.getItems().clear();
-            PLATFORM_FILTER_CHOICE_BOX.getItems().clear();
-            PLATFORM_CHOICE_BOX.getItems().clear();
+            for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
+                platform_choice_box.getItems().clear();
+            }
             for (Platform platform : platforms) {
-                //sets the platforms for the choiceBox
                 addPlatform(platform);
             }
-            PLATFORM_CHOICE_BOX.setValue(PLATFORM_CHOICE_BOX.getItems().get(0));
+//            PLATFORM_CHOICE_BOX.setValue(PLATFORM_CHOICE_BOX.getItems().get(0));
         }
     }
 
     @Override
     public void deletePlatform(Platform platform) {
         platformListView.getItems().remove(platform);
-        PLATFORM_FILTER_CHOICE_BOX.getItems().remove(platform);
-        PLATFORM_CHOICE_BOX.getItems().remove(platform);
+        for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
+            platform_choice_box.getItems().remove(platform);
+        }
     }
 }

@@ -11,16 +11,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.Investment;
-import logic.InvestmentBookView;
-import logic.enums.Status;
+import logic.InvestmentBook;
+import logic.Status;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import static logic.GeneralMethods.*;
-
-//TODO JavaDoc
+/**
+ * Controller of the graphical investment interface.
+ *
+ * @author xthe_white_lionx
+ */
 public class InvestmentController implements Initializable {
 
     @FXML
@@ -59,14 +61,14 @@ public class InvestmentController implements Initializable {
     private Button btnCancel;
 
     /**
-     * the current controlled investment
+     * The current controlled investment
      */
     private Investment currInvestment;
 
     /**
-     * the current {@link InvestmentBookView}
+     * the current {@link InvestmentBook}
      */
-    private InvestmentBookView investmentBookView;
+    private InvestmentBook investmentBook;
 
     /**
      * Sets and show the current {@link Investment} with his detailed information
@@ -74,6 +76,8 @@ public class InvestmentController implements Initializable {
      * @param selectedInvestment the over handed investment
      */
     public void setCurrInvestment(Investment selectedInvestment) {
+        assert selectedInvestment != null;
+
         this.currInvestment = selectedInvestment;
         Status investStatus = currInvestment.getStatus();
         boolean investIsClosed = investStatus.equals(Status.CLOSED);
@@ -82,18 +86,18 @@ public class InvestmentController implements Initializable {
         statusLbl.setText(investStatus.name());
         platformLbl.setText(currInvestment.getPlatform().getName());
         stockNameTxtFld.setText(currInvestment.getStockName());
-        exchangeRateTxtFld.setText(stringOfDouble(currInvestment.getExchangeRate()));
-        capitalTxtFld.setText(stringOfDouble(currInvestment.getCapital()));
-        sellingPriceTxtFld.setText(stringOfDouble(currInvestment.getSellingPrice()));
+        exchangeRateTxtFld.setText(Helper.stringOfDouble(currInvestment.getExchangeRate()));
+        capitalTxtFld.setText(Helper.stringOfDouble(currInvestment.getCapital()));
+        sellingPriceTxtFld.setText(Helper.stringOfDouble(currInvestment.getSellingPrice()));
         String performance =
                 (currInvestment.getPerformance() + " ").replace(".", ",");
-        performanceLbl.setText(performance + SYMBOL_OF_CURRENCY);
+        performanceLbl.setText(performance + Style.SYMBOL_OF_CURRENCY);
         String percentPerformance =
-                (currInvestment.getPerformance() + " ").replace(".", ",");
+                (currInvestment.getPercentPerformance() + " ").replace(".", ",");
         percentPerformanceLbl.setText(percentPerformance + "%");
         String cost =
-                (currInvestment.getPerformance() + " ").replace(".", ",");
-        costLbl.setText(cost + " " + SYMBOL_OF_CURRENCY);
+                (currInvestment.getCost() + " ").replace(".", ",");
+        costLbl.setText(cost + " " + Style.SYMBOL_OF_CURRENCY);
         LocalDate investmentSellDate = currInvestment.getSellingDate();
         //TODO?
 //        sellingDatePicker.setValue(
@@ -109,28 +113,30 @@ public class InvestmentController implements Initializable {
     }
 
     /**
-     * Sets the current {@link InvestmentBookView}
+     * Sets the current {@link InvestmentBook}
      *
-     * @param investmentBookView the over handed investment
+     * @param investmentBook the over handed investment
      */
-    public void setInvestmentBookView(InvestmentBookView investmentBookView) {
-        this.investmentBookView = investmentBookView;
+    public void setInvestmentBookView(InvestmentBook investmentBook) {
+        assert investmentBook != null;
+
+        this.investmentBook = investmentBook;
     }
 
     /**
-     * creates and adds a changeListener to the controller
+     * Creates and adds a changeListener to the controller
      * items of the investment to regular the accessibility of the apply button
      */
     private void initializeApplyListener() {
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
-                    || !isValidDouble(exchangeRateTxtFld)
-                    || !isValidDouble(capitalTxtFld)
+                    || !Helper.isValidDouble(exchangeRateTxtFld)
+                    || !Helper.isValidDouble(capitalTxtFld)
                     || stockNameTxtFld.getText().isEmpty()
                     //To be a valid investment the sellingDate and sellingPrice has to be both
                     // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ isValidDouble(sellingPriceTxtFld));
+                    || (sellingDatePicker.getValue() != null ^ Helper.isValidDouble(sellingPriceTxtFld));
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -152,11 +158,8 @@ public class InvestmentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //all the currency labels as array
-        setCurrenciesForLbls(
-                exchangeRateCurrencyLbl,
-                capitalCurrencyLbl,
-                sellingPriceCurrencyLbl
-        );
+        Style.setCurrenciesForLbls(exchangeRateCurrencyLbl, capitalCurrencyLbl,
+                sellingPriceCurrencyLbl);
         initializeApplyListener();
     }
 
@@ -178,13 +181,13 @@ public class InvestmentController implements Initializable {
     private void handleApply() {
         currInvestment.setCreationDate(creationDatePicker.getValue());
         currInvestment.setStockName(stockNameTxtFld.getText());
-        currInvestment.setExchangeRate(doubleOfTextField(exchangeRateTxtFld));
-        currInvestment.setCapital(doubleOfTextField(capitalTxtFld));
+        currInvestment.setExchangeRate(Helper.doubleOfTextField(exchangeRateTxtFld));
+        currInvestment.setCapital(Helper.doubleOfTextField(capitalTxtFld));
         //TODO for null
         currInvestment.closeInvestment(sellingDatePicker.getValue(),
-                doubleOfTextField(sellingPriceTxtFld)
+                Helper.doubleOfTextField(sellingPriceTxtFld)
         );
-        investmentBookView.updateInvestmentList();
+        investmentBook.displayInvestmentList();
         handleCancel();
     }
 
@@ -195,7 +198,7 @@ public class InvestmentController implements Initializable {
     @FXML
     private void handleSellingPriceCalculator() {
         SellingPriceCalculatorController sellingPriceCalculatorController =
-                createStage("calculator/SellingPriceCalculatorController.fxml",
+                Helper.createStage("calculator/SellingPriceCalculatorController.fxml",
                         "selling price calculator: " + currInvestment.getStockName(),
                         350,
                         200
@@ -210,7 +213,7 @@ public class InvestmentController implements Initializable {
     @FXML
     private void handlePerformanceCalculator() {
         PerformanceCalculatorController performanceCalculatorController =
-                createStage("calculator/PerformanceCalculatorController.fxml",
+                Helper.createStage("calculator/PerformanceCalculatorController.fxml",
                         "performance calculator: " + currInvestment.getStockName(),
                         350,
                         200

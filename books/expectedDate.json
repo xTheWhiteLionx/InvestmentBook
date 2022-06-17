@@ -17,8 +17,8 @@
       "exchangeRate": 1755.0,
       "capital": 1755.0,
       "sellingPrice": 1633.0,
-      "absolutePerformance": -136.0,
-      "percentPerformance": -7.749287749287749,
+      "performance": -136.0,
+      "percentPerformance": -7.75,
       "cost": 14.0,
       "sellingDate": 18110,
       "holdingPeriod": 31

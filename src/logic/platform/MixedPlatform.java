@@ -7,49 +7,98 @@ import logic.Investment;
 import java.util.Objects;
 
 import static logic.GeneralMethods.*;
-//TODO JavaDoc
+
+/**
+ * This class is contains the mixed platform logic and
+ * is an offshoot of the class platform
+ *
+ * @see Platform
+ * @see AbsolutePlatform
+ * @see PercentPlatform
+ * @author xthe_white_lionx
+ */
 public class MixedPlatform extends Platform {
 
-    //TODO JavaDoc
-    private final String NAME;
-    //TODO JavaDoc
+    /**
+     * Name of the platform
+     */
+    private String name;
+
+    /**
+     * Value of the fee of the platform
+     */
     private double percent;
-    //TODO JavaDoc
+
+    /**
+     * Minimale Fee of the platform as absolute value
+     */
     private double minFee;
 
-    //TODO JavaDoc
+    /**
+     * Constructs an {@code MixedPlatform} with the specified arguments.
+     *
+     * @param name of the platform
+     * @param percent value of the fee of the platform
+     * @param min minimale fee of the platform as absolute value
+     */
     public MixedPlatform(String name, double percent, double min) {
-        this.NAME = name;
+        this.name = name;
         this.percent = percent;
         this.minFee = min;
     }
 
     @Override
     public String getName() {
-        return NAME;
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public double getFee(double price) {
-        return Math.max(roundDouble((percent / 100d) * price), minFee);
+        return Math.max(round((percent / 100d) * price), minFee);
     }
 
-    //TODO JavaDoc
+    @Override
+    public String getFxmlPath() {
+        return "platformController/MixedPlatformController.fxml";
+    }
+
+    /**
+     * Returns the value of the fee of this platform
+     *
+     * @return value of the fee of this platform
+     */
     public double getPercent(){
         return percent;
     }
 
-    //TODO JavaDoc
+    /**
+     * Sets the value of the fee of this platform to the specified percent
+     *
+     * @param percent which should be set
+     */
     public void setPercent(double percent) {
         this.percent = percent;
     }
 
-    //TODO JavaDoc
+    /**
+     * Returns the minimale Fee of the platform as absolute value
+     *
+     * @return minimale Fee of the platform as absolute value
+     */
     public double getMinFee() {
         return minFee;
     }
 
-    //TODO JavaDoc
+    /**
+     * Sets the minimale Fee of the platform to the specified percent
+     *
+     * @param minFee which should be set
+     */
     public void setMinFee(double minFee) {
         this.minFee = minFee;
     }
@@ -70,7 +119,7 @@ public class MixedPlatform extends Platform {
         if (100 > percentPerformance) {
             percentPerformance += 100;
         }
-        return roundDouble(investment.getExchangeRate() * (percentPerformance / 100d));
+        return round(investment.getExchangeRate() * (percentPerformance / 100d));
     }
 
     @Override
@@ -84,11 +133,11 @@ public class MixedPlatform extends Platform {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MixedPlatform that)) return false;
-        return that.percent == percent && that.minFee == minFee && NAME.equals(that.NAME);
+        return that.percent == percent && that.minFee == minFee && name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(NAME, percent, minFee);
+        return Objects.hash(name, percent, minFee);
     }
 }
