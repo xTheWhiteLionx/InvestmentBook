@@ -10,5 +10,9 @@ import logic.platform.Platform;
  */
 public interface PlatformController extends Initializable {
 
+    /**
+     *
+     * @param platform
+     */
     void setDisplay(Platform platform);
 }

@@ -29,9 +29,15 @@ public class SellingPriceCalculatorController implements Initializable {
     @FXML
     private Button btnCancel;
 
-    //TODO JavaDoc
+    /**
+     * The current controlled investment
+     */
     private Investment investment;
 
+    /**
+     *
+     * @param investment
+     */
     //TODO JavaDoc
     public void setInvestment(Investment investment) {
         this.investment = investment;

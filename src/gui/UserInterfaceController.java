@@ -224,7 +224,7 @@ public class UserInterfaceController implements Initializable {
      * to regular the accessibility of the add platform button
      */
     private void initializeAddInvestmentListener() {
-//        Listener to regular the accessibility of the add investment button
+        //Listener to regular the accessibility of the add investment button
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
                     || platformChcBx2.getValue() == null

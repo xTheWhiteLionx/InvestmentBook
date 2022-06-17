@@ -29,9 +29,15 @@ public class PerformanceCalculatorController implements Initializable {
     @FXML
     private Button btnCancel;
 
-    //TODO JavaDoc
+    /**
+     * The current controlled investment
+     */
     private Investment currInvestment;
 
+    /**
+     *
+     * @param investment
+     */
     //TODO JavaDoc
     public void setInvestment(Investment investment) {
         this.currInvestment = investment;

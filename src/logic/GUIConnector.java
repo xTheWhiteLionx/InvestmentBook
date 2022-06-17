@@ -41,6 +41,11 @@ public interface GUIConnector {
     //TODO JavaDoc
     void addInvestmentOnDisplay(Investment investment);
 
+    /**
+     *
+     * @param investment
+     */
+    //TODO JavaDoc
     void deleteInvestment(Investment investment);
 
     /**
@@ -52,6 +57,10 @@ public interface GUIConnector {
     //TODO JavaDoc
     void addPlatform(Platform newPlatform);
 
+    /**
+     *
+     * @param platform
+     */
     //TODO JavaDoc
     void deletePlatform(Platform platform);
 }

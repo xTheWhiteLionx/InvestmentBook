@@ -22,6 +22,12 @@ public class FileInterfaceController implements Initializable {
     @FXML
     public Button loadBook;
 
+    /**
+     * Initializes the application.
+     *
+     * @param url            unused
+     * @param resourceBundle unused
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }

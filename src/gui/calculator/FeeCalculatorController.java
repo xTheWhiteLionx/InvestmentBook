@@ -37,6 +37,10 @@ public class FeeCalculatorController implements Initializable {
     @FXML
     private Button cancelBtn;
 
+    /**
+     *
+     * @param platforms
+     */
     //TODO JavaDoc
     public void setPlatformChoiceBox(Set<Platform> platforms) {
         if (!platforms.isEmpty()) {

@@ -18,6 +18,10 @@ import static logic.GeneralMethods.DIRECTORY;
  */
 public class DialogWindow {
 
+    /**
+     *
+     * @return
+     */
     //TODO JavaDoc
     private static FileChooser createFileChooser() {
         FileChooser fileChooser = new FileChooser();
@@ -29,6 +33,11 @@ public class DialogWindow {
         return fileChooser;
     }
 
+    /**
+     *
+     * @param window
+     * @return
+     */
     //TODO JavaDoc
     public static File openDialogFile(Window window) {
         assert window != null;
@@ -38,6 +47,11 @@ public class DialogWindow {
         return fileChooser.showOpenDialog(window);
     }
 
+    /**
+     *
+     * @param window
+     * @return
+     */
     //TODO JavaDoc
     public static File saveDialogFile(Window window) {
         assert window != null;

@@ -4,9 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
-import java.util.Objects;
-
-import static logic.GeneralMethods.*;
+import static logic.GeneralMethods.calcPercent;
+import static logic.GeneralMethods.round;
 
 /**
  * This class is contains the mixed platform logic and
@@ -134,10 +133,5 @@ public class MixedPlatform extends Platform {
         if (this == o) return true;
         if (!(o instanceof MixedPlatform that)) return false;
         return that.percent == percent && that.minFee == minFee && name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, percent, minFee);
     }
 }
