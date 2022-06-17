@@ -9,35 +9,33 @@
 <?import javafx.scene.text.Font?>
 
 
-<BorderPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FileInterfaceController">
+<BorderPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FileInterfaceController">
    <center>
       <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@textures/investmentBookIcon.png" />
-               </image>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-            </ImageView>
-            <Button mnemonicParsing="false" onAction="#handleCreateNewBook" text="+ create new book">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold Italic" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="loadBook" layoutX="10.0" layoutY="160.0" mnemonicParsing="false" onAction="#handleLoadBook" text="load book">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold Italic" size="14.0" />
-               </font>
-            </Button>
-         </children>
+         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <VBox.margin>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </VBox.margin>
+            <Image url="@textures/investmentBookIcon.png"/>
+         </ImageView>
+         <Button mnemonicParsing="false" onAction="#handleCreateNewBook" text="+ create new book">
+            <VBox.margin>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="System Bold Italic" size="14.0"/>
+            </font>
+         </Button>
+         <Button fx:id="loadBook" layoutX="10.0" layoutY="160.0" mnemonicParsing="false"
+                 onAction="#handleLoadBook" text="load book">
+            <VBox.margin>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="System Bold Italic" size="14.0"/>
+            </font>
+         </Button>
       </VBox>
    </center>
 </BorderPane>
