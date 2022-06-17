@@ -14,7 +14,7 @@ public class GeneralMethods {
     /**
      * The directory of the package of the json files
      */
-    public static final String DIRECTORY = "src/main/resources/books/";
+    public static final String DIRECTORY = "books/";
 
     /**
      * Rounds the given double
