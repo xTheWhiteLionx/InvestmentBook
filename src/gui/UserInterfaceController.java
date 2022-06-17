@@ -30,9 +30,9 @@ import static gui.DialogWindow.saveDialogFile;
 import static gui.FeeType.*;
 import static gui.DialogWindow.acceptedDeleteAlert;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
-import static logic.GeneralMethods.DIRECTORY;
+import static gui.DialogWindow.DIRECTORY;
 import static gui.Style.SYMBOL_OF_CURRENCY;
-import static logic.Quarter.getQuarterByMonth;
+import static logic.Quarter.getQuarterOfMonth;
 
 
 /**
@@ -271,7 +271,7 @@ public class UserInterfaceController implements Initializable {
             if (rdBtnFilterQuarter.isSelected()) {
                 yearCheckBox.setSelected(true);
                 //sets the current quarter by the current month
-                quarterChcBox.setValue(getQuarterByMonth(currMonth));
+                quarterChcBox.setValue(getQuarterOfMonth(currMonth));
                 rdBtnFilterMonth.setSelected(false);
             } else {
                 quarterChcBox.setValue(null);
@@ -621,7 +621,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleResetFilter() {
         cleanFilter();
-        investmentBook.displayInvestmentList();
+        investmentBook.displayInvestments();
     }
 
     /**

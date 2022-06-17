@@ -99,7 +99,7 @@ public class PercentPlatform extends Platform {
 
     @Override
     public JsonObject toJson(JsonObject jsonObject) {
-        jsonObject.add("Percent", new JsonPrimitive(percent));
+        jsonObject.add("percent", new JsonPrimitive(percent));
         return super.toJson(jsonObject);
     }
 

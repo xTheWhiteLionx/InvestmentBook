@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 //TODO JavaDoc
 public class InvestmentBookDataTest {
 
-    private final File file = new File("src/main/resources/books/result.json");
+    private final File file = new File("books/result.json");
 
     /**
      * @return

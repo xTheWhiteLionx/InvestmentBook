@@ -1,17 +1,17 @@
 {
   "platforms": [
     {
-      "Percent": 1.49,
-      "Name": "Coinbase"
+      "percent": 2.5,
+      "min": 8.9,
+      "name": "Max Blue"
     },
     {
-      "Percent": 2.5,
-      "Min": 8.9,
-      "Name": "Max Blue"
+      "fee": 7.0,
+      "name": "Onvista Bank"
     },
     {
-      "Fee": 7.0,
-      "Name": "Onvista Bank"
+      "percent": 1.49,
+      "name": "Coinbase"
     }
   ],
   "investments": [
@@ -19,8 +19,8 @@
       "creationDate": 17809,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Take Two",
       "exchangeRate": 112.49,
@@ -36,8 +36,8 @@
       "creationDate": 17842,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Take Two",
       "exchangeRate": 108.65,
@@ -53,8 +53,8 @@
       "creationDate": 17847,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Take Two",
       "exchangeRate": 100.4,
@@ -70,8 +70,8 @@
       "creationDate": 17899,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Take Two",
       "exchangeRate": 88.73,
@@ -87,8 +87,8 @@
       "creationDate": 18079,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Amazon",
       "exchangeRate": 1755.0,
@@ -104,8 +104,8 @@
       "creationDate": 18270,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Deutsche Bank",
       "exchangeRate": 7.1,
@@ -121,8 +121,8 @@
       "creationDate": 18099,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Tesla",
       "exchangeRate": 229.5,
@@ -138,9 +138,9 @@
       "creationDate": 17778,
       "status": "OPEN",
       "platform": {
-        "Percent": 2.5,
-        "Min": 8.9,
-        "Name": "Max Blue"
+        "percent": 2.5,
+        "min": 8.9,
+        "name": "Max Blue"
       },
       "stockName": "Ubisoft",
       "exchangeRate": 96.88,
@@ -155,8 +155,8 @@
       "creationDate": 18114,
       "status": "CLOSED",
       "platform": {
-        "Percent": 1.49,
-        "Name": "Coinbase"
+        "percent": 1.49,
+        "name": "Coinbase"
       },
       "stockName": "Bitcoin",
       "exchangeRate": 11003.76,
@@ -172,8 +172,8 @@
       "creationDate": 18114,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Amazon",
       "exchangeRate": 1592.4,
@@ -189,8 +189,8 @@
       "creationDate": 18141,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Alibaba",
       "exchangeRate": 162.0,
@@ -206,8 +206,8 @@
       "creationDate": 18823,
       "status": "CLOSED",
       "platform": {
-        "Percent": 1.49,
-        "Name": "Coinbase"
+        "percent": 1.49,
+        "name": "Coinbase"
       },
       "stockName": "Bitcoin",
       "exchangeRate": 27185.88,
@@ -223,8 +223,8 @@
       "creationDate": 18940,
       "status": "CLOSED",
       "platform": {
-        "Percent": 1.49,
-        "Name": "Coinbase"
+        "percent": 1.49,
+        "name": "Coinbase"
       },
       "stockName": "Bitcoin",
       "exchangeRate": 58644.49,
@@ -240,8 +240,8 @@
       "creationDate": 18955,
       "status": "CLOSED",
       "platform": {
-        "Percent": 1.49,
-        "Name": "Coinbase"
+        "percent": 1.49,
+        "name": "Coinbase"
       },
       "stockName": "Shiba Inu",
       "exchangeRate": 3.418E-5,
@@ -257,8 +257,8 @@
       "creationDate": 18965,
       "status": "OPEN",
       "platform": {
-        "Percent": 1.49,
-        "Name": "Coinbase"
+        "percent": 1.49,
+        "name": "Coinbase"
       },
       "stockName": "Shiba Inu",
       "exchangeRate": 3.198E-5,

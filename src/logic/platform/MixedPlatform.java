@@ -41,6 +41,10 @@ public class MixedPlatform extends Platform {
      * @param min minimale fee of the platform as absolute value
      */
     public MixedPlatform(String name, double percent, double min) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+
         this.name = name;
         this.percent = percent;
         this.minFee = min;
@@ -53,6 +57,9 @@ public class MixedPlatform extends Platform {
 
     @Override
     public void setName(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
         this.name = name;
     }
 
@@ -123,8 +130,8 @@ public class MixedPlatform extends Platform {
 
     @Override
     public JsonObject toJson(JsonObject jsonObject) {
-        jsonObject.add("Percent", new JsonPrimitive(percent));
-        jsonObject.add("Min", new JsonPrimitive(minFee));
+        jsonObject.add("percent", new JsonPrimitive(percent));
+        jsonObject.add("min", new JsonPrimitive(minFee));
         return super.toJson(jsonObject);
     }
 

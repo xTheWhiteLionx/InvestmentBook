@@ -3,8 +3,8 @@
     "creationDate": 18977,
     "status": "CLOSED",
     "platform": {
-      "Fee": 7.0,
-      "Name": "Onvista Bank"
+      "fee": 7.0,
+      "name": "Onvista Bank"
     },
 	"stockName": "testInvestment",
     "exchangeRate": 0.0,
@@ -20,8 +20,8 @@
     "creationDate": 18982,
     "status": "OPEN",
     "platform": {
-      "Fee": 7.0,
-      "Name": "Onvista Bank"
+      "fee": 7.0,
+      "name": "Onvista Bank"
     },
 	"stockName": "testInvestment",
     "exchangeRate": 0.0,
@@ -36,8 +36,8 @@
     "creationDate": 18995,
     "status": "OPEN",
     "platform": {
-      "Fee": 7.0,
-      "Name": "Onvista Bank"
+      "fee": 7.0,
+      "name": "Onvista Bank"
     },
     "stockName": "testInvestment",
     "exchangeRate": 0.0,

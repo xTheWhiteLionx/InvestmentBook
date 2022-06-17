@@ -7,38 +7,42 @@ import logic.Investment;
 /**
  * This class is contains the platform logic
  *
+ * @author xthe_white_lionx
  * @see AbsolutePlatform
  * @see MixedPlatform
  * @see PercentPlatform
- *
- * @author xthe_white_lionx
  */
 public abstract class Platform {
 
     /**
-     *
      * @param jsonObject
      * @return
      */
     //TODO JavaDoc
     public static Platform fromJson(JsonObject jsonObject) {
-        String name = jsonObject.get("Name").getAsString();
-        if (jsonObject.has("Fee")) {
-            return new AbsolutePlatform(name, jsonObject.get("Fee").getAsDouble());
-        } else if (jsonObject.has("Min")) {
-            return new MixedPlatform(name, jsonObject.get("Percent").getAsDouble(), jsonObject.get("Min").getAsDouble());
+        String name = jsonObject.get("name").getAsString();
+        if (jsonObject.has("fee")) {
+            return new AbsolutePlatform(name, jsonObject.get("fee").getAsDouble());
+        } else if (jsonObject.has("min")) {
+            return new MixedPlatform(name, jsonObject.get("percent").getAsDouble(),
+                    jsonObject.get("min").getAsDouble());
         } else {
-            return new PercentPlatform(name, jsonObject.get("Percent").getAsDouble());
+            return new PercentPlatform(name, jsonObject.get("percent").getAsDouble());
         }
     }
 
     /**
-     * Returns the name of the platform
+     * Returns the name of this platform
+     *
+     * @return name of this platform
      */
     public abstract String getName();
 
     /**
-     * Sets the name of the platform
+     * Sets the name of this platform
+     *
+     * @throws NullPointerException     if name is null
+     * @throws IllegalArgumentException if name is empty
      */
     public abstract void setName(String name);
 
@@ -47,6 +51,7 @@ public abstract class Platform {
      *
      * @param price on which the fee will be calculated
      * @return fee of the platform (for a given price)
+     * @throws IllegalArgumentException if price is negative
      */
     public abstract double getFee(double price);
 
@@ -64,6 +69,7 @@ public abstract class Platform {
      * @param investment        the given investment
      * @param targetPerformance the given target performance, which should be reached
      * @return exchange rate at which the target performance will be reached
+     * @throws NullPointerException     if investment is null
      */
     public abstract double calcSellingExchangeRate(Investment investment, double targetPerformance);
 
@@ -85,7 +91,7 @@ public abstract class Platform {
      */
     //TODO JavaDoc
     public JsonObject toJson(JsonObject jsonObject) {
-        jsonObject.add("Name", new JsonPrimitive(getName()));
+        jsonObject.add("name", new JsonPrimitive(getName()));
 
         return jsonObject;
     }
@@ -101,7 +107,6 @@ public abstract class Platform {
     }
 
     /**
-     *
      * @param o
      * @return
      */

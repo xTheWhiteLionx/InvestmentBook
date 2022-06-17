@@ -3,14 +3,9 @@ package logic;
 import logic.platform.Platform;
 
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static logic.GeneralMethods.*;
 
 /**
  * This class contains the program's logic.
@@ -44,13 +39,23 @@ public class InvestmentBook {
      */
     //TODO JavaDoc
     public InvestmentBook(Set<Platform> platforms, List<Investment> investments, GUIConnector gui) {
+        if (platforms == null) {
+            throw new NullPointerException();
+        }
+        if (investments == null) {
+            throw new NullPointerException();
+        }
+        if (gui == null) {
+            throw new NullPointerException();
+        }
+
         this.platforms = platforms;
+        Collections.sort(investments);
         this.investments = investments;
         this.gui = gui;
 
-        Collections.sort(this.investments);
-        displayInvestmentList();
-        this.gui.displayPlatforms(platforms);
+        displayPlatforms();
+        displayInvestments();
     }
 
     /**
@@ -64,40 +69,75 @@ public class InvestmentBook {
         this(investmentBookData.getPlatforms(), investmentBookData.getInvestments(), gui);
     }
 
+    /**
+     *
+     * @return
+     */
     //TODO JavaDoc
     public Set<Platform> getPlatforms() {
         return new HashSet<>(platforms);
     }
 
+    /**
+     *
+     * @return
+     */
     //TODO JavaDoc
     public List<Investment> getInvestments() {
         return new ArrayList<>(investments);
     }
 
+    /**
+     *
+     */
     //TODO JavaDoc
-    public void displayInvestmentList() {
+    public void displayPlatforms() {
+        gui.displayPlatforms(platforms);
+    }
+
+    /**
+     *
+     */
+    //TODO JavaDoc
+    public void displayInvestments() {
         gui.displayInvestmentList(investments);
     }
 
+    /**
+     *
+     * @param platform
+     */
     //TODO JavaDoc
-    public void add(Platform newPlatform) {
-        platforms.add(newPlatform);
-        gui.addPlatform(newPlatform);
+    public void add(Platform platform) {
+        platforms.add(platform);
+        gui.addPlatform(platform);
     }
 
+    /**
+     *
+     * @param investment
+     */
     //TODO JavaDoc
-    public void add(Investment newInvestment) {
-        investments.add(newInvestment);
+    public void add(Investment investment) {
+        investments.add(investment);
         Collections.sort(investments);
-        gui.addInvestmentOnDisplay(newInvestment);
+        gui.addInvestmentOnDisplay(investment);
     }
 
+    /**
+     *
+     * @param platform
+     */
     //TODO JavaDoc
     public void remove(Platform platform) {
         platforms.remove(platform);
         gui.deletePlatform(platform);
     }
 
+    /**
+     *
+     * @param investment
+     */
     //TODO JavaDoc
     public void remove(Investment investment) {
         investments.remove(investment);
@@ -105,7 +145,24 @@ public class InvestmentBook {
     }
 
     /**
-     * Filter the investments by the given year and
+     * Filters the investments by the given year and
+     * returns the filtered investments
+     */
+    //TODO JavaDoc
+    public Set<Platform> filter(String name) {
+        if (name != null) {
+            Set<Platform> filteredPlatforms = platforms.stream()
+                    .filter(p -> p.getName().equals(name))
+                    .collect(Collectors.toSet());
+
+            gui.displayPlatforms(filteredPlatforms);
+            return filteredPlatforms;
+        }
+        return getPlatforms();
+    }
+
+    /**
+     * Filters the investments by the given year and
      * returns the filtered investments
      *
      * @param status
@@ -148,6 +205,10 @@ public class InvestmentBook {
         return filteredInvestments;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "InvestmentBook{" +

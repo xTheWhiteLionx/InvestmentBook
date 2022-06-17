@@ -58,14 +58,13 @@ public enum Quarter {
      * @param month the given month
      * @return quarter of the month
      */
-    public static Quarter getQuarterByMonth(Month month) {
+    public static Quarter getQuarterOfMonth(Month month) {
         assert month != null;
+        Quarter[] quarters = Quarter.values();
 
-        for (Quarter quarter : Quarter.values()) {
-            for (Month monthOfQuarter : quarter.months) {
-                if (monthOfQuarter == month) {
-                    return quarter;
-                }
+        for (Quarter quarter : quarters) {
+            if (quarter.months.contains(month)) {
+                return quarter;
             }
         }
         return null;

@@ -9,14 +9,17 @@ import javafx.stage.Window;
 import java.io.File;
 import java.util.Optional;
 
-import static logic.GeneralMethods.DIRECTORY;
-
 /**
  * This class contains the dialog window methods.
  *
  * @author xthe_white_lionx
  */
 public class DialogWindow {
+
+    /**
+     * The directory of the package of the json files
+     */
+    public static final String DIRECTORY = "books/";
 
     /**
      *

@@ -3,10 +3,10 @@ package logic;
 import logic.platform.Platform;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-import static logic.GeneralMethods.*;
+import static logic.GeneralMethods.calcPercentRounded;
+import static logic.GeneralMethods.round;
 import static logic.Status.CLOSED;
 import static logic.Status.OPEN;
 
@@ -15,7 +15,7 @@ import static logic.Status.OPEN;
  *
  * @author Fabian Hardt
  */
-public class Investment implements Comparable<Investment>{
+public class Investment implements Comparable<Investment> {
 
     /**
      * Creation Date of the investment as
@@ -50,8 +50,7 @@ public class Investment implements Comparable<Investment>{
     private double capital;
 
     /**
-     * Selling price of the investment,
-     * if it is 0 then it was not sold yet
+     * Selling price of the investment
      */
     private double sellingPrice = 0;
 
@@ -90,15 +89,30 @@ public class Investment implements Comparable<Investment>{
      * @param stockName    stock name of the investment
      * @param exchangeRate exchange rate of the investment at which it was bought
      * @param capital      capital of the investment
+     * @throws NullPointerException     if any argument is null
+     * @throws IllegalArgumentException
      */
     //TODO JavaDoc
     public Investment(LocalDate creationDate, Platform platform, String stockName,
                       double exchangeRate, double capital) {
-        assert creationDate != null;
-        assert platform != null;
-        assert !stockName.isEmpty();
-        assert exchangeRate > 0;
-        assert capital > 0;
+        if (creationDate == null) {
+            throw new NullPointerException();
+        }
+        if (platform == null) {
+            throw new NullPointerException();
+        }
+        if (stockName == null) {
+            throw new NullPointerException();
+        }
+        if (stockName.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (exchangeRate <= 0) {
+            throw new IllegalArgumentException();
+        }
+        if (capital <= 0) {
+            throw new IllegalArgumentException();
+        }
 
         this.creationDate = creationDate;
         this.platform = platform;
@@ -131,6 +145,18 @@ public class Investment implements Comparable<Investment>{
     }
 
     /**
+     * Checks if the end date is after the start date or are equals
+     *
+     * @param startDate
+     * @param endDate
+     * @return true if the end date is after the start date or are equals otherwise false
+     */
+    //TODO JavaDoc
+    private static boolean areAcceptableDates(LocalDate startDate, LocalDate endDate) {
+        return startDate.compareTo(endDate) <= 0;
+    }
+
+    /**
      * Returns the creation Date of the investment
      * as LocalDate
      *
@@ -140,23 +166,25 @@ public class Investment implements Comparable<Investment>{
         return creationDate;
     }
 
-    //TODO JavaDoc
-    private boolean areAcceptableDates(LocalDate startDate, LocalDate endDate) {
-        return (startDate.isBefore(endDate) || startDate.isEqual(endDate));
-    }
-
     /**
      * Set the creating Date and update the holding period of the investment
      *
      * @param newCreationDate creation Date
+     * @throws NullPointerException     if specified the newCreationDate is null
+     * @throws IllegalArgumentException
      */
+    // TODO: 17.06.2022 JavaDoc
     public void setCreationDate(LocalDate newCreationDate) {
+        if (newCreationDate == null) {
+            throw new NullPointerException();
+        }
+
         if (sellingDate != null) {
-            //checks if the selling date is after the creation date or are equals
             if (areAcceptableDates(newCreationDate, sellingDate)) {
                 this.holdingPeriod = DAYS.between(newCreationDate, sellingDate);
             } else {
-                throw new IllegalArgumentException("given creation date is after the selling date, logical error");
+                throw new IllegalArgumentException("given creation date is after the selling date,"
+                        + " logical error");
             }
         }
         this.creationDate = newCreationDate;
@@ -170,26 +198,6 @@ public class Investment implements Comparable<Investment>{
      */
     public LocalDate getSellingDate() {
         return sellingDate;
-    }
-
-    /**
-     * Set the selling Date and update the holding period of the investment
-     *
-     * @param newSellingDate
-     */
-    public void setSellingDate(LocalDate newSellingDate) {
-        if (newSellingDate != null) {
-            if (areAcceptableDates(creationDate, newSellingDate)) {
-                if (!sellingDate.isEqual(newSellingDate)) {
-                    holdingPeriod = DAYS.between(creationDate, newSellingDate);
-                    sellingDate = newSellingDate;
-                }
-            } else {
-                throw new IllegalArgumentException("creation date is after the given selling date, logical error");
-            }
-        } else {
-            throw new IllegalArgumentException("given selling date is null");
-        }
     }
 
     /**
@@ -228,8 +236,21 @@ public class Investment implements Comparable<Investment>{
         return stockName;
     }
 
-    //TODO JavaDoc
+    /**
+     * Set the creating Date and update the holding period of the investment
+     *
+     * @param stockName creation Date
+     * @throws NullPointerException     if specified the newCreationDate is null
+     * @throws IllegalArgumentException
+     */
+    // TODO: 17.06.2022 JavaDoc
     public void setStockName(String stockName) {
+        if (stockName == null) {
+            throw new NullPointerException();
+        }
+        if (stockName.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         this.stockName = stockName;
     }
 
@@ -242,14 +263,19 @@ public class Investment implements Comparable<Investment>{
         return exchangeRate;
     }
 
-    //TODO JavaDoc
+    /**
+     * Set the creating Date and update the holding period of the investment
+     *
+     * @param newExchangeRate creation Date
+     * @throws NullPointerException     if specified the newCreationDate is null
+     * @throws IllegalArgumentException
+     */
+    // TODO: 17.06.2022 JavaDoc
     public void setExchangeRate(double newExchangeRate) {
-        if (newExchangeRate > 0) {
-            exchangeRate = newExchangeRate;
-        } else {
-            //TODO write case
+        if (!(newExchangeRate > 0)) {
             throw new IllegalArgumentException("");
         }
+        exchangeRate = newExchangeRate;
     }
 
     /**
@@ -261,20 +287,23 @@ public class Investment implements Comparable<Investment>{
         return capital;
     }
 
-    //TODO JavaDoc
+    /**
+     * Set the creating Date and update the holding period of the investment
+     *
+     * @param newCapital creation Date
+     * @throws NullPointerException     if specified the newCreationDate is null
+     * @throws IllegalArgumentException
+     */
+    // TODO: 17.06.2022 JavaDoc
     public void setCapital(double newCapital) {
-        if (newCapital > 0) {
-            if (capital != newCapital) {
-                capital = newCapital;
-                if (status == CLOSED) {
-                    cost = platform.getFee(capital);
-                    performance = calcPerformance(sellingPrice);
-                    percentPerformance = calcPercentRounded(capital, performance);
-                }
-            }
-        } else {
-            //TODO write case
+        if (newCapital <= 0) {
             throw new IllegalArgumentException("");
+        }
+        capital = newCapital;
+        if (status == CLOSED) {
+            cost = platform.getFee(capital);
+            performance = calcPerformance(sellingPrice);
+            percentPerformance = calcPercentRounded(capital, performance);
         }
     }
 
@@ -289,12 +318,10 @@ public class Investment implements Comparable<Investment>{
 
     //TODO JavaDoc
     public double calcPerformance(double sellingPrice) {
-        if (sellingPrice >= 0) {
-            return round(sellingPrice - (capital + cost));
-        } else {
-            //TODO write case
+        if (sellingPrice < 0) {
             throw new IllegalArgumentException("");
         }
+        return round(sellingPrice - (capital + cost));
     }
 
     /**
@@ -307,38 +334,36 @@ public class Investment implements Comparable<Investment>{
      */
     //TODO JavaDoc
     public void closeInvestment(LocalDate newSellingDate, double newSellingPrice) {
-        assert newSellingPrice >= 0;
+        if (newSellingDate == null) {
+            throw new NullPointerException();
+        }
+        if (!areAcceptableDates(creationDate, newSellingDate)) {
+            throw new IllegalArgumentException("creation date is after the given sellingDate, logical error");
+        }
+        if (newSellingPrice < 0) {
+            throw new IllegalArgumentException();
+        }
 
-        if (newSellingDate != null) {
-            if (newSellingPrice > 0) {
-                if (areAcceptableDates(creationDate, newSellingDate)) {
-                    if (sellingDate == null || !sellingDate.isEqual(newSellingDate)) {
-                        //updates the holding period of the investment
-                        holdingPeriod = DAYS.between(creationDate, newSellingDate);
-                        //updates the selling Date of the investment
-                        sellingDate = newSellingDate;
-                    }
-                    if (sellingPrice != newSellingPrice) {
-                        if (status == OPEN) {
-                            status = CLOSED;
-                        } else {
-                            //TODO explain tactic
-                            cost = platform.getFee(capital);
-                        }
-                        //updates the cost of the investment
-                        cost = round(cost + platform.getFee(newSellingPrice));
-                        //calculated performance
-                        performance = calcPerformance(newSellingPrice);
-                        System.out.println(performance);
-                        // rule of three
-                        percentPerformance = calcPercentRounded(capital, performance);
-                        sellingPrice = newSellingPrice;
-                    }
-                } else {
-                    throw new IllegalArgumentException("creation date is after the given sellingDate, logical error");
-
-                }
+        if (sellingDate == null || !sellingDate.isEqual(newSellingDate)) {
+            //updates the holding period of the investment
+            holdingPeriod = DAYS.between(creationDate, newSellingDate);
+            //updates the selling Date of the investment
+            sellingDate = newSellingDate;
+        }
+        if (sellingPrice != newSellingPrice) {
+            if (status == CLOSED) {
+                //TODO explain tactic
+                cost = platform.getFee(capital);
+            } else {
+                status = CLOSED;
             }
+            //updates the cost of the investment
+            cost = round(cost + platform.getFee(newSellingPrice));
+            //calculated performance
+            performance = calcPerformance(newSellingPrice);
+            // rule of three
+            percentPerformance = calcPercentRounded(capital, performance);
+            sellingPrice = newSellingPrice;
         }
     }
 
@@ -389,9 +414,13 @@ public class Investment implements Comparable<Investment>{
     }
 
     /**
+     * Compares this investment with the specified investment.  Returns a
+     * negative integer, zero, or a positive integer as this investment is less
+     * than, equal to, or greater than the specified object.
      *
-     * @param other
-     * @return
+     * @param other the investment to be compared.
+     * @return a negative integer, zero, or a positive integer as this investment
+     * is less than, equal to, or greater than the specified investment.
      */
     @Override
     public int compareTo(Investment other) {
@@ -417,12 +446,10 @@ public class Investment implements Comparable<Investment>{
                 ", percentPerformance=" + percentPerformance + "\n" +
                 ", cost=" + cost + "\n" +
                 ", sellingDate=" + sellingDate + "\n" +
-                ", holdingPeriod=" + holdingPeriod +
-                '}';
+                ", holdingPeriod=" + holdingPeriod + '}'+ "\n";
     }
 
     /**
-     *
      * @param o
      * @return
      */

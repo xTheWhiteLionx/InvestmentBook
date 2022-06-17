@@ -34,9 +34,15 @@ public class AbsolutePlatform extends Platform {
      * @param fee  of the platform as absolute value
      */
     public AbsolutePlatform(String name, double fee) {
-        assert name != null;
-        assert !name.isEmpty();
-        assert fee >= 0;
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (fee < 0) {
+            throw new IllegalArgumentException();
+        }
 
         this.name = name;
         this.fee = fee;
@@ -57,7 +63,9 @@ public class AbsolutePlatform extends Platform {
 
     @Override
     public double getFee(double price) {
-        assert price >= 0;
+        if (price < 0) {
+            throw new IllegalArgumentException();
+        }
 
         return fee;
     }
@@ -73,15 +81,18 @@ public class AbsolutePlatform extends Platform {
      * @param fee which should be set
      */
     public void setFee(double fee) {
-        assert fee >= 0;
+        if (fee < 0) {
+            throw new IllegalArgumentException();
+        }
 
         this.fee = fee;
     }
 
     @Override
     public double calcSellingExchangeRate(Investment investment, double targetPerformance) {
-        assert investment != null;
-//        assert targetPerformance >= 0;
+        if (investment == null) {
+            throw new NullPointerException();
+        }
 
         double capital = investment.getCapital();
         double count = capital / investment.getExchangeRate();
@@ -92,7 +103,7 @@ public class AbsolutePlatform extends Platform {
 
     @Override
     public JsonObject toJson(JsonObject jsonObject) {
-        jsonObject.add("Fee", new JsonPrimitive(fee));
+        jsonObject.add("fee", new JsonPrimitive(fee));
         return super.toJson(jsonObject);
     }
 

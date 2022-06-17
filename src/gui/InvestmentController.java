@@ -187,7 +187,7 @@ public class InvestmentController implements Initializable {
         currInvestment.closeInvestment(sellingDatePicker.getValue(),
                 Helper.doubleOfTextField(sellingPriceTxtFld)
         );
-        investmentBook.displayInvestmentList();
+        investmentBook.displayInvestments();
         handleCancel();
     }
 

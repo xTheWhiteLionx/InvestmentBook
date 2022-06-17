@@ -9,9 +9,7 @@ import logic.platform.Platform;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class contains {@code InvestmentBookData} with all his operations.
@@ -26,22 +24,34 @@ import java.util.Set;
  */
 public class InvestmentBookData {
 
-    //TODO JavaDoc
+    /** Platforms of the InvestmentBookData */
     private final Set<Platform> platforms;
 
-    //TODO JavaDoc
+    /** Investments of the InvestmentBookData */
     private final List<Investment> investments;
 
+    /**
+     * Constructor for an investmentBookData.
+     *
+     * @param platforms
+     * @param investments
+     */
     //TODO JavaDoc
     public InvestmentBookData(Set<Platform> platforms, List<Investment> investments){
+        if (platforms == null) {
+            throw new NullPointerException("platforms == null");
+        }
+        if (investments == null) {
+            throw new NullPointerException("investments == null");
+        }
+
         this.platforms = platforms;
         this.investments = investments;
     }
 
     //TODO JavaDoc
     public InvestmentBookData(InvestmentBook investmentBook){
-        this.platforms = investmentBook.getPlatforms();
-        this.investments = investmentBook.getInvestments();
+        this(investmentBook.getPlatforms(), investmentBook.getInvestments());
     }
 
     //TODO JavaDoc
@@ -83,16 +93,28 @@ public class InvestmentBookData {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     //TODO JavaDoc
     public Set<Platform> getPlatforms() {
-        return platforms;
+        return new HashSet<>(platforms);
     }
 
+    /**
+     *
+     * @return
+     */
     //TODO JavaDoc
     public List<Investment> getInvestments() {
-        return investments;
+        return new ArrayList<>(investments);
     }
 
+    /**
+     *
+     * @param file
+     */
     //TODO JavaDoc
     public void toJson(File file) {
         assert file != null;
@@ -117,6 +139,10 @@ public class InvestmentBookData {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "InvestmentBookData{" +
@@ -125,6 +151,11 @@ public class InvestmentBookData {
                 '}';
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

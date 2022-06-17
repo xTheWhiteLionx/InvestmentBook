@@ -1,8 +1,8 @@
 {
   "platforms": [
     {
-      "Fee": 7.0,
-      "Name": "Onvista Bank"
+      "fee": 7.0,
+      "name": "Onvista Bank"
     }
   ],
   "investmentList": [
@@ -10,8 +10,8 @@
       "creationDate": 18079,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
-        "Name": "Onvista Bank"
+        "fee": 7.0,
+        "name": "Onvista Bank"
       },
       "stockName": "Amazon",
       "exchangeRate": 1755.0,
