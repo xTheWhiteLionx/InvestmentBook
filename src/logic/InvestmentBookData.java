@@ -3,7 +3,7 @@ package logic;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import gui.Message;
+import gui.DialogWindow;
 import logic.platform.Platform;
 
 import java.io.*;
@@ -64,7 +64,7 @@ public class InvestmentBookData {
             try {
                 fileReader = new FileReader(file.getAbsoluteFile());
             } catch (FileNotFoundException e) {
-                Message.ExceptionAlert(e);
+                DialogWindow.ExceptionAlert(e);
                 e.printStackTrace();
             }
             try {
@@ -74,7 +74,7 @@ public class InvestmentBookData {
                     return gson.fromJson(reader, listType);
                 }
             } catch (IOException e) {
-                Message.ExceptionAlert(e);
+                DialogWindow.ExceptionAlert(e);
                 e.printStackTrace();
             }
         } else {
@@ -112,7 +112,7 @@ public class InvestmentBookData {
         try (FileWriter writer = new FileWriter(file.getAbsoluteFile())) {
             gson.toJson(this, writer);
         } catch (IOException e) {
-            Message.ExceptionAlert(e);
+            DialogWindow.ExceptionAlert(e);
             e.printStackTrace();
         }
     }

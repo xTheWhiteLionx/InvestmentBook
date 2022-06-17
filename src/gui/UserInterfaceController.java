@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 import static gui.DialogWindow.openDialogFile;
 import static gui.DialogWindow.saveDialogFile;
 import static gui.FeeType.*;
-import static gui.Message.acceptedDeleteAlert;
+import static gui.DialogWindow.acceptedDeleteAlert;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import static logic.GeneralMethods.DIRECTORY;
 import static gui.Style.SYMBOL_OF_CURRENCY;

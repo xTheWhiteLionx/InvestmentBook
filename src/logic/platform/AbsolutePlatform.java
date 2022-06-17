@@ -64,7 +64,7 @@ public class AbsolutePlatform extends Platform {
 
     @Override
     public String getFxmlPath() {
-        return "platformController/AbsolutePlatformController.fxml";
+        return "platformController/AbsolutePlatform.fxml";
     }
 
     /**

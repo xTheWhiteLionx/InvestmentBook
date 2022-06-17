@@ -3,8 +3,6 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 import static gui.Helper.createStage;
 
 /**
@@ -19,7 +17,6 @@ public class ApplicationMain extends Application {
      * title of the window are set.
      *
      * @param primaryStage the stage to be shown
-     * @throws IOException
      */
     @Override
     public void start(Stage primaryStage) {

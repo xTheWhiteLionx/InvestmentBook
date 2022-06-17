@@ -57,7 +57,7 @@ public class PercentPlatform extends Platform {
 
     @Override
     public String getFxmlPath() {
-        return "platformController/PercentPlatformController.fxml";
+        return "platformController/PercentPlatform.fxml";
     }
 
     /**

@@ -64,7 +64,7 @@ public class MixedPlatform extends Platform {
 
     @Override
     public String getFxmlPath() {
-        return "platformController/MixedPlatformController.fxml";
+        return "platformController/MixedPlatform.fxml";
     }
 
     /**

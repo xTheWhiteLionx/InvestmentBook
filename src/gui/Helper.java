@@ -41,7 +41,7 @@ public class Helper {
         try {
             newStage.setScene(new Scene(loader.load(), width, height));
         } catch (IOException e) {
-            Message.ExceptionAlert(e);
+            DialogWindow.ExceptionAlert(e);
             e.printStackTrace();
         }
         newStage.show();
