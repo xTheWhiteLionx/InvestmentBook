@@ -41,13 +41,43 @@ public class Helper {
         try {
             newStage.setScene(new Scene(loader.load(), width, height));
         } catch (IOException e) {
-            DialogWindow.ExceptionAlert(e);
+            DialogWindow.exceptionAlert(e);
             e.printStackTrace();
         }
         newStage.show();
 
         return loader.getController();
     }
+
+    /**
+     * Creates a modality stage/window out of the given fxml path.
+     * With the given title, width and height. And returns the loaded controller generic,
+     * depending on the given fxml path
+     */
+    // TODO: 22.06.2022 JavaDoc
+    public static void createFileController() {
+        double width = 300D;
+        double height = 300D;
+
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(ApplicationMain.class.getResource("FileInterfaceController.fxml"));
+
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle("Investment Book");
+        newStage.setMinWidth(width);
+        newStage.setMinHeight(height);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.setResizable(false);
+        try {
+            newStage.setScene(new Scene(loader.load(), width, height));
+        } catch (IOException e) {
+            DialogWindow.exceptionAlert(e);
+            e.printStackTrace();
+        }
+        newStage.show();
+    }
+
 
     /**
      * Examines if the given text field matches the regex for

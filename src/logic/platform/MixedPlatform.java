@@ -19,11 +19,6 @@ import static logic.GeneralMethods.round;
 public class MixedPlatform extends Platform {
 
     /**
-     * Name of the platform
-     */
-    private String name;
-
-    /**
      * Value of the fee of the platform
      */
     private double percent;
@@ -41,26 +36,9 @@ public class MixedPlatform extends Platform {
      * @param min minimale fee of the platform as absolute value
      */
     public MixedPlatform(String name, double percent, double min) {
-        if (name == null) {
-            throw new NullPointerException();
-        }
-
-        this.name = name;
+        super(name);
         this.percent = percent;
         this.minFee = min;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        this.name = name;
     }
 
     @Override
@@ -139,6 +117,7 @@ public class MixedPlatform extends Platform {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MixedPlatform that)) return false;
-        return that.percent == percent && that.minFee == minFee && name.equals(that.name);
+        if (!super.equals(o)) return false;
+        return Double.compare(that.percent, percent) == 0 && Double.compare(that.minFee, minFee) == 0;
     }
 }

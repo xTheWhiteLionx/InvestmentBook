@@ -1,6 +1,5 @@
 package gui.platformController;
 
-import javafx.fxml.Initializable;
 import logic.platform.Platform;
 
 /**
@@ -8,7 +7,7 @@ import logic.platform.Platform;
  *
  * @author xthe_white_lionx
  */
-public interface PlatformController extends Initializable {
+public interface PlatformController {
 
     /**
      *

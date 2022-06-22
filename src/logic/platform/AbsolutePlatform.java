@@ -18,11 +18,6 @@ import static logic.GeneralMethods.round;
 public class AbsolutePlatform extends Platform {
 
     /**
-     * Name of the platform
-     */
-    private String name;
-
-    /**
      * Fee of the platform as absolute value
      */
     private double fee;
@@ -34,31 +29,11 @@ public class AbsolutePlatform extends Platform {
      * @param fee  of the platform as absolute value
      */
     public AbsolutePlatform(String name, double fee) {
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+        super(name);
         if (fee < 0) {
             throw new IllegalArgumentException();
         }
-
-        this.name = name;
         this.fee = fee;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        assert name != null;
-        assert !name.isEmpty();
-
-        this.name = name;
     }
 
     @Override
@@ -111,6 +86,7 @@ public class AbsolutePlatform extends Platform {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AbsolutePlatform that)) return false;
-        return that.fee == fee && name.equals(that.name);
+        if (!super.equals(o)) return false;
+        return Double.compare(that.fee, fee) == 0;
     }
 }

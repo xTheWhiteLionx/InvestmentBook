@@ -8,16 +8,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import logic.Investment;
+import logic.Quarter;
 import logic.Status;
-import logic.*;
+import logic.investmentBook.InvestmentBook;
+import logic.investmentBook.InvestmentBookData;
 import logic.platform.AbsolutePlatform;
 import logic.platform.MixedPlatform;
 import logic.platform.PercentPlatform;
 import logic.platform.Platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
@@ -25,13 +28,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
-import static gui.DialogWindow.openDialogFile;
-import static gui.DialogWindow.saveDialogFile;
+import static gui.DialogWindow.*;
 import static gui.FeeType.*;
-import static gui.DialogWindow.acceptedDeleteAlert;
-import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
-import static gui.DialogWindow.DIRECTORY;
 import static gui.Style.SYMBOL_OF_CURRENCY;
+import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import static logic.Quarter.getQuarterOfMonth;
 
 
@@ -100,29 +100,6 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private CheckBox yearCheckBox;
 
-    //investment attributes for a new investment
-    @FXML
-    private GridPane addInvestmentGrdPn;
-    @FXML
-    private DatePicker creationDatePicker;
-    @FXML
-    private ChoiceBox<Platform> platformChcBx2;
-    @FXML
-    private TextField stockNameTxtFld;
-    @FXML
-    private TextField exchangeRateTxtFld;
-    @FXML
-    private Label exchangeRateCurrencyLbl;
-    @FXML
-    private TextField capitalTxtFld;
-    @FXML
-    private Label capitalCurrencyLbl;
-    @FXML
-    private TextField sellingPriceTxtFld;
-    @FXML
-    private Label sellingPriceCurrencyLbl;
-    @FXML
-    private DatePicker sellingDatePicker;
     @FXML
     private Button btnAddInvestment;
     @FXML
@@ -140,7 +117,7 @@ public class UserInterfaceController implements Initializable {
      *
      */
     //TODO JavaDoc
-    private ChoiceBox<Platform>[] platformChcBxs;
+    private ChoiceBox[] platformChcBxs;
 
     /**
      *
@@ -163,9 +140,6 @@ public class UserInterfaceController implements Initializable {
      */
     //TODO JavaDoc
     public void setFile(File selectedFile) {
-        if (selectedFile == null) {
-            selectedFile = new File(DIRECTORY + "newBook.json");
-        }
         currFile = selectedFile;
         initInvestmentBook();
     }
@@ -217,34 +191,6 @@ public class UserInterfaceController implements Initializable {
                 (observable, oldValue, newValue) ->
                         btnDeletePlatform.setDisable(newValue == null)
         );
-    }
-
-    /**
-     * Creates and adds a changeListener to the add investment items
-     * to regular the accessibility of the add platform button
-     */
-    private void initializeAddInvestmentListener() {
-        //Listener to regular the accessibility of the add investment button
-        ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
-            boolean someInputIsInvalid = creationDatePicker == null
-                    || platformChcBx2.getValue() == null
-                    || !Helper.isValidDouble(exchangeRateTxtFld)
-                    || !Helper.isValidDouble(capitalTxtFld)
-                    || stockNameTxtFld.getText().isEmpty()
-                    //To be a valid investment the sellingDate and sellingPrice has to be both
-                    // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ Helper.isValidDouble(sellingPriceTxtFld));
-
-            btnAddInvestment.setDisable(someInputIsInvalid);
-        };
-
-        creationDatePicker.valueProperty().addListener(FieldValidityListener);
-        platformChcBx2.valueProperty().addListener(FieldValidityListener);
-        stockNameTxtFld.textProperty().addListener(FieldValidityListener);
-        exchangeRateTxtFld.textProperty().addListener(FieldValidityListener);
-        capitalTxtFld.textProperty().addListener(FieldValidityListener);
-        sellingPriceTxtFld.textProperty().addListener(FieldValidityListener);
-        sellingDatePicker.valueProperty().addListener(FieldValidityListener);
     }
 
     /**
@@ -358,7 +304,6 @@ public class UserInterfaceController implements Initializable {
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         initializeFilterOptions();
-        initializeAddInvestmentListener();
         initializeFilterListener();
 
         investmentTblVw.getSelectionModel().selectedItemProperty().addListener(
@@ -385,21 +330,6 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Handles the "reset" Button for the add investment interface and
-     * cleans the items to their default values
-     */
-    @FXML
-    private void handleResetAddInvestment() {
-        creationDatePicker.setValue(LocalDate.now());
-        stockNameTxtFld.setText("");
-        exchangeRateTxtFld.setText("");
-        capitalTxtFld.setText("");
-        sellingPriceTxtFld.setText("");
-        sellingDatePicker.setValue(null);
-        btnAddInvestment.setDisable(true);
-    }
-
-    /**
      * Handles the "reset" Button for the add platform interface and
      * cleans the items to their default values
      */
@@ -422,10 +352,16 @@ public class UserInterfaceController implements Initializable {
      */
     private InvestmentBookData loadInvestmentBook(File file) {
         if (file.exists()) {
-            return InvestmentBookData.fromJson(file);
+            try {
+                return InvestmentBookData.fromJson(file);
+            } catch (IOException e) {
+                exceptionAlert(e);
+                e.printStackTrace();
+            }
         } else {
             return new InvestmentBookData(new HashSet<>(), new ArrayList<>());
         }
+        return null;
     }
 
     //TODO JavaDoc
@@ -448,7 +384,6 @@ public class UserInterfaceController implements Initializable {
         btnDeleteInvestment.setDisable(true);
         handleResetAddPlatform();
         cleanFilter();
-        handleResetAddInvestment();
     }
 
     //TODO JavaDoc
@@ -469,7 +404,6 @@ public class UserInterfaceController implements Initializable {
         btnDeleteInvestment.setDisable(true);
         handleResetAddPlatform();
         cleanFilter();
-        handleResetAddInvestment();
     }
 
     /**
@@ -480,12 +414,9 @@ public class UserInterfaceController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        platformChcBxs = new ChoiceBox[]{platformChcBx, platformChcBx2};
+        platformChcBxs = new ChoiceBox[]{platformChcBx};
 
         currencyLbls = new Label[]{minCurrencyLbl,
-                exchangeRateCurrencyLbl,
-                capitalCurrencyLbl,
-                sellingPriceCurrencyLbl,
                 totalPerformanceCurrencyLbl};
 
         initializePlatformTab();
@@ -571,7 +502,12 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleSaveBook() {
-        new InvestmentBookData(investmentBook).toJson(currFile);
+        try {
+            new InvestmentBookData(investmentBook).toJson(currFile);
+        } catch (IOException e) {
+            exceptionAlert(e);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -580,7 +516,14 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleSaveBookAs() {
         File selectedFile = saveDialogFile(investmentTblVw.getScene().getWindow());
-        new InvestmentBookData(investmentBook).toJson(selectedFile);
+        if (selectedFile != null) {
+            try {
+                new InvestmentBookData(investmentBook).toJson(selectedFile);
+            } catch (IOException e) {
+                exceptionAlert(e);
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -651,27 +594,13 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleAddInvestment() {
-        double sellingPrice = Helper.doubleOfTextField(sellingPriceTxtFld);
-        LocalDate sellingDate = sellingDatePicker.getValue();
-
-        Investment newInvestment;
-        if (sellingPrice > 0 && sellingDate != null) {
-            newInvestment = new Investment(creationDatePicker.getValue(),
-                    platformChcBx2.getValue(),
-                    stockNameTxtFld.getText(),
-                    Helper.doubleOfTextField(exchangeRateTxtFld),
-                    Helper.doubleOfTextField(capitalTxtFld),
-                    sellingPrice,
-                    sellingDate);
-        } else {
-            newInvestment = new Investment(creationDatePicker.getValue(),
-                    platformChcBx2.getValue(),
-                    stockNameTxtFld.getText(),
-                    Helper.doubleOfTextField(exchangeRateTxtFld),
-                    Helper.doubleOfTextField(capitalTxtFld));
-        }
-        investmentBook.add(newInvestment);
-        handleResetAddInvestment();
+        newInvestmentController newInvestmentController = Helper.createStage(
+                "newInvestmentController.fxml",
+                "new Investment",
+                650,
+                600
+        );
+        newInvestmentController.setInvestmentBook(investmentBook);
     }
 
     /**

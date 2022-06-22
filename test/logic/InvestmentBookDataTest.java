@@ -1,5 +1,6 @@
 package logic;
 
+import logic.investmentBook.InvestmentBookData;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,7 +16,7 @@ import static logic.HelperClass.COINBASE;
 import static logic.HelperClass.MAX_BLUE;
 import static logic.HelperClass.ONVISTA_BANK;
 import static logic.HelperClass.createPlatforms;
-import static logic.InvestmentBookData.fromJson;
+import static logic.investmentBook.InvestmentBookData.fromJson;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -207,7 +208,11 @@ public class InvestmentBookDataTest {
     public void testReadInvestsJsonFileDoesNotExist() {
         File testFile = new File("test.json");
 
-        fromJson(testFile);
+        try {
+            fromJson(testFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -218,7 +223,11 @@ public class InvestmentBookDataTest {
     public void testIsNotAJsonFile() {
         File testFile = new File("src/main/resources/test.txt");
 
-        fromJson(testFile);
+        try {
+            fromJson(testFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    /**
@@ -242,7 +251,7 @@ public class InvestmentBookDataTest {
      */
     @Test
     //TODO JavaDoc and rename
-    public void testWriteInvestsToJsonAndReadInvestsJson() {
+    public void testWriteInvestsToJsonAndReadInvestsJson() throws IOException {
 
         InvestmentBookData expected = createTestInvestmentBookJson();
         expected.toJson(file);

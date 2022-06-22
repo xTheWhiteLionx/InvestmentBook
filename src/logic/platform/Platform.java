@@ -4,8 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
+import java.util.Objects;
+
 /**
- * This class is contains the platform logic
+ * This class contains the platform logic
  *
  * @author xthe_white_lionx
  * @see AbsolutePlatform
@@ -13,6 +15,26 @@ import logic.Investment;
  * @see PercentPlatform
  */
 public abstract class Platform {
+
+    /**
+     * Name of the platform
+     */
+    private String name;
+
+    /**
+     *
+     * @param name
+     */
+    // TODO: 22.06.2022 JavaDoc
+    public Platform(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        this.name = name;
+    }
 
     /**
      * @param jsonObject
@@ -36,7 +58,9 @@ public abstract class Platform {
      *
      * @return name of this platform
      */
-    public abstract String getName();
+    public String getName() {
+        return name;
+    }
 
     /**
      * Sets the name of this platform
@@ -44,7 +68,12 @@ public abstract class Platform {
      * @throws NullPointerException     if name is null
      * @throws IllegalArgumentException if name is empty
      */
-    public abstract void setName(String name);
+    public void setName(String name) {
+        assert name != null;
+        assert !name.isEmpty();
+
+        this.name = name;
+    }
 
     /**
      * Returns the fee of the platform (for a given price)
@@ -103,7 +132,7 @@ public abstract class Platform {
      */
     @Override
     public String toString() {
-        return getName();
+        return name;
     }
 
     /**
@@ -112,9 +141,8 @@ public abstract class Platform {
      */
     @Override
     public boolean equals(Object o) {
-        if (this instanceof AbsolutePlatform a) return a.equals(o);
-        if (this instanceof PercentPlatform b) return b.equals(o);
-        if (this instanceof MixedPlatform c) return c.equals(o);
-        return false;
+        if (this == o) return true;
+        if (!(o instanceof Platform platform)) return false;
+        return Objects.equals(name, platform.name);
     }
 }

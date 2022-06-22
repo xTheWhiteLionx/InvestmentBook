@@ -91,7 +91,7 @@ public class DialogWindow {
      * @param exception which should be displayed
      */
     //TODO JavaDoc
-    public static void ExceptionAlert(Exception exception) {
+    public static void exceptionAlert(Exception exception) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(alert.getAlertType().name().toLowerCase());
         alert.setContentText(exception.getMessage());

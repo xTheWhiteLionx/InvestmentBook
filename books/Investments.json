@@ -1,7 +1,7 @@
 {
   "platforms": [
     {
-      "Fee": 7.0,
+      "fee": 7.0,
       "name": "Onvista Bank"
     },
     {
@@ -37,7 +37,7 @@
       "creationDate": 17809,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Take Two",
@@ -54,7 +54,7 @@
       "creationDate": 17842,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Take Two",
@@ -71,7 +71,7 @@
       "creationDate": 17847,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Take Two",
@@ -88,7 +88,7 @@
       "creationDate": 17899,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Take Two",
@@ -105,7 +105,7 @@
       "creationDate": 18079,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Amazon",
@@ -122,7 +122,7 @@
       "creationDate": 18099,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Tesla",
@@ -156,7 +156,7 @@
       "creationDate": 18114,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Amazon",
@@ -173,7 +173,7 @@
       "creationDate": 18141,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Alibaba",
@@ -190,7 +190,7 @@
       "creationDate": 18270,
       "status": "CLOSED",
       "platform": {
-        "Fee": 7.0,
+        "fee": 7.0,
         "name": "Onvista Bank"
       },
       "stockName": "Deutsche Bank",

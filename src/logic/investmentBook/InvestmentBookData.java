@@ -1,15 +1,25 @@
-package logic;
+package logic.investmentBook;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import gui.DialogWindow;
+import logic.Investment;
 import logic.platform.Platform;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * This class contains {@code InvestmentBookData} with all his operations.
@@ -22,13 +32,7 @@ import java.util.*;
  *
  * @author xthe_white_lionx
  */
-public class InvestmentBookData {
-
-    /** Platforms of the InvestmentBookData */
-    private final Set<Platform> platforms;
-
-    /** Investments of the InvestmentBookData */
-    private final List<Investment> investments;
+public class InvestmentBookData extends InvestmentBookImpl {
 
     /**
      * Constructor for an investmentBookData.
@@ -38,24 +42,16 @@ public class InvestmentBookData {
      */
     //TODO JavaDoc
     public InvestmentBookData(Set<Platform> platforms, List<Investment> investments){
-        if (platforms == null) {
-            throw new NullPointerException("platforms == null");
-        }
-        if (investments == null) {
-            throw new NullPointerException("investments == null");
-        }
-
-        this.platforms = platforms;
-        this.investments = investments;
+        super(platforms, investments);
     }
 
     //TODO JavaDoc
     public InvestmentBookData(InvestmentBook investmentBook){
-        this(investmentBook.getPlatforms(), investmentBook.getInvestments());
+        super(investmentBook.getPlatforms(), investmentBook.getInvestments());
     }
 
     //TODO JavaDoc
-    public static InvestmentBookData fromJson(File file) {
+    public static InvestmentBookData fromJson(File file) throws FileNotFoundException, IOException {
         Gson gson = new GsonBuilder()
                 //Deserializer to parse the dates as LocalDates
                 .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
@@ -71,52 +67,23 @@ public class InvestmentBookData {
 
         if (file.getName().contains(".json")) {
             FileReader fileReader = null;
-            try {
-                fileReader = new FileReader(file.getAbsoluteFile());
-            } catch (FileNotFoundException e) {
-                DialogWindow.ExceptionAlert(e);
-                e.printStackTrace();
-            }
-            try {
-                if (fileReader != null && fileReader.ready()) {
-                    JsonReader reader = new JsonReader(fileReader);
+            fileReader = new FileReader(file.getAbsoluteFile());
+            if (fileReader.ready()) {
+                JsonReader reader = new JsonReader(fileReader);
 
-                    return gson.fromJson(reader, listType);
-                }
-            } catch (IOException e) {
-                DialogWindow.ExceptionAlert(e);
-                e.printStackTrace();
+                return gson.fromJson(reader, listType);
             }
         } else {
             throw new IllegalArgumentException("the file must has to be an json file");
         }
         return null;
     }
-
-    /**
-     *
-     * @return
-     */
-    //TODO JavaDoc
-    public Set<Platform> getPlatforms() {
-        return new HashSet<>(platforms);
-    }
-
-    /**
-     *
-     * @return
-     */
-    //TODO JavaDoc
-    public List<Investment> getInvestments() {
-        return new ArrayList<>(investments);
-    }
-
     /**
      *
      * @param file
      */
     //TODO JavaDoc
-    public void toJson(File file) {
+    public void toJson(File file) throws IOException {
         assert file != null;
 
         Gson gson = new GsonBuilder()
@@ -133,22 +100,7 @@ public class InvestmentBookData {
 
         try (FileWriter writer = new FileWriter(file.getAbsoluteFile())) {
             gson.toJson(this, writer);
-        } catch (IOException e) {
-            DialogWindow.ExceptionAlert(e);
-            e.printStackTrace();
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return "InvestmentBookData{" +
-                "platforms=" + platforms +
-                ", investments=" + investments +
-                '}';
     }
 
     /**

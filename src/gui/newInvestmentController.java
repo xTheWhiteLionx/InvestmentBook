@@ -1,0 +1,180 @@
+package gui;
+
+import javafx.beans.value.ChangeListener;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import logic.Investment;
+import logic.investmentBook.InvestmentBook;
+import logic.platform.Platform;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
+public class newInvestmentController implements Initializable {
+
+    @FXML
+    private DatePicker creationDatePicker;
+    @FXML
+    private ChoiceBox<Platform> platformChcBx;
+    @FXML
+    private TextField stockNameTxtFld;
+    @FXML
+    private TextField exchangeRateTxtFld;
+    @FXML
+    private Label exchangeRateCurrencyLbl;
+    @FXML
+    private TextField capitalTxtFld;
+    @FXML
+    private Label capitalCurrencyLbl;
+    @FXML
+    private TextField sellingPriceTxtFld;
+    @FXML
+    private Label sellingPriceCurrencyLbl;
+    @FXML
+    private DatePicker sellingDatePicker;
+    @FXML
+    private Button btnApply;
+    @FXML
+    private Button btnCancel;
+
+    /**
+     * the current {@link InvestmentBook}
+     */
+    private InvestmentBook investmentBook;
+
+    /**
+     * Sets the current {@link InvestmentBook}
+     *
+     * @param investmentBook the over handed investment
+     */
+    public void setInvestmentBook(InvestmentBook investmentBook) {
+        assert investmentBook != null;
+
+        this.investmentBook = investmentBook;
+        platformChcBx.getItems().addAll(investmentBook.getPlatforms());
+        if (!investmentBook.getPlatforms().isEmpty()) {
+            platformChcBx.setValue(platformChcBx.getItems().get(0));
+        }
+    }
+
+    /**
+     * Creates and adds a changeListener to the controller
+     * items of the investment to regular the accessibility of the apply button
+     */
+    private void initializeApplyListener() {
+        //Listener of the add investment attributes to make the btnAddInvestment enable/disable
+        ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
+            boolean someInputIsInvalid = creationDatePicker == null
+                    || !Helper.isValidDouble(exchangeRateTxtFld)
+                    || !Helper.isValidDouble(capitalTxtFld)
+                    || stockNameTxtFld.getText().isEmpty()
+                    //To be a valid investment the sellingDate and sellingPrice has to be both
+                    // invalid or both attributes has to be valid
+                    || (sellingDatePicker.getValue() != null ^ Helper.isValidDouble(sellingPriceTxtFld));
+
+            btnApply.setDisable(someInputIsInvalid);
+        };
+
+        creationDatePicker.valueProperty().addListener(FieldValidityListener);
+        stockNameTxtFld.textProperty().addListener(FieldValidityListener);
+        exchangeRateTxtFld.textProperty().addListener(FieldValidityListener);
+        capitalTxtFld.textProperty().addListener(FieldValidityListener);
+        sellingPriceTxtFld.textProperty().addListener(FieldValidityListener);
+        sellingDatePicker.valueProperty().addListener(FieldValidityListener);
+    }
+
+    /**
+     * Creates and adds a changeListener to the add investment items
+     * to regular the accessibility of the add platform button
+     */
+    private void initializeAddInvestmentListener() {
+        //Listener to regular the accessibility of the add investment button
+        ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
+            boolean someInputIsInvalid = creationDatePicker == null
+                    || platformChcBx.getValue() == null
+                    || !Helper.isValidDouble(exchangeRateTxtFld)
+                    || !Helper.isValidDouble(capitalTxtFld)
+                    || stockNameTxtFld.getText().isEmpty()
+                    //To be a valid investment the sellingDate and sellingPrice has to be both
+                    // invalid or both attributes has to be valid
+                    || (sellingDatePicker.getValue() != null ^ Helper.isValidDouble(sellingPriceTxtFld));
+
+            btnApply.setDisable(someInputIsInvalid);
+        };
+
+        creationDatePicker.valueProperty().addListener(FieldValidityListener);
+        platformChcBx.valueProperty().addListener(FieldValidityListener);
+        stockNameTxtFld.textProperty().addListener(FieldValidityListener);
+        exchangeRateTxtFld.textProperty().addListener(FieldValidityListener);
+        capitalTxtFld.textProperty().addListener(FieldValidityListener);
+        sellingPriceTxtFld.textProperty().addListener(FieldValidityListener);
+        sellingDatePicker.valueProperty().addListener(FieldValidityListener);
+    }
+
+    /**
+     * Initializes the application.
+     *
+     * @param url            unused
+     * @param resourceBundle unused
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        //all the currency labels as array
+        Style.setCurrenciesForLbls(exchangeRateCurrencyLbl, capitalCurrencyLbl,
+                sellingPriceCurrencyLbl);
+        creationDatePicker.setValue(LocalDate.now());
+
+        initializeApplyListener();
+        initializeAddInvestmentListener();
+    }
+
+    /**
+     * Closes the Window.
+     */
+    @FXML
+    private void handleCancel() {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
+
+    private boolean isValid(TextField textField) {
+        if (!textField.getText().isEmpty()) {
+            return Helper.doubleOfTextField(sellingPriceTxtFld) > 0;
+        }
+        return false;
+    }
+
+    /**
+     * Handles the "Apply" Button and hands over
+     * the (new) {@link Investment} attributes
+     */
+    @FXML
+    //TODO outsource to a methode in investmentBook
+    private void handleApply() {
+        LocalDate sellingDate = sellingDatePicker.getValue();
+
+        Investment newInvestment;
+        if (isValid(sellingPriceTxtFld) && sellingDate != null) {
+            newInvestment = new Investment(creationDatePicker.getValue(),
+                    platformChcBx.getValue(),
+                    stockNameTxtFld.getText(),
+                    Helper.doubleOfTextField(exchangeRateTxtFld),
+                    Helper.doubleOfTextField(capitalTxtFld),
+                    Helper.doubleOfTextField(sellingPriceTxtFld),
+                    sellingDate);
+        } else {
+            newInvestment = new Investment(creationDatePicker.getValue(),
+                    platformChcBx.getValue(),
+                    stockNameTxtFld.getText(),
+                    Helper.doubleOfTextField(exchangeRateTxtFld),
+                    Helper.doubleOfTextField(capitalTxtFld));
+        }
+        investmentBook.add(newInvestment);
+        handleCancel();
+    }
+
+}

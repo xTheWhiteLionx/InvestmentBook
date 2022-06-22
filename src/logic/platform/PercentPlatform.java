@@ -19,11 +19,6 @@ import static logic.GeneralMethods.round;
 public class PercentPlatform extends Platform {
 
     /**
-     * Name of the platform
-     */
-    private String name;
-
-    /**
      * Value of the fee of the platform
      */
     private double percent;
@@ -35,18 +30,8 @@ public class PercentPlatform extends Platform {
      * @param percent value of the fee of the platform
      */
     public PercentPlatform(String name, double percent) {
-        this.name = name;
+        super(name);
         this.percent = percent;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -107,6 +92,7 @@ public class PercentPlatform extends Platform {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PercentPlatform that)) return false;
-        return that.percent == percent && name.equals(that.name);
+        if (!super.equals(o)) return false;
+        return Double.compare(that.percent, percent) == 0;
     }
 }

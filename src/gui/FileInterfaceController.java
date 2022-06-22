@@ -9,6 +9,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static gui.DialogWindow.DIRECTORY;
 import static gui.DialogWindow.openDialogFile;
 import static gui.Helper.createStage;
 
@@ -56,7 +57,7 @@ public class FileInterfaceController implements Initializable {
      * handles the create new Book button
      */
     public void handleCreateNewBook() {
-        createUserInterfaceController(null);
+        createUserInterfaceController(new File(DIRECTORY + "newBook.json"));
     }
 
     /**

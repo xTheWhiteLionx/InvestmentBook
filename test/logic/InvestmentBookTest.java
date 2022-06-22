@@ -1,5 +1,6 @@
 package logic;
 
+import logic.investmentBook.InvestmentBook;
 import org.junit.Test;
 
 import java.time.LocalDate;

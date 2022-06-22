@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.Investment;
-import logic.InvestmentBook;
+import logic.investmentBook.InvestmentBook;
 import logic.Status;
 
 import java.net.URL;

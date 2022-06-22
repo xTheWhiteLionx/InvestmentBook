@@ -1,5 +1,6 @@
 package logic;
 
+import logic.investmentBook.InvestmentBook;
 import logic.platform.AbsolutePlatform;
 import logic.platform.MixedPlatform;
 import logic.platform.PercentPlatform;

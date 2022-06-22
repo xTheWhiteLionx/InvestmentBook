@@ -1,5 +1,6 @@
-package logic;
+package logic.investmentBook;
 
+import logic.*;
 import logic.platform.Platform;
 
 import java.time.Month;
@@ -13,17 +14,7 @@ import java.util.stream.Stream;
  * @author Fabian Hardt
  */
 //TODO JavaDoc
-public class InvestmentBook {
-
-    /**
-     * Platforms of the InvestmentBook
-     */
-    private final Set<Platform> platforms;
-
-    /**
-     * Investments of the InvestmentBook
-     */
-    private final List<Investment> investments;
+public class InvestmentBook extends InvestmentBookImpl {
 
     /**
      * Connection to the gui.
@@ -39,19 +30,10 @@ public class InvestmentBook {
      */
     //TODO JavaDoc
     public InvestmentBook(Set<Platform> platforms, List<Investment> investments, GUIConnector gui) {
-        if (platforms == null) {
-            throw new NullPointerException();
-        }
-        if (investments == null) {
-            throw new NullPointerException();
-        }
+        super(platforms, investments);
         if (gui == null) {
             throw new NullPointerException();
         }
-
-        this.platforms = platforms;
-        Collections.sort(investments);
-        this.investments = investments;
         this.gui = gui;
 
         displayPlatforms();
@@ -71,24 +53,6 @@ public class InvestmentBook {
 
     /**
      *
-     * @return
-     */
-    //TODO JavaDoc
-    public Set<Platform> getPlatforms() {
-        return new HashSet<>(platforms);
-    }
-
-    /**
-     *
-     * @return
-     */
-    //TODO JavaDoc
-    public List<Investment> getInvestments() {
-        return new ArrayList<>(investments);
-    }
-
-    /**
-     *
      */
     //TODO JavaDoc
     public void displayPlatforms() {
@@ -104,7 +68,6 @@ public class InvestmentBook {
     }
 
     /**
-     *
      * @param platform
      */
     //TODO JavaDoc
@@ -114,7 +77,6 @@ public class InvestmentBook {
     }
 
     /**
-     *
      * @param investment
      */
     //TODO JavaDoc
@@ -125,7 +87,6 @@ public class InvestmentBook {
     }
 
     /**
-     *
      * @param platform
      */
     //TODO JavaDoc
@@ -135,7 +96,6 @@ public class InvestmentBook {
     }
 
     /**
-     *
      * @param investment
      */
     //TODO JavaDoc
@@ -173,8 +133,8 @@ public class InvestmentBook {
      * @param year
      */
     public List<Investment> filter(Status status, Platform platform, String stockName,
-                       Month month, Quarter quarter, int year) {
-        Stream<Investment> investmentStream = investments.stream();
+                                   Month month, Quarter quarter, int year) {
+        Stream<Investment> investmentStream = getInvestments().stream();
 
         if (status != null) {
             investmentStream = investmentStream.filter(x -> x.getStatus() == status);
@@ -205,16 +165,11 @@ public class InvestmentBook {
         return filteredInvestments;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
-    public String toString() {
-        return "InvestmentBook{" +
-                "platforms=" + platforms +
-                ", investments=" + investments +
-                ", gui=" + gui +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InvestmentBook that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(gui, that.gui);
     }
 }

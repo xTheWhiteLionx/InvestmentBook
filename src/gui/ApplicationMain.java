@@ -3,7 +3,7 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import static gui.Helper.createStage;
+import static gui.Helper.createFileController;
 
 /**
  * This class contains the main.
@@ -20,11 +20,7 @@ public class ApplicationMain extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-               createStage("FileInterfaceController.fxml",
-                "Investment Book",
-                300,
-                300
-        );
+        createFileController();
     }
 
     /**
