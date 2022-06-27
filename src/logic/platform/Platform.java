@@ -37,6 +37,21 @@ public abstract class Platform {
     }
 
     /**
+     * Constructs an {@code MixedPlatform} with the specified arguments.
+     *
+     * @param name of the platform
+     * @param fee value of the fee of the platform
+     * @param minFee minimale fee of the platform as absolute value
+     */
+    public static Platform create(FeeType feeType, String name, double fee, double minFee) {
+        return switch (feeType) {
+            case PERCENT -> new PercentPlatform(name, fee);
+            case ABSOLUTE -> new AbsolutePlatform(name, fee);
+            case MIXED -> new MixedPlatform(name, fee, minFee);
+        };
+    }
+
+    /**
      * @param jsonObject
      * @return
      */

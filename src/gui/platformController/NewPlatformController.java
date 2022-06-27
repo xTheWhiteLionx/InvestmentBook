@@ -1,6 +1,5 @@
 package gui.platformController;
 
-import gui.FeeType;
 import gui.Helper;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
@@ -12,15 +11,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.investmentBook.InvestmentBook;
-import logic.platform.AbsolutePlatform;
-import logic.platform.MixedPlatform;
-import logic.platform.PercentPlatform;
+import logic.platform.FeeType;
 import logic.platform.Platform;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static gui.FeeType.*;
+import static gui.Style.SYMBOL_OF_CURRENCY;
+import static logic.platform.FeeType.ABSOLUTE;
+import static logic.platform.FeeType.MIXED;
 
 public class NewPlatformController implements Initializable {
 
@@ -30,6 +29,8 @@ public class NewPlatformController implements Initializable {
     private ChoiceBox<FeeType> feeTypeChcBx;
     @FXML
     private TextField feeTxtFld;
+    @FXML
+    private Label feeTypeSymbolLbl;
     @FXML
     private TextField minTxtFld;
     @FXML
@@ -51,19 +52,31 @@ public class NewPlatformController implements Initializable {
     }
 
     /**
-     * Creates and adds a changeListener to the controller
-     * items of the investment to regular the accessibility of the apply button
+     * Creates and adds a changeListener to the controller items
+     * to regular the accessibility of the apply button
      */
-    private void initializeApplyListener() {
-        //Listener of the add investment attributes to make the btnAddInvestment enable/disable
+    private void initializeListener() {
+        //Listener of the add platform attributes to make the btnAddPlatform enable or disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
-            boolean someInputIsInvalid = nameTxtFld.getText().isEmpty()
-                    || !Helper.isValidDouble(feeTxtFld)
-                    || !Helper.isValidDouble(minTxtFld);
+            FeeType feeType = feeTypeChcBx.getValue();
+            boolean isNotMixedPlatform = feeType != MIXED;
+            boolean nameAndFeeAreInvalid =
+                    nameTxtFld.getText().isEmpty() || !Helper.isValidDouble(feeTxtFld);
 
-            btnApply.setDisable(someInputIsInvalid);
+            if (isNotMixedPlatform) {
+                minTxtFld.setText("");
+                btnApply.setDisable(nameAndFeeAreInvalid);
+            } else {
+                // examines if all fields have invalid input
+                btnApply.setDisable(nameAndFeeAreInvalid || !Helper.isValidDouble(minTxtFld));
+            }
+            minTxtFld.setDisable(isNotMixedPlatform);
+            feeTypeSymbolLbl.setText(feeType == ABSOLUTE ? SYMBOL_OF_CURRENCY : "%");
         };
 
+        feeTypeChcBx.getSelectionModel().selectedItemProperty().addListener(
+                FieldValidityListener
+        );
         nameTxtFld.textProperty().addListener(FieldValidityListener);
         feeTxtFld.textProperty().addListener(FieldValidityListener);
         minTxtFld.textProperty().addListener(FieldValidityListener);
@@ -77,10 +90,15 @@ public class NewPlatformController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initializeListener();
+        feeTypeChcBx.getItems().addAll(FeeType.values());
+        feeTypeChcBx.setValue(FeeType.values()[0]);
+        feeTypeSymbolLbl.setText("%");
+        btnApply.setDisable(true);
+
         Style.setCurrenciesForLbls(
                 minFeeCurrencyLbl
         );
-        initializeApplyListener();
     }
 
     /**
@@ -94,19 +112,14 @@ public class NewPlatformController implements Initializable {
 
     /**
      * Handles the "Apply" Button and hands over
-     * the (new) {@link AbsolutePlatform} attributes
+     * the (new) {@link Platform}
      */
     @FXML
-    //TODO outsource to a methode in investmentBook
     private void handleApply() {
-        String platformName = nameTxtFld.getText();
-        double fee = Helper.doubleOfTextField(feeTxtFld);
-
-        Platform newPlatform = switch (feeTypeChcBx.getValue()) {
-            case PERCENT -> new PercentPlatform(platformName, fee);
-            case ABSOLUTE -> new AbsolutePlatform(platformName, fee);
-            case MIXED -> new MixedPlatform(platformName, fee, Helper.doubleOfTextField(minTxtFld));
-        };
+        Platform newPlatform = Platform.create(feeTypeChcBx.getValue(),
+                nameTxtFld.getText(),
+                Helper.doubleOfTextField(feeTxtFld),
+                Helper.doubleOfTextField(minTxtFld));
         investmentBook.add(newPlatform);
         handleCancel();
     }

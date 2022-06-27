@@ -1,4 +1,4 @@
-package gui;
+package logic.platform;
 
 /**
  * Enum of fee types which a platform could have

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.platformController.NewPlatformController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.platformController.NewPlatformController">
     <center>
         <VBox alignment="CENTER" prefHeight="423.0" prefWidth="417.0" BorderPane.alignment="CENTER">
             <opaqueInsets>
@@ -43,7 +43,7 @@
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin></ChoiceBox>
-                <Label layoutX="37.0" layoutY="67.0" text="Fee type" GridPane.rowIndex="1">
+                <Label layoutX="37.0" layoutY="67.0" text="fee type" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
@@ -85,6 +85,8 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
+            <Label fx:id="minFeeCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="feeTypeSymbolLbl" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <opaqueInsets>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </opaqueInsets>

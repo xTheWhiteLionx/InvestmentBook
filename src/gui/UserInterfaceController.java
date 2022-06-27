@@ -3,6 +3,7 @@ package gui;
 import gui.calculator.FeeCalculatorController;
 import gui.investmentController.InvestmentController;
 import gui.investmentController.NewInvestmentController;
+import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -16,9 +17,7 @@ import logic.Quarter;
 import logic.Status;
 import logic.investmentBook.InvestmentBook;
 import logic.investmentBook.InvestmentBookData;
-import logic.platform.AbsolutePlatform;
-import logic.platform.MixedPlatform;
-import logic.platform.PercentPlatform;
+import logic.platform.FeeType;
 import logic.platform.Platform;
 
 import java.io.File;
@@ -31,7 +30,6 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.*;
-import static gui.FeeType.*;
 import static gui.Style.SYMBOL_OF_CURRENCY;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import static logic.Quarter.getQuarterOfMonth;
@@ -43,7 +41,6 @@ import static logic.Quarter.getQuarterOfMonth;
  * @author xthewhitelionx
  */
 public class UserInterfaceController implements Initializable {
-
     @FXML
     private Label fileNameLbl;
     @FXML
@@ -55,25 +52,8 @@ public class UserInterfaceController implements Initializable {
     //TODO implement
     @FXML
     public ProgressBar progressBar;
-
-
-    /**
-     * content of the platform Tab
-     */
     @FXML
-    private ChoiceBox<FeeType> feeTypesChcBox;
-    @FXML
-    private TextField platformNameTxtFld;
-    @FXML
-    private TextField feeTxtFld;
-    @FXML
-    private Label feeTypeSymbolLbl;
-    @FXML
-    private TextField minTxtFld;
-    @FXML
-    private Label minCurrencyLbl;
-    @FXML
-    private Button btnAddPlatform;
+    private ChoiceBox<FeeType> feeTypeChcBx;
     @FXML
     private Button btnDeletePlatform;
     @FXML
@@ -102,8 +82,6 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private CheckBox yearCheckBox;
 
-    @FXML
-    private Button btnAddInvestment;
     @FXML
     private Button btnDeleteInvestment;
 
@@ -147,47 +125,11 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Creates and adds a changeListener to the add platform items
-     * to regular the accessibility of the add platform button
-     */
-    private void initializeAddPlatformListener() {
-        //Listener of the add platform attributes to make the btnAddPlatform enable or disable
-        ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
-            FeeType feeType = feeTypesChcBox.getValue();
-            boolean isNotMixedPlatform = feeType != MIXED;
-            boolean nameAndFeeAreInvalid =
-                    platformNameTxtFld.getText().isEmpty() || !Helper.isValidDouble(feeTxtFld);
-
-            if (isNotMixedPlatform) {
-                minTxtFld.setText("");
-                btnAddPlatform.setDisable(nameAndFeeAreInvalid);
-            } else {
-                // examines if all fields have invalid input
-                btnAddPlatform.setDisable(nameAndFeeAreInvalid || !Helper.isValidDouble(minTxtFld));
-            }
-            minTxtFld.setDisable(isNotMixedPlatform);
-            feeTypeSymbolLbl.setText(feeType == ABSOLUTE ? SYMBOL_OF_CURRENCY : "%");
-        };
-
-        feeTypesChcBox.getSelectionModel().selectedItemProperty().addListener(
-                FieldValidityListener
-        );
-        platformNameTxtFld.textProperty().addListener(FieldValidityListener);
-        feeTxtFld.textProperty().addListener(FieldValidityListener);
-        minTxtFld.textProperty().addListener(FieldValidityListener);
-    }
-
-    /**
      * Initialize the platform tab and
      * sets the default values
      */
     private void initializePlatformTab() {
-
-        feeTypesChcBox.getItems().addAll(FeeType.values());
-        feeTypesChcBox.setValue(PERCENT);
-        feeTypeSymbolLbl.setText("%");
-        initializeAddPlatformListener();
-
+        feeTypeChcBx.getItems().addAll(FeeType.values());
         //changeListener to regular the accessibility of the delete row button
         platformLstVw.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) ->
@@ -332,20 +274,6 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Handles the "reset" Button for the add platform interface and
-     * cleans the items to their default values
-     */
-    @FXML
-    private void handleResetAddPlatform() {
-        platformNameTxtFld.setText("");
-        feeTxtFld.setText("");
-        minTxtFld.setText("");
-        //handles the ability of the minTxtFld depending on the chosen fee type
-        minTxtFld.setDisable(!feeTypesChcBox.getValue().equals(MIXED));
-        btnAddPlatform.setDisable(true);
-    }
-
-    /**
      * Loads the {@link InvestmentBookData} from the given file name.
      *
      * @param file the given file name
@@ -384,7 +312,6 @@ public class UserInterfaceController implements Initializable {
         fileNameLbl.setText(currFile.getName());
         btnDeletePlatform.setDisable(true);
         btnDeleteInvestment.setDisable(true);
-        handleResetAddPlatform();
         cleanFilter();
     }
 
@@ -404,7 +331,6 @@ public class UserInterfaceController implements Initializable {
         fileNameLbl.setText(currFile.getName());
         btnDeletePlatform.setDisable(true);
         btnDeleteInvestment.setDisable(true);
-        handleResetAddPlatform();
         cleanFilter();
     }
 
@@ -418,8 +344,7 @@ public class UserInterfaceController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         platformChcBxs = new ChoiceBox[]{platformChcBx};
 
-        currencyLbls = new Label[]{minCurrencyLbl,
-                totalPerformanceCurrencyLbl};
+        currencyLbls = new Label[]{totalPerformanceCurrencyLbl};
 
         initializePlatformTab();
         initializeInvestmentTab();
@@ -431,16 +356,13 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleAddPlatform() {
-        String platformName = platformNameTxtFld.getText();
-        double fee = Helper.doubleOfTextField(feeTxtFld);
-
-        Platform newPlatform = switch (feeTypesChcBox.getValue()) {
-            case PERCENT -> new PercentPlatform(platformName, fee);
-            case ABSOLUTE -> new AbsolutePlatform(platformName, fee);
-            case MIXED -> new MixedPlatform(platformName, fee, Helper.doubleOfTextField(minTxtFld));
-        };
-        investmentBook.add(newPlatform);
-        handleResetAddPlatform();
+        NewPlatformController newPlatformController = Helper.createStage(
+                "platformController/NewPlatformController.fxml",
+                "new Platform",
+                400,
+                300
+        );
+        newPlatformController.setInvestmentBook(investmentBook);
     }
 
     /**
