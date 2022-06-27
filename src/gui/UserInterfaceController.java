@@ -1,6 +1,8 @@
 package gui;
 
 import gui.calculator.FeeCalculatorController;
+import gui.investmentController.InvestmentController;
+import gui.investmentController.NewInvestmentController;
 import gui.platformController.PlatformController;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -578,8 +580,9 @@ public class UserInterfaceController implements Initializable {
     private void clickInvestment(MouseEvent event) {
         if (isDoubleClicked(event)) {
             Investment selectedInvestment = investmentTblVw.getSelectionModel().getSelectedItem();
-            InvestmentController investController = Helper.createStage("InvestmentController.fxml",
-                    "Investment: " + selectedInvestment.getStockName(),
+            InvestmentController investController = Helper.createStage(
+                    "investmentController/InvestmentController.fxml",
+                    "Investment",
                     650,
                     600
             );
@@ -594,8 +597,8 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleAddInvestment() {
-        newInvestmentController newInvestmentController = Helper.createStage(
-                "newInvestmentController.fxml",
+        NewInvestmentController newInvestmentController = Helper.createStage(
+                "investmentController/NewInvestmentController.fxml",
                 "new Investment",
                 650,
                 600

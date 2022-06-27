@@ -1,5 +1,7 @@
-package gui;
+package gui.investmentController;
 
+import gui.Helper;
+import gui.Style;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
 import javafx.beans.value.ChangeListener;

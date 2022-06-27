@@ -1,9 +1,15 @@
-package gui;
+package gui.investmentController;
 
+import gui.Helper;
+import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.Investment;
 import logic.investmentBook.InvestmentBook;
@@ -13,7 +19,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class newInvestmentController implements Initializable {
+public class NewInvestmentController implements Initializable {
 
     @FXML
     private DatePicker creationDatePicker;
