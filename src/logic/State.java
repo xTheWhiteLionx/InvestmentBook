@@ -5,7 +5,7 @@ package logic;
  *
  * @author xthe_white_lionx
  */
-public enum Status {
+public enum State {
     OPEN, CLOSED
 }
 

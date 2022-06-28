@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.Investment;
 import logic.Quarter;
-import logic.Status;
+import logic.State;
 import logic.investmentBook.InvestmentBook;
 import logic.investmentBook.InvestmentBookData;
 import logic.platform.FeeType;
@@ -67,7 +67,7 @@ public class UserInterfaceController implements Initializable {
      */
     //filter attributes
     @FXML
-    private ChoiceBox<Status> statusChoiceBox;
+    private ChoiceBox<State> statusChoiceBox;
     @FXML
     private ChoiceBox<Platform> platformChcBx;
     @FXML
@@ -198,7 +198,7 @@ public class UserInterfaceController implements Initializable {
      * the toggle between the quarter and month filter option
      */
     private void initializeFilterOptions() {
-        statusChoiceBox.getItems().addAll(Status.values());
+        statusChoiceBox.getItems().addAll(State.values());
         monthChcBox.getItems().addAll(Month.values());
         quarterChcBox.getItems().addAll(Quarter.values());
     }
@@ -210,7 +210,7 @@ public class UserInterfaceController implements Initializable {
     private void initializeInvestmentTab() {
         TableColumn<Investment, LocalDate> creationDateColumn = new TableColumn<>("creationDate");
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
-        TableColumn<Investment, Status> statusColumn = new TableColumn<>("status");
+        TableColumn<Investment, State> statusColumn = new TableColumn<>("status");
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         TableColumn<Investment, Platform> platformColumn = new TableColumn<>("platform");
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));

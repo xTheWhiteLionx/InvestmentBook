@@ -14,8 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.Investment;
+import logic.State;
 import logic.investmentBook.InvestmentBook;
-import logic.Status;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -82,11 +82,11 @@ public class InvestmentController implements Initializable {
         assert selectedInvestment != null;
 
         this.currInvestment = selectedInvestment;
-        Status investStatus = currInvestment.getStatus();
-        boolean investIsClosed = investStatus == Status.CLOSED;
+        State investState = currInvestment.getStatus();
+        boolean investIsClosed = investState == State.CLOSED;
 
         creationDatePicker.setValue(currInvestment.getCreationDate());
-        statusLbl.setText(investStatus.name());
+        statusLbl.setText(investState.name());
         platformLbl.setText(currInvestment.getPlatform().getName());
         stockNameTxtFld.setText(currInvestment.getStockName());
         exchangeRateTxtFld.setText(Helper.stringOfDouble(currInvestment.getExchangeRate()));

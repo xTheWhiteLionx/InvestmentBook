@@ -168,18 +168,18 @@ public class InvestmentBook extends InvestmentBookImpl {
      * Filters the investments by the given year and
      * returns the filtered investments
      *
-     * @param status
+     * @param state
      * @param platform
      * @param month
      * @param quarter
      * @param year
      */
-    public List<Investment> filter(Status status, Platform platform,
+    public List<Investment> filter(State state, Platform platform,
                                    Month month, Quarter quarter, int year) {
         Stream<Investment> investmentStream = this.investments.stream();
 
-        if (status != null) {
-            investmentStream = investmentStream.filter(x -> x.getStatus() == status);
+        if (state != null) {
+            investmentStream = investmentStream.filter(x -> x.getStatus() == state);
         }
         if (platform != null) {
             investmentStream = investmentStream.filter(x -> x.getPlatform().equals(platform));

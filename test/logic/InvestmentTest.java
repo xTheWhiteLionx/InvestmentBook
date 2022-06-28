@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-import static logic.Status.CLOSED;
+import static logic.State.CLOSED;
 import static org.junit.Assert.assertEquals;
 
 public class InvestmentTest {

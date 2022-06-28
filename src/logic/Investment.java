@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static helper.GeneralMethods.calcPercentRounded;
 import static helper.GeneralMethods.round;
-import static logic.Status.CLOSED;
-import static logic.Status.OPEN;
+import static logic.State.CLOSED;
+import static logic.State.OPEN;
 
 /**
  * This class contains the Investment logic.
@@ -27,7 +27,7 @@ public class Investment implements Comparable<Investment> {
      * Status of the investment
      * (must be either open or closed)
      */
-    private Status status = OPEN;
+    private State state = OPEN;
 
     /**
      * Platform of the investment
@@ -214,8 +214,8 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the status
      */
-    public Status getStatus() {
-        return status;
+    public State getStatus() {
+        return state;
     }
 
     /**
@@ -300,7 +300,7 @@ public class Investment implements Comparable<Investment> {
             throw new IllegalArgumentException("");
         }
         capital = newCapital;
-        if (status == CLOSED) {
+        if (state == CLOSED) {
             cost = platform.getFee(capital);
             performance = calcPerformance(sellingPrice);
             percentPerformance = calcPercentRounded(capital, performance);
@@ -351,11 +351,11 @@ public class Investment implements Comparable<Investment> {
             sellingDate = newSellingDate;
         }
         if (sellingPrice != newSellingPrice) {
-            if (status == CLOSED) {
+            if (state == CLOSED) {
                 //TODO explain tactic
                 cost = platform.getFee(capital);
             } else {
-                status = CLOSED;
+                state = CLOSED;
             }
             //updates the cost of the investment
             cost = round(cost + platform.getFee(newSellingPrice));
@@ -436,7 +436,7 @@ public class Investment implements Comparable<Investment> {
     public String toString() {
         return "Investment{" +
                 "creationDate=" + creationDate + "\n" +
-                ", status=" + status + "\n" +
+                ", status=" + state + "\n" +
                 ", platform=" + platform + "\n" +
                 ", stockName='" + stockName + '\'' + "\n" +
                 ", exchangeRate=" + exchangeRate + "\n" +
@@ -463,7 +463,7 @@ public class Investment implements Comparable<Investment> {
                 && this.performance == that.performance
                 && this.percentPerformance == that.percentPerformance
                 && this.cost == that.cost
-                && this.status == that.status
+                && this.state == that.state
                 && this.platform.equals(that.platform)
                 && this.stockName.equals(that.stockName);
     }

@@ -25,7 +25,7 @@ public class InvestmentBookTest {
         InvestmentBook investmentBook = createInvestmentBook();
 
         assertEquals(Collections.emptyList(),
-                investmentBook.filter(Status.OPEN,
+                investmentBook.filter(State.OPEN,
                         MAX_BLUE,
                         null,
                         null,
