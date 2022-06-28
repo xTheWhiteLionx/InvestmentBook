@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
-import static logic.GeneralMethods.round;
+import static helper.GeneralMethods.round;
 
 /**
  * This class contains the absolute platform logic and
@@ -48,6 +48,11 @@ public class AbsolutePlatform extends Platform {
     @Override
     public String getFxmlPath() {
         return "platformController/AbsolutePlatform.fxml";
+    }
+
+    @Override
+    public FeeType getTyp() {
+        return FeeType.ABSOLUTE;
     }
 
     /**

@@ -3,15 +3,14 @@ package gui;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static gui.DialogWindow.DIRECTORY;
-import static gui.DialogWindow.openDialogFile;
-import static gui.Helper.createStage;
+import static gui.DialogWindow.*;
 
 /**
  * Controller of the graphical file interface.
@@ -64,7 +63,9 @@ public class FileInterfaceController implements Initializable {
      * handles the create new Book button
      */
     public void handleLoadBook() {
-        File selectedFile = openDialogFile(loadBook.getScene().getWindow());
+        FileChooser fileChooser = createFileChooser();
+        fileChooser.setTitle("Open JSON Graph-File");
+        File selectedFile = fileChooser.showOpenDialog(loadBook.getScene().getWindow());
         if (selectedFile != null) {
             createUserInterfaceController(selectedFile);
         }

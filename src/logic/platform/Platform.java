@@ -107,6 +107,12 @@ public abstract class Platform {
     public abstract String getFxmlPath();
 
     /**
+     *
+     * @return
+     */
+    public abstract FeeType getTyp();
+
+    /**
      * Calculates the selling price for the given investment to
      * reach the given target performance
      *

@@ -1,6 +1,5 @@
 package gui;
 
-import gui.calculator.FeeCalculatorController;
 import gui.investmentController.InvestmentController;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
@@ -11,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.Investment;
 import logic.Quarter;
@@ -52,6 +52,9 @@ public class UserInterfaceController implements Initializable {
     //TODO implement
     @FXML
     public ProgressBar progressBar;
+
+    @FXML
+    private TextField platformNameTxtFld;
     @FXML
     private ChoiceBox<FeeType> feeTypeChcBx;
     @FXML
@@ -258,10 +261,16 @@ public class UserInterfaceController implements Initializable {
     /**
      * Cleans the options of the filter items to their default values
      */
+    private void cleanFilter2() {
+       feeTypeChcBx.setValue(null);
+    }
+
+    /**
+     * Cleans the options of the filter items to their default values
+     */
     private void cleanFilter() {
         statusChoiceBox.setValue(null);
         platformChcBx.setValue(null);
-        filterStockNameTxtFld.setText("");
         monthChcBox.setValue(null);
         quarterChcBox.setValue(null);
 
@@ -285,7 +294,7 @@ public class UserInterfaceController implements Initializable {
             try {
                 return InvestmentBookData.fromJson(file);
             } catch (IOException e) {
-                exceptionAlert(e);
+                ErrorAlert(e);
                 e.printStackTrace();
             }
         } else {
@@ -348,6 +357,7 @@ public class UserInterfaceController implements Initializable {
 
         initializePlatformTab();
         initializeInvestmentTab();
+        filterByName();
     }
 
     /**
@@ -356,7 +366,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleAddPlatform() {
-        NewPlatformController newPlatformController = Helper.createStage(
+        NewPlatformController newPlatformController = createStage(
                 "platformController/NewPlatformController.fxml",
                 "new Platform",
                 400,
@@ -390,7 +400,7 @@ public class UserInterfaceController implements Initializable {
             Platform currentPlatform = platformLstVw.getSelectionModel().getSelectedItem();
 
             if (currentPlatform != null) {
-                PlatformController platformController = Helper.createStage(
+                PlatformController platformController = createStage(
                         currentPlatform.getFxmlPath(),
                         "Platform: " + currentPlatform.getName(),
                         400,
@@ -416,7 +426,9 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleOpenBook() {
-        currFile = openDialogFile(investmentTblVw.getScene().getWindow());
+        FileChooser fileChooser = createFileChooser();
+        fileChooser.setTitle("Open JSON Graph-File");
+        currFile = fileChooser.showOpenDialog(investmentTblVw.getScene().getWindow());
         initInvestmentBook();
     }
 
@@ -429,7 +441,7 @@ public class UserInterfaceController implements Initializable {
         try {
             new InvestmentBookData(investmentBook).toJson(currFile);
         } catch (IOException e) {
-            exceptionAlert(e);
+            ErrorAlert(e);
             e.printStackTrace();
         }
     }
@@ -439,31 +451,35 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleSaveBookAs() {
-        File selectedFile = saveDialogFile(investmentTblVw.getScene().getWindow());
+        FileChooser fileChooser = createFileChooser();
+        fileChooser.setTitle("Save JSON Graph-File");
+        File selectedFile = fileChooser.showSaveDialog(investmentTblVw.getScene().getWindow());
         if (selectedFile != null) {
             try {
                 new InvestmentBookData(investmentBook).toJson(selectedFile);
             } catch (IOException e) {
-                exceptionAlert(e);
+                ErrorAlert(e);
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * Handles the "fee calculator" button and
-     * opens a FeeCalculator Window. Also gives the
-     * Controller the current platforms.
+     * Handles the "apply" filter Button
      */
     @FXML
-    private void handleFeeCalculator() {
-        FeeCalculatorController feeCalculator =
-                Helper.createStage("calculator/FeeCalculatorController.fxml",
-                        "Fee Calculator",
-                        400,
-                        200
-                );
-        feeCalculator.setPlatformChoiceBox(investmentBook.getPlatforms());
+    private void handleApplyFilter2() {
+        investmentBook.filterPlatformsByType(feeTypeChcBx.getValue());
+    }
+
+    /**
+     * Handles the "reset" filter Button and
+     * displays the default investments
+     */
+    @FXML
+    private void handleResetFilter2() {
+        cleanFilter2();
+        investmentBook.displayPlatforms();
     }
 
     /**
@@ -474,7 +490,6 @@ public class UserInterfaceController implements Initializable {
         investmentBook.filter(
                 statusChoiceBox.getValue(),
                 platformChcBx.getValue(),
-                filterStockNameTxtFld.getText(),
                 monthChcBox.getValue(),
                 quarterChcBox.getValue(),
                 yearSpinner.getValue()
@@ -502,7 +517,7 @@ public class UserInterfaceController implements Initializable {
     private void clickInvestment(MouseEvent event) {
         if (isDoubleClicked(event)) {
             Investment selectedInvestment = investmentTblVw.getSelectionModel().getSelectedItem();
-            InvestmentController investController = Helper.createStage(
+            InvestmentController investController = createStage(
                     "investmentController/InvestmentController.fxml",
                     "Investment",
                     650,
@@ -519,7 +534,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleAddInvestment() {
-        NewInvestmentController newInvestmentController = Helper.createStage(
+        NewInvestmentController newInvestmentController = createStage(
                 "investmentController/NewInvestmentController.fxml",
                 "new Investment",
                 650,
@@ -547,10 +562,37 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleDeletePlatform() {
         if (acceptedDeleteAlert()) {
-            Platform selectedPlatform =
-                    platformLstVw.getSelectionModel().getSelectedItem();
+            Platform selectedPlatform = platformLstVw.getSelectionModel().getSelectedItem();
             investmentBook.remove(selectedPlatform);
         }
+    }
+
+    /**
+     *
+     */
+    // TODO: 28.06.2022 JavaDoc
+    private void filterByName() {
+        platformNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                // Compare name of every investment with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                investmentBook.filterPlatformsByName(lowerCaseFilter);
+            } else {
+                // If filter text is empty, display all platforms.
+                investmentBook.displayPlatforms();
+            }
+        });
+
+        filterStockNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                // Compare name of every investment with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                investmentBook.filterInvestmentsByName(lowerCaseFilter);
+            } else {
+                // If filter text is empty, display all investments.
+                investmentBook.displayInvestments();
+            }
+        });
     }
 
     /**

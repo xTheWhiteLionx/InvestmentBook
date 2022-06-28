@@ -1,6 +1,7 @@
 package logic.investmentBook;
 
 import logic.*;
+import logic.platform.FeeType;
 import logic.platform.Platform;
 
 import java.time.Month;
@@ -107,18 +108,60 @@ public class InvestmentBook extends InvestmentBookImpl {
     /**
      * Filters the investments by the given year and
      * returns the filtered investments
+     *
+     * @param name
+     * @return
      */
-    //TODO JavaDoc
-    public Set<Platform> filter(String name) {
-        if (name != null) {
-            Set<Platform> filteredPlatforms = platforms.stream()
-                    .filter(p -> p.getName().equals(name))
-                    .collect(Collectors.toSet());
-
-            gui.displayPlatforms(filteredPlatforms);
-            return filteredPlatforms;
+    public Set<Platform> filterPlatformsByName(String name) {
+        Stream<Platform> platformStream = this.platforms.stream();
+        if (name != null && !name.isEmpty()) {
+            platformStream = platformStream.filter(p ->
+                    p.getName().toLowerCase().startsWith(name));
         }
-        return getPlatforms();
+
+        Set<Platform> filteredPlatform = platformStream.collect(Collectors.toSet());
+
+        gui.displayPlatforms(filteredPlatform);
+        return filteredPlatform;
+    }
+
+    /**
+     * Filters the investments by the given year and
+     * returns the filtered investments
+     *
+     * @param typ
+     * @return
+     */
+    public Set<Platform> filterPlatformsByType(FeeType typ) {
+        Stream<Platform> platformStream = this.platforms.stream();
+        if (typ != null) {
+            platformStream = platformStream.filter(p -> p.getTyp() == typ);
+        }
+
+        Set<Platform> filteredPlatform = platformStream.collect(Collectors.toSet());
+
+        gui.displayPlatforms(filteredPlatform);
+        return filteredPlatform;
+    }
+
+    /**
+     * Filters the investments by the given year and
+     * returns the filtered investments
+     *
+     * @param name
+     * @return
+     */
+    public List<Investment> filterInvestmentsByName(String name) {
+        Stream<Investment> investmentStream = this.investments.stream();
+        if (name != null && !name.isEmpty()) {
+            investmentStream = investmentStream.filter(invest ->
+                            invest.getStockName().toLowerCase().startsWith(name));
+        }
+
+        List<Investment> filteredInvestments = investmentStream.toList();
+
+        gui.displayInvestmentList(filteredInvestments);
+        return filteredInvestments;
     }
 
     /**
@@ -127,23 +170,19 @@ public class InvestmentBook extends InvestmentBookImpl {
      *
      * @param status
      * @param platform
-     * @param stockName
      * @param month
      * @param quarter
      * @param year
      */
-    public List<Investment> filter(Status status, Platform platform, String stockName,
+    public List<Investment> filter(Status status, Platform platform,
                                    Month month, Quarter quarter, int year) {
-        Stream<Investment> investmentStream = getInvestments().stream();
+        Stream<Investment> investmentStream = this.investments.stream();
 
         if (status != null) {
             investmentStream = investmentStream.filter(x -> x.getStatus() == status);
         }
         if (platform != null) {
             investmentStream = investmentStream.filter(x -> x.getPlatform().equals(platform));
-        }
-        if (stockName != null && !stockName.isEmpty()) {
-            investmentStream = investmentStream.filter(x -> x.getStockName().equals(stockName));
         }
 
         if (year > 0) {
@@ -154,7 +193,7 @@ public class InvestmentBook extends InvestmentBookImpl {
                 );
             } else if (quarter != null) {
                 investmentStream = investmentStream.filter(
-                        x -> quarter.getMonths().contains(x.getCreationDate().getMonth())
+                        x -> quarter.contains(x.getCreationDate().getMonth())
                 );
             }
         }

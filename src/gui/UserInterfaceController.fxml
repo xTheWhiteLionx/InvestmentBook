@@ -21,6 +21,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -38,6 +39,12 @@
                             <BorderPane.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </BorderPane.margin>
+                     <ToolBar>
+                        <items>
+                           <Label text="name" />
+                           <TextField fx:id="platformNameTxtFld" prefWidth="300.0" promptText="name" />
+                        </items>
+                     </ToolBar>
                             <ListView fx:id="platformLstVw" onMouseClicked="#clickPlatform">
                                 <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -68,19 +75,6 @@
                            </font>
                         </Label>
                         <Separator prefWidth="200.0" />
-                        <Label alignment="CENTER" text="name">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TextField fx:id="filterStockNameTxtFld1" prefHeight="25.0" prefWidth="110.0" promptText="name">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </TextField>
                         <Label layoutX="127.0" layoutY="59.0" text="fee type">
                            <font>
                               <Font name="System Bold" size="12.0" />
@@ -99,8 +93,8 @@
                         </ChoiceBox>
                         <ButtonBar buttonMinWidth="0.0" buttonOrder="BUTTON_ORDER_NONE">
                            <buttons>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleApplyFilter" text="apply" textAlignment="CENTER" />
-                              <Button mnemonicParsing="false" onAction="#handleResetFilter" text="Reset" />
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleApplyFilter2" text="apply" textAlignment="CENTER" />
+                              <Button mnemonicParsing="false" onAction="#handleResetFilter2" text="Reset" />
                            </buttons>
                            <VBox.margin>
                               <Insets />
@@ -166,19 +160,6 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                 </VBox.margin>
                             </ChoiceBox>
-                            <Label alignment="CENTER" text="stock name">
-                                <font>
-                                    <Font name="System Bold" size="12.0" />
-                                </font>
-                                <VBox.margin>
-                                    <Insets left="5.0" right="5.0" top="5.0" />
-                                </VBox.margin>
-                            </Label>
-                            <TextField fx:id="filterStockNameTxtFld" prefHeight="25.0" prefWidth="110.0" promptText="stock name">
-                                <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                </VBox.margin>
-                            </TextField>
                             <Label alignment="CENTER" text="month">
                                 <font>
                                     <Font name="System Bold" size="12.0" />
@@ -252,6 +233,12 @@
                     </left>
                     <center>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <ToolBar prefHeight="40.0" prefWidth="200.0">
+                        <items>
+                           <Label text="stock name" />
+                                  <TextField fx:id="filterStockNameTxtFld" prefHeight="25.0" prefWidth="300.0" promptText="stock name" />
+                        </items>
+                     </ToolBar>
                             <TableView fx:id="investmentTblVw" onMouseClicked="#clickInvestment" prefHeight="414.0" prefWidth="537.0" />
                      <ButtonBar>
                         <VBox.margin>
@@ -343,15 +330,6 @@
                 <MenuItem mnemonicParsing="false" onAction="#handleAddInvestment" text="investment" />
               </items>
             </Menu>
-                <Menu mnemonicParsing="false" text="Calculator">
-                    <MenuItem mnemonicParsing="false" onAction="#handleFeeCalculator" text="Fee Calculator">
-                        <graphic>
-                            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                <Image url="@textures/calculatorIcon.png" />
-                            </ImageView>
-                        </graphic>
-                    </MenuItem>
-                </Menu>
             </MenuBar>
         </VBox>
     </top>

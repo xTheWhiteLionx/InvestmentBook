@@ -2,7 +2,7 @@ package logic;
 
 import org.junit.Test;
 
-import static logic.GeneralMethods.calcPercentRounded;
+import static helper.GeneralMethods.calcPercentRounded;
 import static org.junit.Assert.assertEquals;
 
 /**

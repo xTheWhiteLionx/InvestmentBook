@@ -29,7 +29,6 @@ public class InvestmentBookTest {
                         MAX_BLUE,
                         null,
                         null,
-                        null,
                         0));
     }
 
@@ -40,7 +39,6 @@ public class InvestmentBookTest {
         assertEquals(Collections.emptyList(),
                 investmentBook.filter(null,
                         MAX_BLUE,
-                        null,
                         null,
                         null,
                         0));
@@ -57,7 +55,6 @@ public class InvestmentBookTest {
         InvestmentBook investmentBook = createInvestmentBook();
 
         assertEquals(List.of(investment2), investmentBook.filter(null,
-                null,
                 null,
                 Month.AUGUST,
                 null,
@@ -79,7 +76,6 @@ public class InvestmentBookTest {
                 investmentBook.filter(null,
                         null,
                         null,
-                        null,
                         Quarter.Q4,
                         2021));
     }
@@ -96,7 +92,6 @@ public class InvestmentBookTest {
 
         assertEquals(List.of(investment2),
                 investmentBook.filter(null,
-                        null,
                         null,
                         null,
                         null,

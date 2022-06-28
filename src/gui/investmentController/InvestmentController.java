@@ -1,6 +1,7 @@
 package gui.investmentController;
 
-import gui.Helper;
+import gui.DialogWindow;
+import helper.Helper;
 import gui.Style;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
@@ -82,7 +83,7 @@ public class InvestmentController implements Initializable {
 
         this.currInvestment = selectedInvestment;
         Status investStatus = currInvestment.getStatus();
-        boolean investIsClosed = investStatus.equals(Status.CLOSED);
+        boolean investIsClosed = investStatus == Status.CLOSED;
 
         creationDatePicker.setValue(currInvestment.getCreationDate());
         statusLbl.setText(investStatus.name());
@@ -200,7 +201,7 @@ public class InvestmentController implements Initializable {
     @FXML
     private void handleSellingPriceCalculator() {
         SellingPriceCalculatorController sellingPriceCalculatorController =
-                Helper.createStage("calculator/SellingPriceCalculatorController.fxml",
+                DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
                         "selling price calculator: " + currInvestment.getStockName(),
                         350,
                         200
@@ -215,7 +216,7 @@ public class InvestmentController implements Initializable {
     @FXML
     private void handlePerformanceCalculator() {
         PerformanceCalculatorController performanceCalculatorController =
-                Helper.createStage("calculator/PerformanceCalculatorController.fxml",
+                DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
                         "performance calculator: " + currInvestment.getStockName(),
                         350,
                         200

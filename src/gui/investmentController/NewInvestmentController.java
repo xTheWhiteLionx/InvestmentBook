@@ -1,6 +1,6 @@
 package gui.investmentController;
 
-import gui.Helper;
+import helper.Helper;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;

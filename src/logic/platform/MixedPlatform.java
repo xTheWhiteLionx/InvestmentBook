@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
-import static logic.GeneralMethods.calcPercent;
-import static logic.GeneralMethods.round;
+import static helper.GeneralMethods.calcPercent;
+import static helper.GeneralMethods.round;
 
 /**
  * This class is contains the mixed platform logic and
@@ -49,6 +49,11 @@ public class MixedPlatform extends Platform {
     @Override
     public String getFxmlPath() {
         return "platformController/MixedPlatform.fxml";
+    }
+
+    @Override
+    public FeeType getTyp() {
+        return FeeType.MIXED;
     }
 
     /**

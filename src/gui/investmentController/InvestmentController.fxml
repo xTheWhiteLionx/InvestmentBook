@@ -5,6 +5,9 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -215,23 +218,6 @@
    </center>
    <bottom>
    </bottom>
-   <right>
-       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-           <BorderPane.margin>
-               <Insets />
-           </BorderPane.margin>
-           <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSellingPriceCalculator" prefHeight="150.0" prefWidth="150.0" text="Selling price Calculator" textAlignment="CENTER" wrapText="true">
-              <font>
-                  <Font size="14.0" />
-              </font>
-           </Button>
-           <Button alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="10.0" mnemonicParsing="false" onAction="#handlePerformanceCalculator" prefHeight="150.0" prefWidth="150.0" text="Performance Calculator" textAlignment="CENTER" wrapText="true">
-              <font>
-                  <Font size="14.0" />
-              </font>
-           </Button>
-       </VBox>
-   </right>
    <bottom>
       <ButtonBar BorderPane.alignment="CENTER">
          <buttons>
@@ -243,4 +229,16 @@
          </BorderPane.margin>
       </ButtonBar>
    </bottom>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Calculator">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleSellingPriceCalculator" text="selling price" />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePerformanceCalculator" text="performance" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>

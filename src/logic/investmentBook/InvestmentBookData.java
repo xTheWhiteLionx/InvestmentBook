@@ -1,20 +1,12 @@
 package logic.investmentBook;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import logic.Investment;
 import logic.platform.Platform;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,11 +37,22 @@ public class InvestmentBookData extends InvestmentBookImpl {
         super(platforms, investments);
     }
 
+    /**
+     *
+     * @param investmentBook
+     */
     //TODO JavaDoc
     public InvestmentBookData(InvestmentBook investmentBook){
         super(investmentBook.getPlatforms(), investmentBook.getInvestments());
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     //TODO JavaDoc
     public static InvestmentBookData fromJson(File file) throws FileNotFoundException, IOException {
         Gson gson = new GsonBuilder()
@@ -78,9 +81,11 @@ public class InvestmentBookData extends InvestmentBookImpl {
         }
         return null;
     }
+
     /**
      *
      * @param file
+     * @throws IOException
      */
     //TODO JavaDoc
     public void toJson(File file) throws IOException {

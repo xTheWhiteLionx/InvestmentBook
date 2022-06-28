@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import gui.Helper;
+import helper.Helper;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -84,6 +84,16 @@ public class PercentPlatformController implements Initializable, PlatformControl
         currPlatform.setName(nameTxtFld.getText());
         currPlatform.setPercent(Helper.doubleOfTextField(percentTxtFld));
         handleCancel();
+    }
+
+    /**
+     * Handles the "fee calculator" button and
+     * opens a FeeCalculator Window. Also gives the
+     * Controller the current platforms.
+     */
+    @FXML
+    private void handleFeeCalculator() {
+        handleFeeCalculator(currPlatform);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package logic;
 
-import logic.platform.PercentPlatform;
 import org.junit.Test;
 
 import java.time.LocalDate;
 
-import static logic.GeneralMethods.calcPercent;
+import static helper.GeneralMethods.calcPercent;
 import static logic.HelperClass.COINBASE;
 import static org.junit.Assert.assertEquals;
 

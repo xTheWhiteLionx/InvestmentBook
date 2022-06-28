@@ -3,7 +3,7 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import static gui.Helper.createFileController;
+import static gui.DialogWindow.createFileController;
 
 /**
  * This class contains the main.

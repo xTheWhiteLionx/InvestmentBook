@@ -1,5 +1,6 @@
 package gui;
 
+import helper.Helper;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 
@@ -9,7 +10,7 @@ import java.util.Locale;
 import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.RED;
-import static logic.GeneralMethods.round;
+import static helper.GeneralMethods.round;
 
 /**
  *

@@ -1,11 +1,10 @@
 package gui.calculator;
 
-import gui.Helper;
+import helper.Helper;
 import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -23,7 +22,7 @@ import java.util.Set;
 public class FeeCalculatorController implements Initializable {
 
     @FXML
-    private ChoiceBox<Platform> platformChoiceBox;
+    private Label platformName;
     @FXML
     private TextField capitalTxtField;
     @FXML
@@ -37,16 +36,18 @@ public class FeeCalculatorController implements Initializable {
     @FXML
     private Button cancelBtn;
 
+    private Platform platform;
+
     /**
      *
      * @param platforms
      */
     //TODO JavaDoc
     public void setPlatformChoiceBox(Set<Platform> platforms) {
-        if (!platforms.isEmpty()) {
-            platformChoiceBox.getItems().addAll(platforms);
-            platformChoiceBox.setValue(platformChoiceBox.getItems().get(0));
-        }
+    }
+
+    public void setPlatform(Platform currPlatform) {
+
     }
 
     /**
@@ -70,7 +71,7 @@ public class FeeCalculatorController implements Initializable {
     //TODO JavaDoc
     @FXML
     private void handleCalculate() {
-        double capital = platformChoiceBox.getValue().getFee(Helper.doubleOfTextField(capitalTxtField));
+        double capital = platform.getFee(Helper.doubleOfTextField(capitalTxtField));
         feeLbl.setText(Helper.stringOfDouble(capital));
     }
 

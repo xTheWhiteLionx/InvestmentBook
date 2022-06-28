@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import gui.Helper;
+import helper.Helper;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -108,6 +108,16 @@ public class MixedPlatformController implements Initializable, PlatformControlle
         currPlatform.setPercent(Helper.doubleOfTextField(percentTxtFld));
         currPlatform.setMinFee(Helper.doubleOfTextField(minFeeTxtFld));
         handleCancel();
+    }
+
+    /**
+     * Handles the "fee calculator" button and
+     * opens a FeeCalculator Window. Also gives the
+     * Controller the current platforms.
+     */
+    @FXML
+    private void handleFeeCalculator() {
+        handleFeeCalculator(currPlatform);
     }
 
     @Override

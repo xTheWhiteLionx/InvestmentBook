@@ -5,8 +5,8 @@ import logic.platform.Platform;
 import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-import static logic.GeneralMethods.calcPercentRounded;
-import static logic.GeneralMethods.round;
+import static helper.GeneralMethods.calcPercentRounded;
+import static helper.GeneralMethods.round;
 import static logic.Status.CLOSED;
 import static logic.Status.OPEN;
 

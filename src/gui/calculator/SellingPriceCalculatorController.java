@@ -1,6 +1,6 @@
 package gui.calculator;
 
-import gui.Helper;
+import helper.Helper;
 import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

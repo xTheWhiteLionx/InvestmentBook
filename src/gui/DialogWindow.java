@@ -1,12 +1,18 @@
 package gui;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -19,14 +25,80 @@ public class DialogWindow {
     /**
      * The directory of the package of the json files
      */
-    public static final String DIRECTORY = "books/";
+    static final String DIRECTORY = "books/";
+
+    /**
+     * Creates a modality stage/window out of the given fxml path.
+     * With the given title, width and height. And returns the loaded controller generic,
+     * depending on the given fxml path
+     *
+     * @param fxmlPath path of the fxml which should be loaded
+     * @param title    of the stage/window
+     * @param width    of the stage/window
+     * @param height   of the stage/window
+     * @param <T>      type of the controller, depending on the given fxml path
+     * @return controller, depending on the given fxml path
+     */
+    public static <T> T createStage(@NotNull String fxmlPath, String title, int width, int height) {
+        assert !fxmlPath.isEmpty();
+        assert width > 0;
+        assert height > 0;
+
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(ApplicationMain.class.getResource(fxmlPath));
+
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle(title);
+        newStage.setMinWidth(width);
+        newStage.setMinHeight(height);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        try {
+            newStage.setScene(new Scene(loader.load(), width, height));
+        } catch (IOException e) {
+            ErrorAlert(e);
+            e.printStackTrace();
+        }
+        newStage.show();
+
+        return loader.getController();
+    }
+
+    /**
+     * Creates a modality stage/window out of the given fxml path.
+     * With the given title, width and height. And returns the loaded controller generic,
+     * depending on the given fxml path
+     */
+    // TODO: 22.06.2022 JavaDoc
+    static void createFileController() {
+        double width = 300D;
+        double height = 300D;
+
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(ApplicationMain.class.getResource("FileInterfaceController.fxml"));
+
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle("Investment Book");
+        newStage.setMinWidth(width);
+        newStage.setMinHeight(height);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.setResizable(false);
+        try {
+            newStage.setScene(new Scene(loader.load(), width, height));
+        } catch (IOException e) {
+            ErrorAlert(e);
+            e.printStackTrace();
+        }
+        newStage.show();
+    }
 
     /**
      *
      * @return
      */
     //TODO JavaDoc
-    private static FileChooser createFileChooser() {
+    static FileChooser createFileChooser() {
         FileChooser fileChooser = new FileChooser();
         //ensure the dialog opens in the correct directory
         fileChooser.setInitialDirectory(new File(DIRECTORY));
@@ -37,39 +109,10 @@ public class DialogWindow {
     }
 
     /**
-     *
-     * @param window
-     * @return
-     */
-    //TODO JavaDoc
-    public static File openDialogFile(Window window) {
-        assert window != null;
-
-        FileChooser fileChooser = createFileChooser();
-        fileChooser.setTitle("Open JSON Graph-File");
-        return fileChooser.showOpenDialog(window);
-    }
-
-    /**
-     *
-     * @param window
-     * @return
-     */
-    //TODO JavaDoc
-    public static File saveDialogFile(Window window) {
-        assert window != null;
-
-        FileChooser fileChooser = createFileChooser();
-        fileChooser.setTitle("Save JSON Graph-File");
-        return fileChooser.showSaveDialog(window);
-    }
-
-    /**
      * creates a confirmation alert with the given content
      *
      * @return true if ...
      */
-    //TODO implement
     //TODO JavaDoc
     public static boolean acceptedDeleteAlert() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -91,7 +134,7 @@ public class DialogWindow {
      * @param exception which should be displayed
      */
     //TODO JavaDoc
-    public static void exceptionAlert(Exception exception) {
+    public static void ErrorAlert(Exception exception) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(alert.getAlertType().name().toLowerCase());
         alert.setContentText(exception.getMessage());

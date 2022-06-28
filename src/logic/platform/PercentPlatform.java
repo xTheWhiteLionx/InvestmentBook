@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
-import static logic.GeneralMethods.calcPercent;
-import static logic.GeneralMethods.round;
+import static helper.GeneralMethods.calcPercent;
+import static helper.GeneralMethods.round;
 
 /**
  * This class is contains the percent platform logic and
@@ -26,8 +26,8 @@ public class PercentPlatform extends Platform {
     /**
      * Constructs an {@code PercentPlatform} with the specified arguments.
      *
-     * @param name of the platform
-     * @param percent value of the fee of the platform
+     * @param name name of the platform
+     * @param percent value of the fee of the platform in percent
      */
     public PercentPlatform(String name, double percent) {
         super(name);
@@ -42,6 +42,11 @@ public class PercentPlatform extends Platform {
     @Override
     public String getFxmlPath() {
         return "platformController/PercentPlatform.fxml";
+    }
+
+    @Override
+    public FeeType getTyp() {
+        return FeeType.PERCENT;
     }
 
     /**

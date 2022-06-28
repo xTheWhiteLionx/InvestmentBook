@@ -17,7 +17,9 @@ import static java.time.Month.OCTOBER;
 import static java.time.Month.SEPTEMBER;
 
 /**
- * Enum of quarter with their months
+ * Enum of quarter.
+ * A quarter is a quarter of a year, three months.
+ * Denoted by Q1 to Q4
  *
  * @author xthe_white_lionx
  */
@@ -28,7 +30,7 @@ public enum Quarter {
     Q4(OCTOBER, NOVEMBER, DECEMBER);
 
     /**
-     * Set of months of the Quarter
+     * Months of the quarter
      */
     private final Set<Month> months;
 
@@ -36,9 +38,12 @@ public enum Quarter {
      * Constructor of a quarter
      *
      * @param months vararg of months
+     * @throws NullPointerException if on of the specified month is null
      */
     Quarter(Month... months) {
-        assert months != null;
+        if (months == null) {
+            throw new NullPointerException("months == null");
+        }
 
         this.months = Set.of(months);
     }
@@ -50,6 +55,15 @@ public enum Quarter {
      */
     public Set<Month> getMonths() {
         return this.months;
+    }
+
+    /**
+     * 
+     * @param month
+     * @return
+     */
+    public boolean contains(Month month){
+        return this.months.contains(month);
     }
 
     /**
