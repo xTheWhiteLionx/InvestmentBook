@@ -157,7 +157,7 @@ public class UserInterfaceController implements Initializable {
     public static void loadUserInterfaceController() {
         UserInterfaceController controller = createUserInterfaceController("newBook.json");
 
-        controller.setCurrFile(new File(DIRECTORY + "newBook.json"));
+        controller.setCurrFile(new File(DIRECTORY + "/newBook.json"));
         controller.investmentBook = new InvestmentBook(controller.createJavaFXGUI());
     }
 
@@ -180,6 +180,26 @@ public class UserInterfaceController implements Initializable {
 
         controller.setCurrFile(selectedFile);
         controller.investmentBook = new InvestmentBook(investmentBookData, controller.createJavaFXGUI());
+    }
+
+    /**
+     * Initializes the application.
+     *
+     * @param url            unused
+     * @param resourceBundle unused
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        platformChcBxs = new ChoiceBox[]{platformChcBx};
+
+        currencyLbls = new Label[]{totalPerformanceCurrencyLbl};
+
+        initializeThemeMenu();
+
+        initializePlatformTab();
+        initializeInvestmentTab();
+        initializeSearch();
+        toDefault();
     }
 
     /**
@@ -359,8 +379,8 @@ public class UserInterfaceController implements Initializable {
     private void initializeInvestmentTab() {
         TableColumn<Investment, LocalDate> creationDateColumn = new TableColumn<>("creationDate");
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
-        TableColumn<Investment, State> statusColumn = new TableColumn<>("status");
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        TableColumn<Investment, State> stateColumn = new TableColumn<>("state");
+        stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         TableColumn<Investment, Platform> platformColumn = new TableColumn<>("platform");
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
         TableColumn<Investment, String> stockNameColumn = new TableColumn<>("stock name");
@@ -387,7 +407,7 @@ public class UserInterfaceController implements Initializable {
 
         investmentTblVw.getColumns().addAll(
                 creationDateColumn,
-                statusColumn,
+                stateColumn,
                 platformColumn,
                 stockNameColumn,
                 exchangeRateColumn,
@@ -470,26 +490,6 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Initializes the application.
-     *
-     * @param url            unused
-     * @param resourceBundle unused
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        platformChcBxs = new ChoiceBox[]{platformChcBx};
-
-        currencyLbls = new Label[]{totalPerformanceCurrencyLbl};
-
-        initializeThemeMenu();
-
-        initializePlatformTab();
-        initializeInvestmentTab();
-        initializeSearch();
-        toDefault();
-    }
-
-    /**
      * Handles the "Add" Button and hands over the value for
      * a new Platform.
      */
@@ -546,7 +546,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleNewBook() {
-        setCurrFile(new File(DIRECTORY + "newBook.json"));
+        setCurrFile(new File(DIRECTORY + "/newBook.json"));
         this.investmentBook = new InvestmentBook(createJavaFXGUI());
         toDefault();
     }

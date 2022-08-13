@@ -214,7 +214,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the status
      */
-    public State getStatus() {
+    public State getState() {
         return state;
     }
 

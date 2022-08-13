@@ -189,7 +189,7 @@ public class InvestmentBook extends InvestmentBookImpl {
         Stream<Investment> investmentStream = this.investments.stream();
 
         if (state != null) {
-            investmentStream = investmentStream.filter(x -> x.getStatus() == state);
+            investmentStream = investmentStream.filter(x -> x.getState() == state);
         }
         if (platform != null) {
             investmentStream = investmentStream.filter(x -> x.getPlatform().equals(platform));

@@ -26,7 +26,7 @@ public class InvestmentTest {
         Investment result = new Investment(date, ONVISTA_BANK, "Microsoft", 250, 250);
         result.closeInvestment(date, 500);
 
-        assertEquals(CLOSED, result.getStatus());
+        assertEquals(CLOSED, result.getState());
         assertEquals(236, result.getPerformance(), 0.0);
         assertEquals(94.4, result.getPercentPerformance(), 0.0);
         assertEquals(14, result.getCost(), 0.0);

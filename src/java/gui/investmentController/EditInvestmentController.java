@@ -109,7 +109,7 @@ public class EditInvestmentController implements Initializable {
      * @param currInvestment the over handed investment
      */
     private void initializeCurrInvestment() {
-        State investState = this.currInvestment.getStatus();
+        State investState = this.currInvestment.getState();
         boolean investIsClosed = investState == State.CLOSED;
 
         creationDatePicker.setValue(this.currInvestment.getCreationDate());
