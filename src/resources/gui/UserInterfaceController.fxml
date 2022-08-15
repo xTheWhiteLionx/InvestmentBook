@@ -346,8 +346,8 @@
              </Menu>
          <Menu mnemonicParsing="false" text="Add">
            <items>
-               <MenuItem mnemonicParsing="false" onAction="#handleAddPlatform" text="Platform" />
-             <MenuItem mnemonicParsing="false" onAction="#handleAddInvestment" text="Investment" />
+               <MenuItem mnemonicParsing="false" onAction="#handleAddPlatform" text="Add Platform" />
+             <MenuItem mnemonicParsing="false" onAction="#handleAddInvestment" text="Add Investment" />
            </items>
          </Menu>
          <Menu mnemonicParsing="false" text="Appearance">

@@ -4,7 +4,6 @@ import gui.investmentController.EditInvestmentController;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -195,10 +194,8 @@ public class UserInterfaceController implements Initializable {
         currencyLbls = new Label[]{totalPerformanceCurrencyLbl};
 
         initializeThemeMenu();
-
         initializePlatformTab();
         initializeInvestmentTab();
-        initializeSearch();
         toDefault();
     }
 
@@ -302,11 +299,19 @@ public class UserInterfaceController implements Initializable {
      */
     private void initializePlatformTab() {
         feeTypeChcBx.getItems().addAll(FeeType.values());
+        feeTypeChcBx.valueProperty().addListener((observableValue, feeType, t1) -> {
+            boolean b = t1 == null;
+            btnApplyPlatformFilter.setDisable(b);
+            btnResetPlatformFilter.setDisable(b);
+        });
+
         //changeListener to regular the accessibility of the delete row button
         platformLstVw.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) ->
                         btnDeletePlatform.setDisable(newValue == null)
         );
+
+        initializePlatformSearch();
     }
 
     /**
@@ -314,10 +319,35 @@ public class UserInterfaceController implements Initializable {
      * to regular the accessibility of the filter apply button and
      * the toggle between the quarter and month filter option
      */
-    private void initializeFilterListener() {
+    private void initializeInvestmentFilter() {
         Month currMonth = LocalDate.now().getMonth();
 
-        ChangeListener<Boolean> filterMonthListener = (observable, oldValue, newValue) -> {
+        statusChoiceBox.getItems().addAll(State.values());
+        statusChoiceBox.valueProperty().addListener((observableValue, state, t1) -> {
+            btnApplyInvestmentFilter.setDisable(t1 == null);
+            btnResetInvestmentFilter.setDisable(t1 == null);
+        });
+
+        platformChcBx.valueProperty().addListener((observableValue, state, t1) -> {
+            btnApplyInvestmentFilter.setDisable(t1 == null);
+            btnResetInvestmentFilter.setDisable(t1 == null);
+        });
+
+        monthChcBox.getItems().addAll(Month.values());
+        monthChcBox.valueProperty().addListener((observableValue, state, t1) -> {
+            btnApplyInvestmentFilter.setDisable(t1 == null && !yearCheckBox.isSelected());
+            btnResetInvestmentFilter.setDisable(t1 == null && !yearCheckBox.isSelected());
+        });
+
+        quarterChcBox.getItems().addAll(Quarter.values());
+        quarterChcBox.valueProperty().addListener((observableValue, state, t1) -> {
+            btnApplyInvestmentFilter.setDisable(t1 == null && !yearCheckBox.isSelected());
+            btnResetInvestmentFilter.setDisable(t1 == null && !yearCheckBox.isSelected());
+        });
+
+        yearSpinner.setValueFactory(new IntegerSpinnerValueFactory(0, 0, 0));
+
+        rdBtnFilterMonth.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (rdBtnFilterMonth.isSelected()) {
                 yearCheckBox.setSelected(true);
                 //sets the current month
@@ -327,9 +357,9 @@ public class UserInterfaceController implements Initializable {
                 monthChcBox.setValue(null);
             }
             monthChcBox.setDisable(!rdBtnFilterMonth.isSelected());
-        };
+        });
 
-        ChangeListener<Boolean> filterQuarterListener = (observable, oldValue, newValue) -> {
+        rdBtnFilterQuarter.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (rdBtnFilterQuarter.isSelected()) {
                 yearCheckBox.setSelected(true);
                 //sets the current quarter by the current month
@@ -339,9 +369,9 @@ public class UserInterfaceController implements Initializable {
                 quarterChcBox.setValue(null);
             }
             quarterChcBox.setDisable(!rdBtnFilterQuarter.isSelected());
-        };
+        });
 
-        ChangeListener<Boolean> filterYearListener = (observable, oldValue, newValue) -> {
+        yearCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             int currYear = LocalDate.now().getYear();
             SpinnerValueFactory<Integer> valueFactory =
                     new IntegerSpinnerValueFactory(1970, currYear, currYear);
@@ -352,24 +382,11 @@ public class UserInterfaceController implements Initializable {
                 valueFactory = new IntegerSpinnerValueFactory(0, 0, 0);
             }
             yearSpinner.setValueFactory(valueFactory);
-            yearSpinner.setDisable(!yearCheckBox.isSelected());
-        };
+            yearSpinner.setDisable(!newValue);
 
-        rdBtnFilterMonth.selectedProperty().addListener(filterMonthListener);
-        rdBtnFilterQuarter.selectedProperty().addListener(filterQuarterListener);
-        yearCheckBox.selectedProperty().addListener(filterYearListener);
-        yearSpinner.setValueFactory(new IntegerSpinnerValueFactory(0, 0, 0));
-    }
-
-    /**
-     * Creates and adds the changeListeners to the filter items
-     * to regular the accessibility of the filter apply button and
-     * the toggle between the quarter and month filter option
-     */
-    private void initializeFilterOptions() {
-        statusChoiceBox.getItems().addAll(State.values());
-        monthChcBox.getItems().addAll(Month.values());
-        quarterChcBox.getItems().addAll(Quarter.values());
+            btnApplyInvestmentFilter.setDisable(!newValue);
+            btnResetInvestmentFilter.setDisable(!newValue);
+        });
     }
 
     /**
@@ -419,12 +436,13 @@ public class UserInterfaceController implements Initializable {
         );
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        initializeFilterOptions();
-        initializeFilterListener();
-
         investmentTblVw.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> btnDeleteInvestment.setDisable(newValue == null)
         );
+
+        initializeInvestmentFilter();
+        initializeInvestmentSearch();
+
     }
 
     /**
@@ -482,7 +500,6 @@ public class UserInterfaceController implements Initializable {
 
     //TODO JavaDoc
     private void toDefault() {
-        initializeFilterListener();
         btnDeletePlatform.setDisable(true);
         btnDeleteInvestment.setDisable(true);
         cleanInvestmentFilter();
@@ -693,7 +710,7 @@ public class UserInterfaceController implements Initializable {
      *
      */
     // TODO: 28.06.2022 JavaDoc
-    private void initializeSearch() {
+    private void initializePlatformSearch() {
         platformNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.
@@ -704,7 +721,13 @@ public class UserInterfaceController implements Initializable {
                 investmentBook.displayPlatforms();
             }
         });
+    }
 
+    /**
+     *
+     */
+    // TODO: 28.06.2022 JavaDoc
+    private void initializeInvestmentSearch() {
         filterStockNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.

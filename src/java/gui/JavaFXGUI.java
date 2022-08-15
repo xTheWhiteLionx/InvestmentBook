@@ -150,14 +150,11 @@ public class JavaFXGUI implements GUIConnector {
     @Override
     public void displayPlatforms(Set<Platform> platforms) {
         platformListView.getItems().clear();
-        if (!platforms.isEmpty()) {
-            for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
-                platform_choice_box.getItems().clear();
-            }
-            for (Platform platform : platforms) {
-                addPlatform(platform);
-            }
-//            PLATFORM_CHOICE_BOX.setValue(PLATFORM_CHOICE_BOX.getItems().get(0));
+        for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
+            platform_choice_box.getItems().clear();
+        }
+        for (Platform platform : platforms) {
+            addPlatform(platform);
         }
     }
 

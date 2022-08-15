@@ -60,6 +60,9 @@ public class InvestmentBook extends InvestmentBookImpl {
     public InvestmentBook(GUIConnector gui) {
         super();
         this.gui = gui;
+
+        displayPlatforms();
+        displayInvestments();
     }
 
     /**
