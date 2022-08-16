@@ -4,6 +4,7 @@ import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,10 +52,10 @@ public class UserInterfaceController implements Initializable {
 
     //TODO implement
     @FXML
-    public Label status;
+    private Label status;
     //TODO implement
     @FXML
-    public ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     @FXML
     private TextField platformNameTxtFld;
@@ -102,9 +103,6 @@ public class UserInterfaceController implements Initializable {
     private TableView<Investment> investmentTblVw;
     @FXML
     private Label totalPerformanceLbl;
-    @FXML
-    private Label totalPerformanceCurrencyLbl;
-
 
     @FXML
     private Label creationDateLbl;
@@ -148,12 +146,6 @@ public class UserInterfaceController implements Initializable {
      */
     //TODO JavaDoc
     private ChoiceBox[] platformChcBxs;
-
-    /**
-     *
-     */
-    //TODO JavaDoc
-    private Label[] currencyLbls;
 
     /**
      * The current {@link InvestmentBook}
@@ -217,8 +209,6 @@ public class UserInterfaceController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         platformChcBxs = new ChoiceBox[]{platformChcBx};
 
-        currencyLbls = new Label[]{totalPerformanceCurrencyLbl};
-
         initializeThemeMenu();
         initializePlatformTab();
         initializeInvestmentTab();
@@ -264,7 +254,6 @@ public class UserInterfaceController implements Initializable {
                 platformLstVw,
                 platformChcBxs,
                 totalPerformanceLbl,
-                currencyLbls,
                 status);
     }
 
@@ -433,14 +422,14 @@ public class UserInterfaceController implements Initializable {
         TableColumn<Investment, String> stockNameColumn = new TableColumn<>("stock name");
         stockNameColumn.setCellValueFactory(new PropertyValueFactory<>("stockName"));
         TableColumn<Investment, Double> exchangeRateColumn = new TableColumn<>("exchange Rate" +
-                " " + SYMBOL_OF_CURRENCY);
+                                                                               " " + SYMBOL_OF_CURRENCY);
         exchangeRateColumn.setCellValueFactory(new PropertyValueFactory<>("exchangeRate"));
 //        columns.add(exchangeRateColumn);
         TableColumn<Investment, Double> capitalColumn = new TableColumn<>("capital" + " " +
-                SYMBOL_OF_CURRENCY);
+                                                                          SYMBOL_OF_CURRENCY);
         capitalColumn.setCellValueFactory(new PropertyValueFactory<>("capital"));
         TableColumn<Investment, Double> sellingPriceColumn = new TableColumn<>("selling Price" +
-                " " + SYMBOL_OF_CURRENCY);
+                                                                               " " + SYMBOL_OF_CURRENCY);
         sellingPriceColumn.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
         TableColumn<Investment, Double> absolutePerformanceColumn = new TableColumn<>(
                 "performance" + " " + SYMBOL_OF_CURRENCY);
@@ -450,7 +439,7 @@ public class UserInterfaceController implements Initializable {
         percentPerformanceColumn.setCellValueFactory(new PropertyValueFactory<>(
                 "percentPerformance"));
         TableColumn<Investment, Double> costColumn = new TableColumn<>("cost" + " " +
-                SYMBOL_OF_CURRENCY);
+                                                                       SYMBOL_OF_CURRENCY);
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
         investmentTblVw.getColumns().addAll(
@@ -521,6 +510,9 @@ public class UserInterfaceController implements Initializable {
      */
     //TODO JavaDoc
     private void loadInvestmentBook(File file) {
+        Task<InvestmentBookData> loadTask = fileLoaderTask(file);
+        progressBar.progressProperty().bind(loadTask.progressProperty());
+        loadTask.run();
         try {
             InvestmentBookData investmentBookData = InvestmentBookData.fromJson(file);
             this.currFile = file;
@@ -533,6 +525,18 @@ public class UserInterfaceController implements Initializable {
 //        progressBar.progressProperty().bind(loadTask.progressProperty());
         status.setText("File loaded: " + currFile.getName());
         toDefault();
+    }
+
+    private Task<InvestmentBookData> fileLoaderTask(File file){
+
+        Task<InvestmentBookData> loadFileTask = new Task<>() {
+            @Override
+            protected InvestmentBookData call() throws Exception {
+                updateProgress();
+                return InvestmentBookData.fromJson(file);
+            }
+        };
+        return null;
     }
 
     //TODO JavaDoc

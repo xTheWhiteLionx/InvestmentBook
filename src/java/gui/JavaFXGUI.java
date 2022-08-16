@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import static gui.Style.setAndColorsText;
-import static gui.Style.setCurrenciesForLbls;
 
 
 /**
@@ -58,27 +57,23 @@ public class JavaFXGUI implements GUIConnector {
     /**
      * The constructor. Gets past all components of the gui that may change
      * due to actions in the logic.
-     *  @param investmentTableView          all investments in a Tableview
+     * @param investmentTableView          all investments in a Tableview
      * @param platformListView             all platforms in a Listview
      * @param platformFilterChoiceBoxes
- * //     * @param platformFilterChoiceBox choiceBox of all platforms for the filter
- * //     * @param platformChoiceBox       choiceBox of all platforms to create a new investment
+* //     * @param platformFilterChoiceBox choiceBox of all platforms for the filter
+* //     * @param platformChoiceBox       choiceBox of all platforms to create a new investment
      * @param totalPerformanceLabel        label to change the total performance
 *                                     of the displayed investments
-     * @param currencyLbls                 labels to show the local currency
      * @param status                       label to change the current status
      */
     public JavaFXGUI(TableView<Investment> investmentTableView, ListView<Platform> platformListView,
                      ChoiceBox[] platformFilterChoiceBoxes, Label totalPerformanceLabel,
-                     Label[] currencyLbls, Label status) {
+                     Label status) {
         this.investmentTableView = investmentTableView;
         this.platformListView = platformListView;
         this.platformFilterChoiceBoxes = platformFilterChoiceBoxes;
         this.totalPerformanceLabel = totalPerformanceLabel;
         this.status = status;
-
-        //TODO?
-        setCurrenciesForLbls(currencyLbls);
     }
 
     /**

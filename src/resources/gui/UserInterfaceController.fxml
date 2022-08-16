@@ -286,15 +286,6 @@
                                         <Font name="System Bold" size="14.0"/>
                                     </font>
                                 </Label>
-                                <Label fx:id="totalPerformanceCurrencyLbl" layoutX="259.0"
-                                       layoutY="16.0">
-                                    <font>
-                                        <Font size="14.0"/>
-                                    </font>
-                                    <HBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </HBox.margin>
-                                </Label>
                             </HBox>
                             <ToolBar prefHeight="40.0" prefWidth="200.0">
                                 <CustomTextField fx:id="filterStockNameTxtFld" promptText="search"

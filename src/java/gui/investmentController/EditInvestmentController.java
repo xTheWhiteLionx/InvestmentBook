@@ -116,30 +116,17 @@ public class EditInvestmentController implements Initializable {
         statusLbl.setText(investState.name());
         platformLbl.setText(this.investment.getPlatform().getName());
         stockNameTxtFld.setText(this.investment.getStockName());
-        exchangeRateTxtFld.setText(DoubleUtil.formatMoney(this.investment.getExchangeRate()));
-        capitalTxtFld.setText(DoubleUtil.formatMoney(this.investment.getCapital()));
-        sellingPriceTxtFld.setText(DoubleUtil.formatMoney(this.investment.getSellingPrice()));
-        String performance =
-                (this.investment.getPerformance() + " ").replace(".", ",");
-        performanceLbl.setText(performance + Style.SYMBOL_OF_CURRENCY);
-        String percentPerformance =
-                (this.investment.getPercentPerformance() + " ").replace(".", ",");
-        percentPerformanceLbl.setText(percentPerformance + "%");
-        String cost =
-                (this.investment.getCost() + " ").replace(".", ",");
-        costLbl.setText(cost + " " + Style.SYMBOL_OF_CURRENCY);
-        LocalDate investmentSellDate = this.investment.getSellingDate();
-        //TODO?
-//        sellingDatePicker.setValue(
-//                investmentSellDate != null ? investmentSellDate : LocalDate.now()
-//        );
-        sellingDatePicker.setValue(investmentSellDate);
-        holdingPeriodLbl.setText(this.investment.getHoldingPeriod() + " days");
+        exchangeRateTxtFld.setText(DoubleUtil.format(this.investment.getExchangeRate()));
+        capitalTxtFld.setText(DoubleUtil.format(this.investment.getCapital()));
+        performanceLbl.setText(DoubleUtil.format(investment.getPerformance()));
+        percentPerformanceLbl.setText(DoubleUtil.format(investment.getPercentPerformance()) + "%");
+        costLbl.setText(DoubleUtil.format(investment.getCost()));
+        if (investIsClosed) {
+            sellingPriceTxtFld.setText(DoubleUtil.format(this.investment.getSellingPrice()));
+            sellingDatePicker.setValue(investment.getSellingDate());
+        }
 
-        stockNameTxtFld.setDisable(investIsClosed);
-        exchangeRateTxtFld.setDisable(investIsClosed);
-        capitalTxtFld.setDisable(investIsClosed);
-        sellingPriceTxtFld.setDisable(investIsClosed);
+        holdingPeriodLbl.setText(this.investment.getHoldingPeriod() + " days");
     }
 
     /**
