@@ -1,9 +1,10 @@
 package gui;
 
-import helper.DoubleTools;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -17,15 +18,27 @@ import static helper.GeneralMethods.round;
  */
 public class Style {
     /**
-     * Regex for only integers or double values
-     * (only two decimal places are guaranteed)
-     */
-    public static final String TXT_FIELD_REGEX = "^[0-9]+([,.][0-9][0-9])?$";
-    /**
      * Symbol of the local currency
      */
     public static final String SYMBOL_OF_CURRENCY = Currency.getInstance(Locale.getDefault())
             .getSymbol();
+
+    /** The date pattern that is used for conversion. Change as you wish. */
+    private static final String DATE_PATTERN = "dd.MM.yyyy";
+
+    /** The date formatter. */
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern(DATE_PATTERN);
+
+    /**
+     * Sets the text of the given Labels to the
+     * current currency symbol
+     *
+     * @param labels currency labels
+     */
+    public static Label createCurrencyLbl() {
+        return new Label(SYMBOL_OF_CURRENCY);
+    }
 
     /**
      * Sets the text of the given Labels to the
@@ -52,7 +65,7 @@ public class Style {
     public static void setAndColorsText(double value, Label valueLbl) {
         assert valueLbl != null;
 
-        valueLbl.setText(DoubleTools.toString(round(value)));
+        valueLbl.setText(DoubleUtil.formatMoney(round(value)));
         Paint color = BLACK;
         if (value > 0) {
             color = GREEN;
@@ -60,5 +73,19 @@ public class Style {
             color = RED;
         }
         valueLbl.setTextFill(color);
+    }
+
+    /**
+     * Returns the given date as a well formatted String. The above defined
+     * {@link DoubleUtil#DATE_PATTERN} is used.
+     *
+     * @param date the date to be returned as a string
+     * @return formatted string
+     */
+    public static String format(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return DATE_FORMATTER.format(date);
     }
 }

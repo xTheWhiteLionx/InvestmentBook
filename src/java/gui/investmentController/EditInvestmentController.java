@@ -1,10 +1,10 @@
 package gui.investmentController;
 
+import gui.DoubleUtil;
 import gui.DialogWindow;
 import gui.Style;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
-import helper.DoubleTools;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,7 +68,7 @@ public class EditInvestmentController implements Initializable {
     /**
      * The current controlled investment
      */
-    private Investment currInvestment;
+    private Investment investment;
 
     /**
      * the current {@link InvestmentBook}
@@ -98,7 +98,7 @@ public class EditInvestmentController implements Initializable {
                 650,
                 600
         );
-        editInvestment.currInvestment = selectedInvestment;
+        editInvestment.investment = selectedInvestment;
         editInvestment.investmentBook = investmentBook;
         editInvestment.initializeCurrInvestment();
     }
@@ -109,32 +109,32 @@ public class EditInvestmentController implements Initializable {
      * @param currInvestment the over handed investment
      */
     private void initializeCurrInvestment() {
-        State investState = this.currInvestment.getState();
+        State investState = this.investment.getState();
         boolean investIsClosed = investState == State.CLOSED;
 
-        creationDatePicker.setValue(this.currInvestment.getCreationDate());
+        creationDatePicker.setValue(this.investment.getCreationDate());
         statusLbl.setText(investState.name());
-        platformLbl.setText(this.currInvestment.getPlatform().getName());
-        stockNameTxtFld.setText(this.currInvestment.getStockName());
-        exchangeRateTxtFld.setText(DoubleTools.toString(this.currInvestment.getExchangeRate()));
-        capitalTxtFld.setText(DoubleTools.toString(this.currInvestment.getCapital()));
-        sellingPriceTxtFld.setText(DoubleTools.toString(this.currInvestment.getSellingPrice()));
+        platformLbl.setText(this.investment.getPlatform().getName());
+        stockNameTxtFld.setText(this.investment.getStockName());
+        exchangeRateTxtFld.setText(DoubleUtil.formatMoney(this.investment.getExchangeRate()));
+        capitalTxtFld.setText(DoubleUtil.formatMoney(this.investment.getCapital()));
+        sellingPriceTxtFld.setText(DoubleUtil.formatMoney(this.investment.getSellingPrice()));
         String performance =
-                (this.currInvestment.getPerformance() + " ").replace(".", ",");
+                (this.investment.getPerformance() + " ").replace(".", ",");
         performanceLbl.setText(performance + Style.SYMBOL_OF_CURRENCY);
         String percentPerformance =
-                (this.currInvestment.getPercentPerformance() + " ").replace(".", ",");
+                (this.investment.getPercentPerformance() + " ").replace(".", ",");
         percentPerformanceLbl.setText(percentPerformance + "%");
         String cost =
-                (this.currInvestment.getCost() + " ").replace(".", ",");
+                (this.investment.getCost() + " ").replace(".", ",");
         costLbl.setText(cost + " " + Style.SYMBOL_OF_CURRENCY);
-        LocalDate investmentSellDate = this.currInvestment.getSellingDate();
+        LocalDate investmentSellDate = this.investment.getSellingDate();
         //TODO?
 //        sellingDatePicker.setValue(
 //                investmentSellDate != null ? investmentSellDate : LocalDate.now()
 //        );
         sellingDatePicker.setValue(investmentSellDate);
-        holdingPeriodLbl.setText(this.currInvestment.getHoldingPeriod() + " days");
+        holdingPeriodLbl.setText(this.investment.getHoldingPeriod() + " days");
 
         stockNameTxtFld.setDisable(investIsClosed);
         exchangeRateTxtFld.setDisable(investIsClosed);
@@ -150,12 +150,12 @@ public class EditInvestmentController implements Initializable {
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
-                    || !DoubleTools.isValidDouble(exchangeRateTxtFld)
-                    || !DoubleTools.isValidDouble(capitalTxtFld)
+                    || !DoubleUtil.isValidDouble(exchangeRateTxtFld)
+                    || !DoubleUtil.isValidDouble(capitalTxtFld)
                     || stockNameTxtFld.getText().isEmpty()
                     //To be a valid investment the sellingDate and sellingPrice has to be both
                     // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ DoubleTools.isValidDouble(sellingPriceTxtFld));
+                    || (sellingDatePicker.getValue() != null ^ DoubleUtil.isValidDouble(sellingPriceTxtFld));
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -198,13 +198,13 @@ public class EditInvestmentController implements Initializable {
     @FXML
     //TODO outsource to a methode in investmentBook
     private void handleApply() {
-        currInvestment.setCreationDate(creationDatePicker.getValue());
-        currInvestment.setStockName(stockNameTxtFld.getText());
-        currInvestment.setExchangeRate(DoubleTools.toDouble(exchangeRateTxtFld.getText()));
-        currInvestment.setCapital(DoubleTools.toDouble(capitalTxtFld.getText()));
+        investment.setCreationDate(creationDatePicker.getValue());
+        investment.setStockName(stockNameTxtFld.getText());
+        investment.setExchangeRate(DoubleUtil.parse(exchangeRateTxtFld.getText()));
+        investment.setCapital(DoubleUtil.parse(capitalTxtFld.getText()));
         //TODO for null
-        currInvestment.closeInvestment(sellingDatePicker.getValue(),
-                DoubleTools.toDouble(sellingPriceTxtFld.getText())
+        investment.closeInvestment(sellingDatePicker.getValue(),
+                DoubleUtil.parse(sellingPriceTxtFld.getText())
         );
         investmentBook.displayInvestments();
         handleCancel();
@@ -218,11 +218,11 @@ public class EditInvestmentController implements Initializable {
     private void handleSellingPriceCalculator() {
         SellingPriceCalculatorController sellingPriceCalculatorController =
                 DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
-                        "selling price calculator: " + currInvestment.getStockName(),
+                        "selling price calculator: " + investment.getStockName(),
                         350,
                         200
                 );
-        sellingPriceCalculatorController.setInvestment(currInvestment);
+        sellingPriceCalculatorController.setInvestment(investment);
     }
 
     /**
@@ -233,10 +233,10 @@ public class EditInvestmentController implements Initializable {
     private void handlePerformanceCalculator() {
         PerformanceCalculatorController performanceCalculatorController =
                 DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
-                        "performance calculator: " + currInvestment.getStockName(),
+                        "performance calculator: " + investment.getStockName(),
                         350,
                         200
                 );
-        performanceCalculatorController.setInvestment(currInvestment);
+        performanceCalculatorController.setInvestment(investment);
     }
 }

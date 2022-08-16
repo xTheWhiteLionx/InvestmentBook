@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import helper.DoubleTools;
+import gui.DoubleUtil;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -61,14 +61,14 @@ public class NewPlatformController implements Initializable {
             FeeType feeType = feeTypeChcBx.getValue();
             boolean isNotMixedPlatform = feeType != MIXED;
             boolean nameAndFeeAreInvalid =
-                    nameTxtFld.getText().isEmpty() || !DoubleTools.isValidDouble(feeTxtFld);
+                    nameTxtFld.getText().isEmpty() || !DoubleUtil.isValidDouble(feeTxtFld);
 
             if (isNotMixedPlatform) {
                 minTxtFld.setText("");
                 btnApply.setDisable(nameAndFeeAreInvalid);
             } else {
                 // examines if all fields have invalid input
-                btnApply.setDisable(nameAndFeeAreInvalid || !DoubleTools.isValidDouble(minTxtFld));
+                btnApply.setDisable(nameAndFeeAreInvalid || !DoubleUtil.isValidDouble(minTxtFld));
             }
             minTxtFld.setDisable(isNotMixedPlatform);
             feeTypeSymbolLbl.setText(feeType == ABSOLUTE ? SYMBOL_OF_CURRENCY : "%");
@@ -118,8 +118,8 @@ public class NewPlatformController implements Initializable {
     private void handleApply() {
         Platform newPlatform = Platform.create(feeTypeChcBx.getValue(),
                 nameTxtFld.getText(),
-                DoubleTools.toDouble(feeTxtFld.getText()),
-                DoubleTools.toDouble(minTxtFld.getText()));
+                DoubleUtil.parse(feeTxtFld.getText()),
+                DoubleUtil.parse(minTxtFld.getText()));
         investmentBook.add(newPlatform);
         handleCancel();
     }

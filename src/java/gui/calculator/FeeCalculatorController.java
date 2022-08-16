@@ -1,7 +1,7 @@
 package gui.calculator;
 
+import gui.DoubleUtil;
 import gui.Style;
-import helper.DoubleTools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import static helper.DoubleTools.isValidDouble;
+import static gui.DoubleUtil.isValidDouble;
 
 /**
  * Controller of the graphical fee calculator.
@@ -75,8 +75,8 @@ public class FeeCalculatorController implements Initializable {
     //TODO JavaDoc
     @FXML
     private void handleCalculate() {
-        double capital = platform.getFee(DoubleTools.toDouble(capitalTxtField.getText()));
-        feeLbl.setText(DoubleTools.toString(capital));
+        double capital = platform.getFee(DoubleUtil.parse(capitalTxtField.getText()));
+        feeLbl.setText(DoubleUtil.formatMoney(capital));
     }
 
     /**

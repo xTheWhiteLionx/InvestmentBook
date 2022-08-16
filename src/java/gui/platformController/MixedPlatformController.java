@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import helper.DoubleTools;
+import gui.DoubleUtil;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -51,8 +51,8 @@ public class MixedPlatformController implements Initializable, PlatformControlle
 
         this.currPlatform = selectedPlatform;
         nameTxtFld.setText(currPlatform.getName());
-        percentTxtFld.setText(DoubleTools.toString(currPlatform.getPercent()));
-        minFeeTxtFld.setText(DoubleTools.toString(currPlatform.getMinFee()));
+        percentTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getPercent()));
+        minFeeTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getMinFee()));
     }
 
     /**
@@ -63,8 +63,8 @@ public class MixedPlatformController implements Initializable, PlatformControlle
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = nameTxtFld.getText().isEmpty()
-                    || !DoubleTools.isValidDouble(percentTxtFld)
-                    || !DoubleTools.isValidDouble(minFeeTxtFld);
+                    || !DoubleUtil.isValidDouble(percentTxtFld)
+                    || !DoubleUtil.isValidDouble(minFeeTxtFld);
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -105,8 +105,8 @@ public class MixedPlatformController implements Initializable, PlatformControlle
     //TODO outsource to a methode in investmentBook
     private void handleApply() {
         currPlatform.setName(nameTxtFld.getText());
-        currPlatform.setPercent(DoubleTools.toDouble(percentTxtFld.getText()));
-        currPlatform.setMinFee(DoubleTools.toDouble(minFeeTxtFld.getText()));
+        currPlatform.setPercent(DoubleUtil.parse(percentTxtFld.getText()));
+        currPlatform.setMinFee(DoubleUtil.parse(minFeeTxtFld.getText()));
         handleCancel();
     }
 
@@ -126,7 +126,7 @@ public class MixedPlatformController implements Initializable, PlatformControlle
 
         this.currPlatform = (MixedPlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        percentTxtFld.setText(DoubleTools.toString(currPlatform.getPercent()));
-        minFeeTxtFld.setText(DoubleTools.toString(currPlatform.getMinFee()));
+        percentTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getPercent()));
+        minFeeTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getMinFee()));
     }
 }

@@ -1,29 +1,14 @@
 package gui;
 
-import gui.investmentController.EditInvestmentController;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -85,9 +70,9 @@ public class UserInterfaceController implements Initializable {
     private ListView<Platform> platformLstVw;
 
     /**
-     * content of the investment Tab
+     * Content of the investment Tab
      */
-    //filter attributes
+    //investment filter attributes
     @FXML
     private ChoiceBox<State> statusChoiceBox;
     @FXML
@@ -111,16 +96,52 @@ public class UserInterfaceController implements Initializable {
     private Button btnApplyInvestmentFilter;
     @FXML
     private Button btnResetInvestmentFilter;
-    @FXML
-    private Button btnDeleteInvestment;
 
-    //Table
+    //Tab Investment
     @FXML
     private TableView<Investment> investmentTblVw;
     @FXML
     private Label totalPerformanceLbl;
     @FXML
     private Label totalPerformanceCurrencyLbl;
+
+
+    @FXML
+    private Label creationDateLbl;
+    @FXML
+    private Label statusLbl;
+    @FXML
+    private Label platformLbl;
+    @FXML
+    private Label stockNameLbl;
+    @FXML
+    private Label exchangeRateLbl;
+    @FXML
+    private Label exchangeRateCurrencyLbl;
+    @FXML
+    private Label capitalLbl;
+    @FXML
+    private Label capitalCurrencyLbl;
+    @FXML
+    private Label sellingPriceLbl;
+    @FXML
+    private Label sellingPriceCurrencyLbl;
+    @FXML
+    private Label performanceLbl;
+    @FXML
+    private Label percentPerformanceLbl;
+    @FXML
+    private Label costLbl;
+    @FXML
+    private Label sellingDateLbl;
+    @FXML
+    private Label holdingPeriodLbl;
+    @FXML
+    private Button btnNewInvestment;
+    @FXML
+    private Button btnEditInvestment;
+    @FXML
+    private Button btnDeleteInvestment;
 
     /**
      *
@@ -138,6 +159,11 @@ public class UserInterfaceController implements Initializable {
      * The current {@link InvestmentBook}
      */
     private InvestmentBook investmentBook;
+
+    /**
+     * The current {@link InvestmentBook}
+     */
+    private Investment currentInvestment;
 
     /**
      * The current file
@@ -394,10 +420,14 @@ public class UserInterfaceController implements Initializable {
      * sets the default values
      */
     private void initializeInvestmentTab() {
+        ObservableList<TableColumn<Investment, ?>> columns = investmentTblVw.getColumns();
+
         TableColumn<Investment, LocalDate> creationDateColumn = new TableColumn<>("creationDate");
         creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
+        columns.add(creationDateColumn);
         TableColumn<Investment, State> stateColumn = new TableColumn<>("state");
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
+        columns.add(stateColumn);
         TableColumn<Investment, Platform> platformColumn = new TableColumn<>("platform");
         platformColumn.setCellValueFactory(new PropertyValueFactory<>("platform"));
         TableColumn<Investment, String> stockNameColumn = new TableColumn<>("stock name");
@@ -405,6 +435,7 @@ public class UserInterfaceController implements Initializable {
         TableColumn<Investment, Double> exchangeRateColumn = new TableColumn<>("exchange Rate" +
                 " " + SYMBOL_OF_CURRENCY);
         exchangeRateColumn.setCellValueFactory(new PropertyValueFactory<>("exchangeRate"));
+//        columns.add(exchangeRateColumn);
         TableColumn<Investment, Double> capitalColumn = new TableColumn<>("capital" + " " +
                 SYMBOL_OF_CURRENCY);
         capitalColumn.setCellValueFactory(new PropertyValueFactory<>("capital"));
@@ -423,8 +454,8 @@ public class UserInterfaceController implements Initializable {
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
         investmentTblVw.getColumns().addAll(
-                creationDateColumn,
-                stateColumn,
+//                creationDateColumn,
+//                stateColumn,
                 platformColumn,
                 stockNameColumn,
                 exchangeRateColumn,
@@ -437,7 +468,13 @@ public class UserInterfaceController implements Initializable {
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         investmentTblVw.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> btnDeleteInvestment.setDisable(newValue == null)
+                (observable, oldValue, newValue) -> {
+                    currentInvestment = newValue;
+                    showInvestmentDetails(currentInvestment);
+                    boolean isNull = newValue == null;
+                    btnEditInvestment.setDisable(isNull);
+                    btnDeleteInvestment.setDisable(isNull);
+                }
         );
 
         initializeInvestmentFilter();
@@ -501,6 +538,7 @@ public class UserInterfaceController implements Initializable {
     //TODO JavaDoc
     private void toDefault() {
         btnDeletePlatform.setDisable(true);
+        btnEditInvestment.setDisable(true);
         btnDeleteInvestment.setDisable(true);
         cleanInvestmentFilter();
         cleanPlatformFilter();
@@ -652,19 +690,57 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
-     * Creates and displays new {@link EditInvestmentController}
-     * also it hands over the selected investment and the current
-     * investmentBookView which should be transmitted to the created investmentController
+     * Fills all text fields to show details about the person.
+     * If the specified person is null, all text fields are cleared.
      *
-     * @param event mouseEvent to examine a double-click
+     * @param person the person or null
+     */
+    private void showInvestmentDetails(Investment investment) {
+        if (investment != null) {
+            State investState = investment.getState();
+
+            creationDateLbl.setText(Style.format(investment.getCreationDate()));
+            statusLbl.setText(investState.name());
+            platformLbl.setText(investment.getPlatform().getName());
+            stockNameLbl.setText(investment.getStockName());
+            exchangeRateLbl.setText(DoubleUtil.formatMoney(investment.getExchangeRate()));
+            capitalLbl.setText(DoubleUtil.formatMoney(investment.getCapital()));
+            performanceLbl.setText(DoubleUtil.formatMoney(investment.getPerformance()));
+            percentPerformanceLbl.setText(
+                    DoubleUtil.format(investment.getPercentPerformance()) + "%");
+            costLbl.setText(DoubleUtil.formatMoney(investment.getCost()));
+            if (investState == State.CLOSED) {
+                sellingPriceLbl.setText(DoubleUtil.formatMoney(investment.getSellingPrice()));
+                sellingDateLbl.setText(Style.format(investment.getSellingDate()));
+            } else {
+                sellingPriceLbl.setText("");
+                sellingDateLbl.setText("");
+            }
+            holdingPeriodLbl.setText(investment.getHoldingPeriod() + " days");
+        } else {
+            // Investment is null, remove all the text.
+            creationDateLbl.setText("");
+            statusLbl.setText("");
+            platformLbl.setText("");
+            stockNameLbl.setText("");
+            exchangeRateLbl.setText("");
+            capitalLbl.setText("");
+            performanceLbl.setText("");
+            percentPerformanceLbl.setText("");
+            costLbl.setText("");
+            sellingPriceLbl.setText("");
+            sellingDateLbl.setText("");
+            holdingPeriodLbl.setText("");
+        }
+    }
+
+    /**
+     * Handles the "add" Button and hands over the value for
+     * a new Investment.
      */
     @FXML
-    private void clickInvestment(MouseEvent event) {
-        if (isDoubleClicked(event)) {
-
-            Investment selectedInvestment = investmentTblVw.getSelectionModel().getSelectedItem();
-            loadEditInvestmentController(selectedInvestment, investmentBook);
-        }
+    private void handleEditInvestment() {
+        loadEditInvestmentController(currentInvestment, investmentBook);
     }
 
     /**

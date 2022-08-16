@@ -77,9 +77,9 @@ public class Investment implements Comparable<Investment> {
     private LocalDate sellingDate;
 
     /**
-     * Holding period of the investment in days
+     * Holding period of the investment since the buying date, in days.
      */
-    private long holdingPeriod = 0;
+    private long holdingPeriod;
 
     /**
      * Constructor for a new (open) Investment, with calling of the constructor.
@@ -120,6 +120,7 @@ public class Investment implements Comparable<Investment> {
         this.exchangeRate = exchangeRate;
         this.capital = capital;
         this.cost = platform.getFee(capital);
+        this.holdingPeriod = DAYS.between(creationDate, LocalDate.now());
     }
 
     /**
@@ -184,8 +185,10 @@ public class Investment implements Comparable<Investment> {
                 this.holdingPeriod = DAYS.between(newCreationDate, sellingDate);
             } else {
                 throw new IllegalArgumentException("given creation date is after the selling date,"
-                        + " logical error");
+                                                   + " logical error");
             }
+        } else {
+            this.holdingPeriod = DAYS.between(newCreationDate, LocalDate.now());
         }
         this.creationDate = newCreationDate;
     }
@@ -436,7 +439,7 @@ public class Investment implements Comparable<Investment> {
     public String toString() {
         return "Investment{" +
                 "creationDate=" + creationDate + "\n" +
-                ", status=" + state + "\n" +
+                ", state=" + state + "\n" +
                 ", platform=" + platform + "\n" +
                 ", stockName='" + stockName + '\'' + "\n" +
                 ", exchangeRate=" + exchangeRate + "\n" +

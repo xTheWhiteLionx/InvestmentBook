@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import helper.DoubleTools;
+import gui.DoubleUtil;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -46,7 +46,7 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = nameTxtFld.getText().isEmpty()
-                    || !DoubleTools.isValidDouble(feeTxtFld);
+                    || !DoubleUtil.isValidDouble(feeTxtFld);
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -84,7 +84,7 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
     //TODO outsource to a methode in investmentBook
     private void handleApply() {
         currPlatform.setName(nameTxtFld.getText());
-        currPlatform.setFee(DoubleTools.toDouble(feeTxtFld.getText()));
+        currPlatform.setFee(DoubleUtil.parse(feeTxtFld.getText()));
         handleCancel();
     }
 
@@ -102,6 +102,6 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
     public void setDisplay(Platform platform) {
         this.currPlatform = (AbsolutePlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        feeTxtFld.setText(DoubleTools.toString(currPlatform.getFee(0)));
+        feeTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getFee(0)));
     }
 }

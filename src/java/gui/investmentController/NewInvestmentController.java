@@ -1,6 +1,6 @@
 package gui.investmentController;
 
-import helper.DoubleTools;
+import gui.DoubleUtil;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -74,12 +74,12 @@ public class NewInvestmentController implements Initializable {
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
-                    || !DoubleTools.isValidDouble(exchangeRateTxtFld)
-                    || !DoubleTools.isValidDouble(capitalTxtFld)
+                    || !DoubleUtil.isValidDouble(exchangeRateTxtFld)
+                    || !DoubleUtil.isValidDouble(capitalTxtFld)
                     || stockNameTxtFld.getText().isEmpty()
                     //To be a valid investment the sellingDate and sellingPrice has to be both
                     // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ DoubleTools.isValidDouble(sellingPriceTxtFld));
+                    || (sellingDatePicker.getValue() != null ^ DoubleUtil.isValidDouble(sellingPriceTxtFld));
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -101,12 +101,12 @@ public class NewInvestmentController implements Initializable {
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = creationDatePicker == null
                     || platformChcBx.getValue() == null
-                    || !DoubleTools.isValidDouble(exchangeRateTxtFld)
-                    || !DoubleTools.isValidDouble(capitalTxtFld)
+                    || !DoubleUtil.isValidDouble(exchangeRateTxtFld)
+                    || !DoubleUtil.isValidDouble(capitalTxtFld)
                     || stockNameTxtFld.getText().isEmpty()
                     //To be a valid investment the sellingDate and sellingPrice has to be both
                     // invalid or both attributes has to be valid
-                    || (sellingDatePicker.getValue() != null ^ DoubleTools.isValidDouble(sellingPriceTxtFld));
+                    || (sellingDatePicker.getValue() != null ^ DoubleUtil.isValidDouble(sellingPriceTxtFld));
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -149,7 +149,7 @@ public class NewInvestmentController implements Initializable {
 
     private boolean isValid(TextField textField) {
         if (!textField.getText().isEmpty()) {
-            return DoubleTools.toDouble(sellingPriceTxtFld.getText()) > 0;
+            return DoubleUtil.parse(sellingPriceTxtFld.getText()) > 0;
         }
         return false;
     }
@@ -168,16 +168,16 @@ public class NewInvestmentController implements Initializable {
             newInvestment = new Investment(creationDatePicker.getValue(),
                     platformChcBx.getValue(),
                     stockNameTxtFld.getText(),
-                    DoubleTools.toDouble(exchangeRateTxtFld.getText()),
-                    DoubleTools.toDouble(capitalTxtFld.getText()),
-                    DoubleTools.toDouble(sellingPriceTxtFld.getText()),
+                    DoubleUtil.parse(exchangeRateTxtFld.getText()),
+                    DoubleUtil.parse(capitalTxtFld.getText()),
+                    DoubleUtil.parse(sellingPriceTxtFld.getText()),
                     sellingDate);
         } else {
             newInvestment = new Investment(creationDatePicker.getValue(),
                     platformChcBx.getValue(),
                     stockNameTxtFld.getText(),
-                    DoubleTools.toDouble(exchangeRateTxtFld.getText()),
-                    DoubleTools.toDouble(capitalTxtFld.getText()));
+                    DoubleUtil.parse(exchangeRateTxtFld.getText()),
+                    DoubleUtil.parse(capitalTxtFld.getText()));
         }
         investmentBook.add(newInvestment);
         handleCancel();

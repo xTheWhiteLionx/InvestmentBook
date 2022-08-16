@@ -1,6 +1,6 @@
 package gui.platformController;
 
-import helper.DoubleTools;
+import gui.DoubleUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +44,7 @@ public class PercentPlatformController implements Initializable, PlatformControl
         //Listener of the add investment attributes to make the btnAddInvestment enable/disable
         ChangeListener<Object> FieldValidityListener = (observable, oldValue, newValue) -> {
             boolean someInputIsInvalid = nameTxtFld.getText().isEmpty()
-                    || !DoubleTools.isValidDouble(percentTxtFld);
+                    || !DoubleUtil.isValidDouble(percentTxtFld);
 
             btnApply.setDisable(someInputIsInvalid);
         };
@@ -82,7 +82,7 @@ public class PercentPlatformController implements Initializable, PlatformControl
     //TODO outsource to a methode in investmentBook
     private void handleApply() {
         currPlatform.setName(nameTxtFld.getText());
-        currPlatform.setPercent(DoubleTools.toDouble(percentTxtFld.getText()));
+        currPlatform.setPercent(DoubleUtil.parse(percentTxtFld.getText()));
         handleCancel();
     }
 
@@ -102,6 +102,6 @@ public class PercentPlatformController implements Initializable, PlatformControl
 
         this.currPlatform = (PercentPlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        percentTxtFld.setText(DoubleTools.toString(currPlatform.getPercent()));
+        percentTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getPercent()));
     }
 }

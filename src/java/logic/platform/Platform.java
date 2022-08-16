@@ -19,7 +19,7 @@ public abstract class Platform {
     /**
      * Name of the platform
      */
-    private String name;
+    String name;
 
     /**
      *

@@ -1,7 +1,7 @@
 package gui.calculator;
 
+import gui.DoubleUtil;
 import gui.Style;
-import helper.DoubleTools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,7 +13,7 @@ import logic.Investment;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static helper.DoubleTools.isValidDouble;
+import static gui.DoubleUtil.isValidDouble;
 
 //TODO JavaDoc
 public class SellingPriceCalculatorController implements Initializable {
@@ -69,8 +69,8 @@ public class SellingPriceCalculatorController implements Initializable {
     private void handleCalculate() {
         double sellingExchangeRate =
                 investment.getPlatform().calcSellingExchangeRate(investment,
-                DoubleTools.toDouble(targetPerformance.getText()));
-        sellingExchangeRateLbl.setText(DoubleTools.toString(sellingExchangeRate));
+                DoubleUtil.parse(targetPerformance.getText()));
+        sellingExchangeRateLbl.setText(DoubleUtil.formatMoney(sellingExchangeRate));
     }
 
     /**

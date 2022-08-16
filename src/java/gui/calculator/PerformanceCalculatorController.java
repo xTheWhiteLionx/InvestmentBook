@@ -1,7 +1,7 @@
 package gui.calculator;
 
+import gui.DoubleUtil;
 import gui.Style;
-import helper.DoubleTools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,7 +13,7 @@ import logic.Investment;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static helper.DoubleTools.isValidDouble;
+import static gui.DoubleUtil.isValidDouble;
 
 //TODO JavaDoc
 public class PerformanceCalculatorController implements Initializable {
@@ -67,7 +67,7 @@ public class PerformanceCalculatorController implements Initializable {
     @FXML
     //TODO JavaDoc
     private void handleCalculate() {
-        double performance = currInvestment.calcPerformance(DoubleTools.toDouble(sellingPrice.getText()));
+        double performance = currInvestment.calcPerformance(DoubleUtil.parse(sellingPrice.getText()));
         Style.setAndColorsText(performance, performanceLbl);
     }
 
