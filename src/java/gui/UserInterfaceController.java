@@ -3,8 +3,10 @@ package gui;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
+import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,13 +18,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import logic.GUIConnector;
 import logic.Investment;
 import logic.Quarter;
 import logic.State;
 import logic.investmentBook.InvestmentBook;
 import logic.investmentBook.InvestmentBookData;
+import logic.platform.AbsolutePlatform;
 import logic.platform.FeeType;
+import logic.platform.MixedPlatform;
 import logic.platform.Platform;
 
 import java.io.File;
@@ -30,7 +35,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 import static gui.DialogWindow.*;
 import static gui.Style.SYMBOL_OF_CURRENCY;
@@ -66,9 +73,19 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private Button btnResetPlatformFilter;
     @FXML
-    private Button btnDeletePlatform;
-    @FXML
     private ListView<Platform> platformLstVw;
+    @FXML
+    private Label platformNameLbl;
+    @FXML
+    private Label platformFeeLbl;
+    @FXML
+    private Label platformMinFeeLbl;
+    @FXML
+    private Button btnNewPlatform;
+    @FXML
+    private Button btnEditPlatform;
+    @FXML
+    private Button btnDeletePlatform;
 
     /**
      * Content of the investment Tab
@@ -158,6 +175,11 @@ public class UserInterfaceController implements Initializable {
     private Investment currentInvestment;
 
     /**
+     *
+     */
+    private Platform currentPlatform;
+
+    /**
      * The current file
      */
     private File currFile;
@@ -230,6 +252,7 @@ public class UserInterfaceController implements Initializable {
         newStage.setMaximized(true);
         // Icon/logo of the application
         newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle(fileName);
         newStage.setMinWidth(1200D);
         newStage.setMinHeight(650D);
         newStage.initModality(Modality.WINDOW_MODAL);
@@ -322,8 +345,14 @@ public class UserInterfaceController implements Initializable {
 
         //changeListener to regular the accessibility of the delete row button
         platformLstVw.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) ->
-                        btnDeletePlatform.setDisable(newValue == null)
+                (observable, oldValue, newValue) -> {
+                    currentPlatform = newValue;
+                    showPlatformDetails(newValue);
+
+                    boolean isNull = newValue == null;
+                    btnEditPlatform.setDisable(isNull);
+                    btnDeletePlatform.setDisable(isNull);
+                }
         );
 
         initializePlatformSearch();
@@ -449,9 +478,9 @@ public class UserInterfaceController implements Initializable {
                 stockNameColumn,
                 exchangeRateColumn,
                 capitalColumn,
-                sellingPriceColumn,
-                absolutePerformanceColumn,
-                percentPerformanceColumn,
+//                sellingPriceColumn,
+//                absolutePerformanceColumn,
+//                percentPerformanceColumn,
                 costColumn
         );
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -501,6 +530,30 @@ public class UserInterfaceController implements Initializable {
         btnResetPlatformFilter.setDisable(true);
     }
 
+    private Task<InvestmentBookData> fileLoaderTask(File file) {
+        return new Task<>() {
+            @Override
+            protected InvestmentBookData call() throws Exception {
+                progressBar.setVisible(true);
+                status.setText(Status.loaded.getFormatMessage(file.getName()));
+
+                for (int i = 1; i <= 1000; i++) {
+                    PauseTransition wait = new PauseTransition(Duration.seconds(60));
+                    int finalI = i;
+                    wait.setOnFinished(actionEvent -> updateProgress(finalI, 100));
+                    wait.play();
+                }
+                return InvestmentBookData.fromJson(file);
+            }
+
+            @Override
+            protected void succeeded() {
+                status.setText("");
+                progressBar.setVisible(false);
+            }
+        };
+    }
+
     /**
      * Loads the {@link InvestmentBookData} from the given file name.
      *
@@ -513,34 +566,21 @@ public class UserInterfaceController implements Initializable {
         Task<InvestmentBookData> loadTask = fileLoaderTask(file);
         progressBar.progressProperty().bind(loadTask.progressProperty());
         loadTask.run();
+
         try {
-            InvestmentBookData investmentBookData = InvestmentBookData.fromJson(file);
-            this.currFile = file;
+            InvestmentBookData investmentBookData = loadTask.get();
+            setCurrFile(file);
             this.investmentBook = new InvestmentBook(investmentBookData, createJavaFXGUI());
-        } catch (IOException e) {
+            toDefault();
+        } catch (InterruptedException | ExecutionException e) {
             displayError(e);
         }
 
-        //TODO implement methode
-//        progressBar.progressProperty().bind(loadTask.progressProperty());
-        status.setText("File loaded: " + currFile.getName());
-        toDefault();
-    }
-
-    private Task<InvestmentBookData> fileLoaderTask(File file){
-
-        Task<InvestmentBookData> loadFileTask = new Task<>() {
-            @Override
-            protected InvestmentBookData call() throws Exception {
-                updateProgress();
-                return InvestmentBookData.fromJson(file);
-            }
-        };
-        return null;
     }
 
     //TODO JavaDoc
     private void toDefault() {
+        btnEditPlatform.setDisable(true);
         btnDeletePlatform.setDisable(true);
         btnEditInvestment.setDisable(true);
         btnDeleteInvestment.setDisable(true);
@@ -622,16 +662,48 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
+     * @param file
+     * @return
+     */
+    private Task<Void> fileSaveTask(File file) {
+        return new Task<>() {
+            @Override
+            protected Void call() {
+                progressBar.setVisible(true);
+                status.setText(Status.saved.getFormatMessage(file.getName()));
+
+                for (int i = 1; i <= 1000; i++) {
+                    PauseTransition wait = new PauseTransition(Duration.seconds(60));
+                    int finalI = i;
+                    wait.setOnFinished(actionEvent -> updateProgress(finalI, 100));
+                    wait.play();
+                }
+                InvestmentBookData investmentBookData = new InvestmentBookData(investmentBook);
+                try {
+                    investmentBookData.toJson(file);
+                } catch (IOException e) {
+                    displayError(e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                status.setText("");
+                progressBar.setVisible(false);
+            }
+        };
+    }
+
+    /**
      * Handles the "save" button and
      * saves the current {@link InvestmentBook}.
      */
     @FXML
     private void handleSaveBook() {
-        try {
-            new InvestmentBookData(investmentBook).toJson(currFile);
-        } catch (IOException e) {
-            displayError(e);
-        }
+        Task<Void> saveTask = fileSaveTask(currFile);
+        progressBar.progressProperty().bind(saveTask.progressProperty());
+        saveTask.run();
     }
 
     /**
@@ -642,12 +714,11 @@ public class UserInterfaceController implements Initializable {
         FileChooser fileChooser = createFileChooser();
         fileChooser.setTitle("Save JSON Graph-File");
         File selectedFile = fileChooser.showSaveDialog(investmentTblVw.getScene().getWindow());
+
         if (selectedFile != null) {
-            try {
-                new InvestmentBookData(investmentBook).toJson(selectedFile);
-            } catch (IOException e) {
-                displayError(e);
-            }
+            Task<Void> saveTask = fileSaveTask(selectedFile);
+            progressBar.progressProperty().bind(saveTask.progressProperty());
+            saveTask.run();
         }
     }
 
@@ -655,7 +726,7 @@ public class UserInterfaceController implements Initializable {
      * Handles the "apply" filter Button
      */
     @FXML
-    private void handleApplyFilter2() {
+    private void handleApplyPlatformFilter() {
         investmentBook.filterPlatformsByType(feeTypeChcBx.getValue());
     }
 
@@ -670,10 +741,43 @@ public class UserInterfaceController implements Initializable {
     }
 
     /**
+     * Fills all text fields to show details about the person.
+     * If the specified person is null, all text fields are cleared.
+     *
+     * @param platform the investment or null
+     */
+    private void showPlatformDetails(Platform platform) {
+        if (platform != null) {
+            platformNameLbl.setText(platform.getName());
+
+            String fee = "";
+            FeeType typ = platform.getTyp();
+
+            if (typ == FeeType.PERCENT) {
+                fee = DoubleUtil.format(platform.getFee(100)) + " %";
+                platformMinFeeLbl.setText("");
+            } else if (typ == FeeType.MIXED) {
+                MixedPlatform mixedPlatform = (MixedPlatform) platform;
+                fee = DoubleUtil.format(platform.getFee(100)) + " %";
+                platformMinFeeLbl.setText(DoubleUtil.formatMoney(mixedPlatform.getMinFee()));
+            } else if (typ == FeeType.ABSOLUTE) {
+                fee = DoubleUtil.formatMoney(platform.getFee(100));
+                platformMinFeeLbl.setText("");
+            }
+            platformFeeLbl.setText(fee);
+        } else {
+            // platform is null, remove all the text.
+            platformNameLbl.setText("");
+            platformFeeLbl.setText("");
+            platformMinFeeLbl.setText("");
+        }
+    }
+
+    /**
      * Handles the "apply" filter Button
      */
     @FXML
-    private void handleApplyFilter() {
+    private void handleApplyInvestmentFilter() {
         investmentBook.filter(
                 statusChoiceBox.getValue(),
                 platformChcBx.getValue(),
@@ -697,7 +801,7 @@ public class UserInterfaceController implements Initializable {
      * Fills all text fields to show details about the person.
      * If the specified person is null, all text fields are cleared.
      *
-     * @param person the person or null
+     * @param investment the investment or null
      */
     private void showInvestmentDetails(Investment investment) {
         if (investment != null) {
@@ -752,14 +856,24 @@ public class UserInterfaceController implements Initializable {
      * a new Investment.
      */
     @FXML
-    private void handleAddInvestment() {
-        NewInvestmentController newInvestmentController = createStage(
-                "investmentController/NewInvestmentController.fxml",
-                "new Investment",
-                650,
-                600
-        );
-        newInvestmentController.setInvestmentBook(investmentBook);
+    private void handleNewInvestment() {
+        if (!investmentBook.getPlatforms().isEmpty()) {
+            NewInvestmentController newInvestmentController = createStage(
+                    "investmentController/NewInvestmentController.fxml",
+                    "new Investment",
+                    650,
+                    600
+            );
+            newInvestmentController.setInvestmentBook(investmentBook);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(ICON);
+            alert.setHeaderText("Platform needed.\n" +
+                                "Please add a new platform");
+            alert.setContentText("Each investment needs a platform");
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -831,6 +945,19 @@ public class UserInterfaceController implements Initializable {
         }
         Stage stage = (Stage) investmentTblVw.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    public void handleEditPlatform() {
+        if (currentPlatform != null) {
+            PlatformController platformController = createStage(
+                    currentPlatform.getFxmlPath(),
+                    "Edit Platform",
+                    400,
+                    300
+            );
+            platformController.setDisplay(currentPlatform);
+        }
     }
 }
 

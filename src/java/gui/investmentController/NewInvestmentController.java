@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import logic.Investment;
+import logic.State;
 import logic.investmentBook.InvestmentBook;
 import logic.platform.Platform;
 
@@ -23,6 +24,8 @@ public class NewInvestmentController implements Initializable {
 
     @FXML
     private DatePicker creationDatePicker;
+    @FXML
+    public ChoiceBox<State> stateChcBx;
     @FXML
     private ChoiceBox<Platform> platformChcBx;
     @FXML
@@ -60,8 +63,11 @@ public class NewInvestmentController implements Initializable {
         assert investmentBook != null;
 
         this.investmentBook = investmentBook;
-        platformChcBx.getItems().addAll(investmentBook.getPlatforms());
+        stateChcBx.getItems().addAll(State.values());
+        stateChcBx.setValue(stateChcBx.getItems().get(0));
+
         if (!investmentBook.getPlatforms().isEmpty()) {
+            platformChcBx.getItems().addAll(investmentBook.getPlatforms());
             platformChcBx.setValue(platformChcBx.getItems().get(0));
         }
     }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.investmentController.NewInvestmentController">
+<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.investmentController.NewInvestmentController">
    <center>
        <VBox alignment="CENTER" prefHeight="423.0" prefWidth="417.0" BorderPane.alignment="CENTER">
            <opaqueInsets>
@@ -31,6 +31,7 @@
                </columnConstraints>
                <rowConstraints>
                    <RowConstraints maxHeight="44.28571237836565" minHeight="10.0" prefHeight="44.28570801871163" vgrow="SOMETIMES" />
+               <RowConstraints maxHeight="139.0" minHeight="10.0" prefHeight="34.99999128069196" valignment="CENTER" vgrow="SOMETIMES" />
                    <RowConstraints maxHeight="139.0" minHeight="0.0" prefHeight="34.99999128069196" vgrow="SOMETIMES" />
                    <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
                    <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
@@ -38,12 +39,12 @@
                    <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="33.42854309082031" vgrow="SOMETIMES" />
                    <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="35.28573172433033" vgrow="SOMETIMES" />
                </rowConstraints>
-               <TextField fx:id="stockNameTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <TextField fx:id="stockNameTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="3">
                    <GridPane.margin>
                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                    </GridPane.margin>
                </TextField>
-           <ChoiceBox fx:id="platformChcBx" prefHeight="25.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+           <ChoiceBox fx:id="platformChcBx" prefHeight="25.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></ChoiceBox>
@@ -55,7 +56,7 @@
                    <Font name="System Bold" size="12.0" />
                </font>
            </Label>
-           <Label layoutX="37.0" layoutY="67.0" text="Platform" GridPane.rowIndex="1">
+           <Label layoutX="37.0" layoutY="67.0" text="Platform" GridPane.rowIndex="2">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -63,7 +64,7 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </Label>
-           <Label layoutX="37.0" layoutY="67.0" text="Stock name" GridPane.rowIndex="2">
+           <Label layoutX="37.0" layoutY="67.0" text="Stock name" GridPane.rowIndex="3">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -71,7 +72,7 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </Label>
-           <Label layoutX="32.0" layoutY="180.0" text="exchange rate" GridPane.rowIndex="3">
+           <Label layoutX="32.0" layoutY="180.0" text="exchange rate" GridPane.rowIndex="4">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -79,7 +80,7 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </Label>
-           <Label layoutX="37.0" layoutY="18.0" text="capital" GridPane.rowIndex="4">
+           <Label layoutX="37.0" layoutY="18.0" text="capital" GridPane.rowIndex="5">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -92,7 +93,7 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </DatePicker>
-           <Label layoutX="37.0" layoutY="192.0" text="selling Price" GridPane.rowIndex="5">
+           <Label layoutX="37.0" layoutY="192.0" text="selling Price" GridPane.rowIndex="6">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -100,7 +101,7 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </Label>
-           <Label layoutX="20.0" layoutY="229.0" text="selling Date" GridPane.rowIndex="6">
+           <Label layoutX="20.0" layoutY="229.0" text="selling Date" GridPane.rowIndex="7">
                <font>
                    <Font name="System Bold" size="12.0" />
                </font>
@@ -108,29 +109,42 @@
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </Label>
-           <DatePicker fx:id="sellingDatePicker" layoutX="169.0" layoutY="-1.0" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+           <DatePicker fx:id="sellingDatePicker" layoutX="169.0" layoutY="-1.0" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </DatePicker>
-           <TextField fx:id="exchangeRateTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+           <TextField fx:id="exchangeRateTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </TextField>
-           <TextField fx:id="capitalTxtFld" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+           <TextField fx:id="capitalTxtFld" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <GridPane.margin>
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </TextField>
-           <TextField fx:id="sellingPriceTxtFld" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+           <TextField fx:id="sellingPriceTxtFld" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
            </TextField>
-           <Label fx:id="capitalCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-           <Label fx:id="sellingPriceCurrencyLbl" layoutX="287.0" layoutY="197.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-           <Label fx:id="exchangeRateCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+           <Label fx:id="capitalCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+           <Label fx:id="sellingPriceCurrencyLbl" layoutX="287.0" layoutY="197.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+           <Label fx:id="exchangeRateCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label layoutX="15.0" layoutY="24.0" text="state" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <ChoiceBox fx:id="stateChcBx" layoutX="107.0" layoutY="95.0" prefHeight="25.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ChoiceBox>
                <opaqueInsets>
                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </opaqueInsets>
