@@ -55,7 +55,7 @@ public interface GUIConnector {
      * @param newPlatform
      */
     //TODO JavaDoc
-    void addPlatform(Platform newPlatform);
+    void addPlatformOnDisplay(Platform newPlatform);
 
     /**
      *

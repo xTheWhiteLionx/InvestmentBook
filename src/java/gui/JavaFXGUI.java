@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -88,13 +89,15 @@ public class JavaFXGUI implements GUIConnector {
      * Updates the status and cleans it after
      */
     //TODO status enum?
-    private void updateStatus(Status status) {
-        this.status.setText(status.name());
-        //TODO how, maybe TimerTask?
-//        Task<String> task = new Task<>() {
-//
-//        };
-        this.status.setText("");
+    private void updateStatus(Status status, String content) {
+        this.status.setText(status.formatMessage(content));
+        this.status.setVisible(true);
+        PauseTransition pt = new PauseTransition(UserInterfaceController.SHOW_DURATION);
+        pt.onFinishedProperty().set(actionEvent -> {
+            this.status.setVisible(false);
+            this.status.setText("");
+        });
+        pt.play();
     }
 
     /**
@@ -112,6 +115,8 @@ public class JavaFXGUI implements GUIConnector {
     public void addInvestmentOnDisplay(Investment investment) {
         addInvestment(investment);
         updateTotalPerformanceLabel();
+
+        updateStatus(Status.added, "investment");
     }
 
     @Override
@@ -129,17 +134,23 @@ public class JavaFXGUI implements GUIConnector {
         investmentTableView.getItems().remove(investment);
         totalPerformance -= investment.getPerformance();
         updateTotalPerformanceLabel();
+        updateStatus(Status.deleted, "platform");
     }
 
-    @Override
-    public void addPlatform(Platform newPlatform) {
-        assert newPlatform != null;
-
+    private void addPlatform(Platform newPlatform){
         platformListView.getItems().add(newPlatform);
         for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
             //sets the platforms for the choiceBox
             platform_choice_box.getItems().add(newPlatform);
         }
+    }
+
+    @Override
+    public void addPlatformOnDisplay(Platform newPlatform) {
+        assert newPlatform != null;
+
+        addPlatform(newPlatform);
+        updateStatus(Status.added, "platform");
     }
 
     @Override
@@ -159,5 +170,6 @@ public class JavaFXGUI implements GUIConnector {
         for (ChoiceBox<Platform> platform_choice_box : platformFilterChoiceBoxes) {
             platform_choice_box.getItems().remove(platform);
         }
+        updateStatus(Status.deleted, "platform");
     }
 }

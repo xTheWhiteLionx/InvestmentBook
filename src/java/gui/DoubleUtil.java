@@ -59,6 +59,8 @@ public class DoubleUtil {
     public static double parse(String text) {
         assert text != null;
         assert isValidDouble(text);
+        System.out.println("text = ." + text + ".");
+        System.out.println("text.isEmpty() = " + text.isEmpty());
 
         return Double.parseDouble(text.replace(",", "."));
     }

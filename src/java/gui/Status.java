@@ -16,7 +16,7 @@ public enum Status {
         return message;
     }
 
-    public String getFormatMessage(String string) {
+    public String formatMessage(String string) {
         return string + " " + message;
     }
 }

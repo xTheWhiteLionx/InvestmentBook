@@ -116,10 +116,12 @@ public class NewPlatformController implements Initializable {
      */
     @FXML
     private void handleApply() {
+        double minFee = !minTxtFld.getText().isEmpty() ? DoubleUtil.parse(minTxtFld.getText()) : 0;
+
         Platform newPlatform = Platform.create(feeTypeChcBx.getValue(),
                 nameTxtFld.getText(),
                 DoubleUtil.parse(feeTxtFld.getText()),
-                DoubleUtil.parse(minTxtFld.getText()));
+                minFee);
         investmentBook.add(newPlatform);
         handleCancel();
     }

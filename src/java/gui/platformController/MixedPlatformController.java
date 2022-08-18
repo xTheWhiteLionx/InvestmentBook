@@ -126,7 +126,7 @@ public class MixedPlatformController implements Initializable, PlatformControlle
 
         this.currPlatform = (MixedPlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        percentTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getPercent()));
-        minFeeTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getMinFee()));
+        percentTxtFld.setText(DoubleUtil.format(currPlatform.getPercent()));
+        minFeeTxtFld.setText(DoubleUtil.format(currPlatform.getMinFee()));
     }
 }

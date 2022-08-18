@@ -87,7 +87,7 @@ public class InvestmentBook extends InvestmentBookImpl {
     //TODO JavaDoc
     public void add(Platform platform) {
         platforms.add(platform);
-        gui.addPlatform(platform);
+        gui.addPlatformOnDisplay(platform);
     }
 
     /**

@@ -73,7 +73,12 @@ public class UserInterfaceController implements Initializable {
     /**
      *
      */
-    public static final Duration DURATION = Duration.millis(10);
+    public static final Duration LOAD_DURATION = Duration.millis(10);
+
+    /**
+     *
+     */
+    public static final Duration SHOW_DURATION = Duration.seconds(1);
 
     @FXML
     private CheckMenuItem autoSave;
@@ -103,8 +108,6 @@ public class UserInterfaceController implements Initializable {
     private Label platformFeeLbl;
     @FXML
     private Label platformMinFeeLbl;
-    @FXML
-    private Button btnNewPlatform;
     @FXML
     private Button btnEditPlatform;
     @FXML
@@ -155,15 +158,9 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private Label exchangeRateLbl;
     @FXML
-    private Label exchangeRateCurrencyLbl;
-    @FXML
     private Label capitalLbl;
     @FXML
-    private Label capitalCurrencyLbl;
-    @FXML
     private Label sellingPriceLbl;
-    @FXML
-    private Label sellingPriceCurrencyLbl;
     @FXML
     private Label performanceLbl;
     @FXML
@@ -174,8 +171,6 @@ public class UserInterfaceController implements Initializable {
     private Label sellingDateLbl;
     @FXML
     private Label holdingPeriodLbl;
-    @FXML
-    private Button btnNewInvestment;
     @FXML
     private Button btnEditInvestment;
     @FXML
@@ -558,13 +553,12 @@ public class UserInterfaceController implements Initializable {
             protected InvestmentBookData call() throws Exception {
                 status.setVisible(true);
                 progressBar.setVisible(true);
-                status.setText(Status.loaded.getFormatMessage(file.getName()));
                 List<Animation> children = st.getChildren();
 
                 int full = 100;
 
                 for (int i = 1; i <= full; i++) {
-                    PauseTransition pt = new PauseTransition(DURATION);
+                    PauseTransition pt = new PauseTransition(LOAD_DURATION);
                     int finalI = i;
                     pt.setOnFinished(actionEvent -> updateProgress(finalI, full));
                     children.add(pt);
@@ -580,6 +574,15 @@ public class UserInterfaceController implements Initializable {
                     setCurrFile(file);
                     this.investmentBook = new InvestmentBook(investmentBookData, createJavaFXGUI());
                     toDefault();
+                    status.setText(Status.loaded.formatMessage(file.getName()));
+                    status.setVisible(true);
+                    PauseTransition pt = new PauseTransition(SHOW_DURATION);
+                    pt.setOnFinished(actionEvent2 -> {
+                        status.setVisible(false);
+                        status.setText("");
+                    });
+                    pt.play();
+
                 } catch (InterruptedException | ExecutionException e) {
                     displayError(e);
                 }
@@ -614,7 +617,6 @@ public class UserInterfaceController implements Initializable {
         cleanPlatformFilter();
         status.setText("");
         status.setVisible(false);
-        progressBar.setProgress(0);
         progressBar.setVisible(false);
     }
 
@@ -705,10 +707,12 @@ public class UserInterfaceController implements Initializable {
                 progressBar.setVisible(true);
                 List<Animation> children = st.getChildren();
 
-                for (int i = 1; i <= 10; i++) {
-                    PauseTransition pt = new PauseTransition(DURATION);
+                int full = 100;
+
+                for (int i = 1; i <= full; i++) {
+                    PauseTransition pt = new PauseTransition(LOAD_DURATION);
                     int finalI = i;
-                    pt.setOnFinished(actionEvent -> updateProgress(finalI, 10));
+                    pt.setOnFinished(actionEvent -> updateProgress(finalI, full));
                     children.add(pt);
                 }
                 InvestmentBookData investmentBookData = new InvestmentBookData(investmentBook);
@@ -723,8 +727,8 @@ public class UserInterfaceController implements Initializable {
 
         saveFileTask.setOnSucceeded(workerStateEvent -> {
             st.setOnFinished(actionEvent -> {
-                status.setText(Status.saved.getFormatMessage(file.getName()));
-                PauseTransition pt = new PauseTransition(DURATION);
+                status.setText(Status.saved.formatMessage(file.getName()));
+                PauseTransition pt = new PauseTransition(SHOW_DURATION);
                 pt.setOnFinished(actionEvent2 -> {
                     status.setText("");
                     status.setVisible(false);
@@ -755,7 +759,6 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleSaveBookAs() {
         FileChooser fileChooser = createFileChooser();
-        fileChooser.setTitle("Save JSON Graph-File");
         File selectedFile = fileChooser.showSaveDialog(investmentTblVw.getScene().getWindow());
 
         if (selectedFile != null) {

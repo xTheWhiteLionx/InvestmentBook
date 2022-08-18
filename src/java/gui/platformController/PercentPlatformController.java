@@ -102,6 +102,6 @@ public class PercentPlatformController implements Initializable, PlatformControl
 
         this.currPlatform = (PercentPlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        percentTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getPercent()));
+        percentTxtFld.setText(DoubleUtil.format(currPlatform.getPercent()));
     }
 }

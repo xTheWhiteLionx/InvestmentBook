@@ -37,7 +37,7 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void addPlatform(Platform newPlatform) {
+    public void addPlatformOnDisplay(Platform newPlatform) {
 
     }
 

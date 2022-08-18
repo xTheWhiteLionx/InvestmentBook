@@ -120,7 +120,7 @@
                             </GridPane>
                             <ButtonBar>
                                 <buttons>
-                                    <Button fx:id="btnNewPlatform" alignment="CENTER" contentDisplay="CENTER"
+                                    <Button alignment="CENTER" contentDisplay="CENTER"
                                             mnemonicParsing="false" onAction="#handleAddPlatform" text="new" />
                            <Button fx:id="btnEditPlatform" alignment="CENTER" contentDisplay="CENTER"
                                    layoutX="896.0" layoutY="10.0" mnemonicParsing="false"
@@ -499,8 +499,6 @@
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <Label fx:id="capitalCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                <Label fx:id="sellingPriceCurrencyLbl" layoutX="287.0" layoutY="197.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                 <Label fx:id="holdingPeriodLbl" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="11">
                                     <GridPane.margin>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -521,7 +519,6 @@
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <Label fx:id="exchangeRateCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                 <Label fx:id="costLbl" GridPane.columnIndex="1" GridPane.rowIndex="9">
                                     <GridPane.margin>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -539,7 +536,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                 </VBox.margin>
                                 <buttons>
-                                    <Button fx:id="btnNewInvestment" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleNewInvestment" text="new" />
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleNewInvestment" text="new" />
                                     <Button fx:id="btnEditInvestment" alignment="CENTER" contentDisplay="CENTER" layoutX="737.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleEditInvestment" text="edit" />
                                     <Button fx:id="btnDeleteInvestment" alignment="CENTER" contentDisplay="CENTER" layoutX="605.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleDeleteInvestment" text="delete" />
                                 </buttons>

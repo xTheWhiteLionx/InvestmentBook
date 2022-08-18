@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.platformController.AbsolutePlatformController">
+<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.platformController.AbsolutePlatformController">
    <center>
       <VBox alignment="CENTER">
          <GridPane alignment="CENTER">
@@ -59,23 +59,18 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </opaqueInsets>
          </GridPane>
+         <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <buttons>
+               <Button fx:id="btnApply" mnemonicParsing="false" onAction="#handleApply" text="apply" />
+               <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
+            </buttons>
+         </ButtonBar>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
       </VBox>
    </center>
    <bottom>
-   </bottom>
-   <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <buttons>
-            <Button fx:id="btnApply" defaultButton="true" mnemonicParsing="false" onAction="#handleApply" text="apply" />
-            <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
-         </buttons>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
-      </ButtonBar>
    </bottom>
    <top>
       <MenuBar BorderPane.alignment="CENTER">

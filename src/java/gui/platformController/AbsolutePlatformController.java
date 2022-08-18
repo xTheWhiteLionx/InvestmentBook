@@ -102,6 +102,6 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
     public void setDisplay(Platform platform) {
         this.currPlatform = (AbsolutePlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        feeTxtFld.setText(DoubleUtil.formatMoney(currPlatform.getFee(0)));
+        feeTxtFld.setText(DoubleUtil.format(currPlatform.getFee(0)));
     }
 }
