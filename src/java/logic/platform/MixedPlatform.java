@@ -52,7 +52,7 @@ public class MixedPlatform extends Platform {
     }
 
     @Override
-    public FeeType getTyp() {
+    public FeeType getType() {
         return FeeType.MIXED;
     }
 

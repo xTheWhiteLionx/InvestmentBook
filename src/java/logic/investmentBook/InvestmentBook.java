@@ -148,7 +148,7 @@ public class InvestmentBook extends InvestmentBookImpl {
     public Set<Platform> filterPlatformsByType(FeeType typ) {
         Stream<Platform> platformStream = this.platforms.stream();
         if (typ != null) {
-            platformStream = platformStream.filter(p -> p.getTyp() == typ);
+            platformStream = platformStream.filter(p -> p.getType() == typ);
         }
 
         Set<Platform> filteredPlatform = platformStream.collect(Collectors.toSet());

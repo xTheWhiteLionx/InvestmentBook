@@ -45,7 +45,7 @@ public class PercentPlatform extends Platform {
     }
 
     @Override
-    public FeeType getTyp() {
+    public FeeType getType() {
         return FeeType.PERCENT;
     }
 

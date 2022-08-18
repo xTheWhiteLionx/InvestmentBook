@@ -91,39 +91,6 @@ public abstract class Platform {
     }
 
     /**
-     * Returns the fee of the platform (for a given price)
-     *
-     * @param price on which the fee will be calculated
-     * @return fee of the platform (for a given price)
-     * @throws IllegalArgumentException if price is negative
-     */
-    public abstract double getFee(double price);
-
-    /**
-     * Returns the fxmlPath of the platform type
-     *
-     * @return fxmlPath of the platform type
-     */
-    public abstract String getFxmlPath();
-
-    /**
-     *
-     * @return
-     */
-    public abstract FeeType getTyp();
-
-    /**
-     * Calculates the selling price for the given investment to
-     * reach the given target performance
-     *
-     * @param investment        the given investment
-     * @param targetPerformance the given target performance, which should be reached
-     * @return exchange rate at which the target performance will be reached
-     * @throws NullPointerException     if investment is null
-     */
-    public abstract double calcSellingExchangeRate(Investment investment, double targetPerformance);
-
-    /**
      * Returns the
      *
      * @return
@@ -145,6 +112,39 @@ public abstract class Platform {
 
         return jsonObject;
     }
+
+    /**
+     * Returns the fee of the platform (for a given price)
+     *
+     * @param price on which the fee will be calculated
+     * @return fee of the platform (for a given price)
+     * @throws IllegalArgumentException if price is negative
+     */
+    public abstract double getFee(double price);
+
+    /**
+     * Returns the fxmlPath of the platform type
+     *
+     * @return fxmlPath of the platform type
+     */
+    public abstract String getFxmlPath();
+
+    /**
+     *
+     * @return
+     */
+    public abstract FeeType getType();
+
+    /**
+     * Calculates the selling price for the given investment to
+     * reach the given target performance
+     *
+     * @param investment        the given investment
+     * @param targetPerformance the given target performance, which should be reached
+     * @return exchange rate at which the target performance will be reached
+     * @throws NullPointerException     if investment is null
+     */
+    public abstract double calcSellingExchangeRate(Investment investment, double targetPerformance);
 
     /**
      * Returns a string representation of the platform

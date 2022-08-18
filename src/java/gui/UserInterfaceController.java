@@ -3,15 +3,32 @@ package gui;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +45,7 @@ import logic.investmentBook.InvestmentBookData;
 import logic.platform.AbsolutePlatform;
 import logic.platform.FeeType;
 import logic.platform.MixedPlatform;
+import logic.platform.PercentPlatform;
 import logic.platform.Platform;
 
 import java.io.File;
@@ -35,7 +53,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
@@ -317,8 +335,6 @@ public class UserInterfaceController implements Initializable {
                 toggleGroup.getToggles().add(theme);
                 theme.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
                     if (t1) {
-                        System.out.println("styleSheetName = " + getClass().getResource(
-                                "themes/" + styleSheetName).toExternalForm());
                         btnDeletePlatform.getScene().getStylesheets().add(getClass().getResource(
                                 "themes/" + styleSheetName).toExternalForm());
                     } else {
@@ -451,14 +467,14 @@ public class UserInterfaceController implements Initializable {
         TableColumn<Investment, String> stockNameColumn = new TableColumn<>("stock name");
         stockNameColumn.setCellValueFactory(new PropertyValueFactory<>("stockName"));
         TableColumn<Investment, Double> exchangeRateColumn = new TableColumn<>("exchange Rate" +
-                                                                               " " + SYMBOL_OF_CURRENCY);
+                " " + SYMBOL_OF_CURRENCY);
         exchangeRateColumn.setCellValueFactory(new PropertyValueFactory<>("exchangeRate"));
 //        columns.add(exchangeRateColumn);
         TableColumn<Investment, Double> capitalColumn = new TableColumn<>("capital" + " " +
-                                                                          SYMBOL_OF_CURRENCY);
+                SYMBOL_OF_CURRENCY);
         capitalColumn.setCellValueFactory(new PropertyValueFactory<>("capital"));
         TableColumn<Investment, Double> sellingPriceColumn = new TableColumn<>("selling Price" +
-                                                                               " " + SYMBOL_OF_CURRENCY);
+                " " + SYMBOL_OF_CURRENCY);
         sellingPriceColumn.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
         TableColumn<Investment, Double> absolutePerformanceColumn = new TableColumn<>(
                 "performance" + " " + SYMBOL_OF_CURRENCY);
@@ -468,7 +484,7 @@ public class UserInterfaceController implements Initializable {
         percentPerformanceColumn.setCellValueFactory(new PropertyValueFactory<>(
                 "percentPerformance"));
         TableColumn<Investment, Double> costColumn = new TableColumn<>("cost" + " " +
-                                                                       SYMBOL_OF_CURRENCY);
+                SYMBOL_OF_CURRENCY);
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
         investmentTblVw.getColumns().addAll(
@@ -531,27 +547,40 @@ public class UserInterfaceController implements Initializable {
     }
 
     private Task<InvestmentBookData> fileLoaderTask(File file) {
-        return new Task<>() {
+        SequentialTransition st = new SequentialTransition();
+        Task<InvestmentBookData> loadFileTask = new Task<>() {
             @Override
             protected InvestmentBookData call() throws Exception {
+                status.setVisible(true);
                 progressBar.setVisible(true);
                 status.setText(Status.loaded.getFormatMessage(file.getName()));
+                List<Animation> children = st.getChildren();
 
-                for (int i = 1; i <= 1000; i++) {
-                    PauseTransition wait = new PauseTransition(Duration.seconds(60));
+                for (int i = 1; i <= 10; i++) {
+                    PauseTransition pt = new PauseTransition(Duration.millis(100));
                     int finalI = i;
-                    wait.setOnFinished(actionEvent -> updateProgress(finalI, 100));
-                    wait.play();
+                    pt.setOnFinished(actionEvent -> updateProgress(finalI, 10));
+                    children.add(pt);
                 }
                 return InvestmentBookData.fromJson(file);
             }
-
-            @Override
-            protected void succeeded() {
-                status.setText("");
-                progressBar.setVisible(false);
-            }
         };
+
+        loadFileTask.setOnSucceeded(workerStateEvent -> {
+            st.setOnFinished(actionEvent -> {
+                try {
+                    InvestmentBookData investmentBookData = loadFileTask.get();
+                    setCurrFile(file);
+                    this.investmentBook = new InvestmentBook(investmentBookData, createJavaFXGUI());
+                    toDefault();
+                } catch (InterruptedException | ExecutionException e) {
+                    displayError(e);
+                }
+            });
+            st.play();
+        });
+
+        return loadFileTask;
     }
 
     /**
@@ -566,16 +595,6 @@ public class UserInterfaceController implements Initializable {
         Task<InvestmentBookData> loadTask = fileLoaderTask(file);
         progressBar.progressProperty().bind(loadTask.progressProperty());
         loadTask.run();
-
-        try {
-            InvestmentBookData investmentBookData = loadTask.get();
-            setCurrFile(file);
-            this.investmentBook = new InvestmentBook(investmentBookData, createJavaFXGUI());
-            toDefault();
-        } catch (InterruptedException | ExecutionException e) {
-            displayError(e);
-        }
-
     }
 
     //TODO JavaDoc
@@ -586,6 +605,10 @@ public class UserInterfaceController implements Initializable {
         btnDeleteInvestment.setDisable(true);
         cleanInvestmentFilter();
         cleanPlatformFilter();
+        status.setText("");
+        status.setVisible(false);
+        progressBar.setProgress(0);
+        progressBar.setVisible(false);
     }
 
     /**
@@ -666,17 +689,20 @@ public class UserInterfaceController implements Initializable {
      * @return
      */
     private Task<Void> fileSaveTask(File file) {
-        return new Task<>() {
+        SequentialTransition st = new SequentialTransition();
+
+        Task<Void> saveFileTask =  new Task<>() {
             @Override
             protected Void call() {
+                status.setVisible(true);
                 progressBar.setVisible(true);
-                status.setText(Status.saved.getFormatMessage(file.getName()));
+                List<Animation> children = st.getChildren();
 
-                for (int i = 1; i <= 1000; i++) {
-                    PauseTransition wait = new PauseTransition(Duration.seconds(60));
+                for (int i = 1; i <= 10; i++) {
+                    PauseTransition pt = new PauseTransition(Duration.millis(150));
                     int finalI = i;
-                    wait.setOnFinished(actionEvent -> updateProgress(finalI, 100));
-                    wait.play();
+                    pt.setOnFinished(actionEvent -> updateProgress(finalI, 10));
+                    children.add(pt);
                 }
                 InvestmentBookData investmentBookData = new InvestmentBookData(investmentBook);
                 try {
@@ -686,13 +712,23 @@ public class UserInterfaceController implements Initializable {
                 }
                 return null;
             }
-
-            @Override
-            protected void succeeded() {
-                status.setText("");
-                progressBar.setVisible(false);
-            }
         };
+
+        saveFileTask.setOnSucceeded(workerStateEvent -> {
+            st.setOnFinished(actionEvent -> {
+                status.setText(Status.saved.getFormatMessage(file.getName()));
+                PauseTransition pt = new PauseTransition(Duration.millis(150));
+                pt.setOnFinished(actionEvent2 -> {
+                    status.setText("");
+                    status.setVisible(false);
+                    progressBar.setVisible(false);
+                });
+                pt.play();
+            });
+            st.play();
+        });
+
+        return saveFileTask;
     }
 
     /**
@@ -751,16 +787,14 @@ public class UserInterfaceController implements Initializable {
             platformNameLbl.setText(platform.getName());
 
             String fee = "";
-            FeeType typ = platform.getTyp();
 
-            if (typ == FeeType.PERCENT) {
+            if (platform instanceof PercentPlatform) {
                 fee = DoubleUtil.format(platform.getFee(100)) + " %";
                 platformMinFeeLbl.setText("");
-            } else if (typ == FeeType.MIXED) {
-                MixedPlatform mixedPlatform = (MixedPlatform) platform;
+            } else if (platform instanceof MixedPlatform mixedPlatform) {
                 fee = DoubleUtil.format(platform.getFee(100)) + " %";
                 platformMinFeeLbl.setText(DoubleUtil.formatMoney(mixedPlatform.getMinFee()));
-            } else if (typ == FeeType.ABSOLUTE) {
+            } else if (platform instanceof AbsolutePlatform) {
                 fee = DoubleUtil.formatMoney(platform.getFee(100));
                 platformMinFeeLbl.setText("");
             }
@@ -870,7 +904,7 @@ public class UserInterfaceController implements Initializable {
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(ICON);
             alert.setHeaderText("Platform needed.\n" +
-                                "Please add a new platform");
+                    "Please add a new platform");
             alert.setContentText("Each investment needs a platform");
             alert.showAndWait();
         }
