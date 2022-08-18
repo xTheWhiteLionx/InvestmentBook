@@ -1,5 +1,7 @@
 package gui;
 
+import gui.calculator.PerformanceCalculatorController;
+import gui.calculator.SellingPriceCalculatorController;
 import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
@@ -1002,6 +1004,36 @@ public class UserInterfaceController implements Initializable {
             );
             platformController.setDisplay(currentPlatform);
         }
+    }
+
+    /**
+     * Handles the "selling price calculator" Button and hands over
+     * the current investment.
+     */
+    @FXML
+    private void handleSellingPriceCalculator() {
+        SellingPriceCalculatorController sellingPriceCalculatorController =
+                DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
+                        "selling price calculator: " + currentInvestment.getStockName(),
+                        350,
+                        200
+                );
+        sellingPriceCalculatorController.setInvestment(currentInvestment);
+    }
+
+    /**
+     * Handles the "performance calculator" Button and hands over
+     * the current investment.
+     */
+    @FXML
+    private void handlePerformanceCalculator() {
+        PerformanceCalculatorController performanceCalculatorController =
+                DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
+                        "performance calculator: " + currentInvestment.getStockName(),
+                        350,
+                        200
+                );
+        performanceCalculatorController.setInvestment(currentInvestment);
     }
 }
 
