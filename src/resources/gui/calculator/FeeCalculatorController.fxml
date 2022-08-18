@@ -78,8 +78,8 @@
             </Label>
             <ButtonBar>
                <buttons>
-                 <Button fx:id="applyBtn" mnemonicParsing="false" onAction="#handleCalculate" text="apply" />
-                 <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
+                 <Button fx:id="applyBtn" defaultButton="true" mnemonicParsing="false" onAction="#handleCalculate" text="calculate" />
+                 <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
                </buttons>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
