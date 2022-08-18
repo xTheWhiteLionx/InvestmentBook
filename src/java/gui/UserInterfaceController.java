@@ -70,6 +70,11 @@ import static logic.Quarter.getQuarterOfMonth;
  * @author xthewhitelionx
  */
 public class UserInterfaceController implements Initializable {
+    /**
+     *
+     */
+    public static final Duration DURATION = Duration.millis(10);
+
     @FXML
     private CheckMenuItem autoSave;
     @FXML
@@ -556,10 +561,12 @@ public class UserInterfaceController implements Initializable {
                 status.setText(Status.loaded.getFormatMessage(file.getName()));
                 List<Animation> children = st.getChildren();
 
-                for (int i = 1; i <= 10; i++) {
-                    PauseTransition pt = new PauseTransition(Duration.millis(100));
+                int full = 100;
+
+                for (int i = 1; i <= full; i++) {
+                    PauseTransition pt = new PauseTransition(DURATION);
                     int finalI = i;
-                    pt.setOnFinished(actionEvent -> updateProgress(finalI, 10));
+                    pt.setOnFinished(actionEvent -> updateProgress(finalI, full));
                     children.add(pt);
                 }
                 return InvestmentBookData.fromJson(file);
@@ -699,7 +706,7 @@ public class UserInterfaceController implements Initializable {
                 List<Animation> children = st.getChildren();
 
                 for (int i = 1; i <= 10; i++) {
-                    PauseTransition pt = new PauseTransition(Duration.millis(150));
+                    PauseTransition pt = new PauseTransition(DURATION);
                     int finalI = i;
                     pt.setOnFinished(actionEvent -> updateProgress(finalI, 10));
                     children.add(pt);
@@ -717,7 +724,7 @@ public class UserInterfaceController implements Initializable {
         saveFileTask.setOnSucceeded(workerStateEvent -> {
             st.setOnFinished(actionEvent -> {
                 status.setText(Status.saved.getFormatMessage(file.getName()));
-                PauseTransition pt = new PauseTransition(Duration.millis(150));
+                PauseTransition pt = new PauseTransition(DURATION);
                 pt.setOnFinished(actionEvent2 -> {
                     status.setText("");
                     status.setVisible(false);
