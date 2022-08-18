@@ -25,8 +25,6 @@ public class SellingPriceCalculatorController implements Initializable {
     @FXML
     private Label sellingExchangeRateLbl;
     @FXML
-    private Label sellingExchangeRateCurrency;
-    @FXML
     private Button btnCalculate;
     @FXML
     private Button btnCancel;
@@ -53,8 +51,7 @@ public class SellingPriceCalculatorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Style.setCurrenciesForLbls(targetPerformanceCurrency,
-                sellingExchangeRateCurrency);
+        Style.setCurrenciesForLbls(targetPerformanceCurrency);
         btnCalculate.setDisable(true);
         targetPerformance.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> btnCalculate.setDisable(

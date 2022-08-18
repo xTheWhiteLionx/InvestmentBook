@@ -32,8 +32,6 @@ public class FeeCalculatorController implements Initializable {
     @FXML
     private Label feeLbl;
     @FXML
-    private Label feeCurrencyLbl;
-    @FXML
     public Button applyBtn;
     @FXML
     private Button cancelBtn;
@@ -60,8 +58,7 @@ public class FeeCalculatorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Style.setCurrenciesForLbls(capitalCurrencyLbl,
-                feeCurrencyLbl);
+        Style.setCurrenciesForLbls(capitalCurrencyLbl);
         applyBtn.setDisable(true);
         capitalTxtField.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> applyBtn.setDisable(

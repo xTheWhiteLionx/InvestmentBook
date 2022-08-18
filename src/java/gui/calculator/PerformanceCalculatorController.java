@@ -25,8 +25,6 @@ public class PerformanceCalculatorController implements Initializable {
     @FXML
     private Label performanceLbl;
     @FXML
-    private Label performanceCurrencyLbl;
-    @FXML
     private Button btnCalculate;
     @FXML
     private Button btnCancel;
@@ -53,8 +51,7 @@ public class PerformanceCalculatorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Style.setCurrenciesForLbls(sellingPriceCurrencyLbl,
-                performanceCurrencyLbl);
+        Style.setCurrenciesForLbls(sellingPriceCurrencyLbl);
         btnCalculate.setDisable(true);
         sellingPrice.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> btnCalculate.setDisable(
