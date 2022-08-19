@@ -21,8 +21,6 @@ public class DoubleUtil {
 
     public static final DecimalFormat df = new DecimalFormat("0.00");
 
-    public static final DecimalFormat dfMoney = new DecimalFormat("0.00 " + Style.SYMBOL_OF_CURRENCY);
-
     /**
      * Examines if the given text field matches the regex for
      * a valid double
@@ -59,8 +57,6 @@ public class DoubleUtil {
     public static double parse(String text) {
         assert text != null;
         assert isValidDouble(text);
-        System.out.println("text = ." + text + ".");
-        System.out.println("text.isEmpty() = " + text.isEmpty());
 
         return Double.parseDouble(text.replace(",", "."));
     }

@@ -1,19 +1,25 @@
 package gui.calculator;
 
+import gui.ApplicationMain;
 import gui.DoubleUtil;
 import gui.Style;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.platform.Platform;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
 
+import static gui.DialogWindow.displayError;
 import static gui.DoubleUtil.isValidDouble;
 
 /**
@@ -23,8 +29,6 @@ import static gui.DoubleUtil.isValidDouble;
  */
 public class FeeCalculatorController implements Initializable {
 
-    @FXML
-    private Label platformName;
     @FXML
     private TextField capitalTxtField;
     @FXML
@@ -36,18 +40,33 @@ public class FeeCalculatorController implements Initializable {
     @FXML
     private Button cancelBtn;
 
-    private Platform platform;
+    private Platform currPlatform;
 
-    /**
-     *
-     * @param platforms
-     */
-    //TODO JavaDoc
-    public void setPlatformChoiceBox(Set<Platform> platforms) {
+    public static void loadFeeCalculatorController(Platform platform) {
+        FeeCalculatorController feeCalculator = createFeeCalculatorController(platform);
+        feeCalculator.currPlatform = platform;
     }
 
-    public void setPlatform(Platform currPlatform) {
+    private static FeeCalculatorController createFeeCalculatorController(Platform currPlatform) {
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(
+                ApplicationMain.class.getResource("calculator/FeeCalculatorController.fxml"));
 
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle(currPlatform.getName() + " Fee Calculator");
+        newStage.setMinWidth(400D);
+        newStage.setMinHeight(200D);
+        newStage.setResizable(false);
+        newStage.initModality(Modality.WINDOW_MODAL);
+        try {
+            newStage.setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            displayError(e);
+        }
+        newStage.show();
+
+        return loader.getController();
     }
 
     /**
@@ -72,8 +91,9 @@ public class FeeCalculatorController implements Initializable {
     //TODO JavaDoc
     @FXML
     private void handleCalculate() {
-        double capital = platform.getFee(DoubleUtil.parse(capitalTxtField.getText()));
-        feeLbl.setText(DoubleUtil.formatMoney(capital));
+        double capital = DoubleUtil.parse(capitalTxtField.getText());
+        double fee = currPlatform.getFee(capital);
+        feeLbl.setText(DoubleUtil.formatMoney(fee));
     }
 
     /**

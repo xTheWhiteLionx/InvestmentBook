@@ -35,101 +35,9 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserInterfaceController">
     <center>
-        <TabPane side="RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <Tab closable="false" text="Platforms">
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
-                    <center>
-                        <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
-                            <BorderPane.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </BorderPane.margin>
-                            <ToolBar>
-                                <CustomTextField fx:id="platformNameTxtFld" promptText="search" styleClass="searchField">
-                                    <left>
-                                        <Label styleClass="searchBoxLabel">
-                                            <graphic>
-                                                <ImageView>
-                                                    <Image url="@textures/searchIcon.png" />
-                                                </ImageView>
-                                            </graphic>
-                                        </Label>
-                                    </left>
-                                </CustomTextField>
-                            </ToolBar>
-                            <ListView fx:id="platformLstVw" onMouseClicked="#clickPlatform">
-                                <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                </VBox.margin>
-                            </ListView>
-                            <GridPane alignment="CENTER">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" />
-                                    <ColumnConstraints hgrow="SOMETIMES" />
-                                    <ColumnConstraints hgrow="SOMETIMES" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="33.42854309082031" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                <Label fx:id="platformNameLbl" GridPane.columnIndex="1">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label layoutX="37.0" layoutY="67.0" text="name">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label layoutX="32.0" layoutY="180.0" text="percent fee" GridPane.rowIndex="1">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label layoutX="37.0" layoutY="192.0" text="min fee" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label fx:id="platformFeeLbl" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label fx:id="platformMinFeeLbl" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <opaqueInsets>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                </opaqueInsets>
-                                <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                </VBox.margin>
-                            </GridPane>
-                            <ButtonBar>
-                                <buttons>
-                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAddPlatform" text="new" />
-                           <Button fx:id="btnEditPlatform" alignment="CENTER" contentDisplay="CENTER" layoutX="896.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleEditPlatform" text="edit" />
-                           <Button fx:id="btnDeletePlatform" alignment="CENTER" contentDisplay="CENTER" layoutX="811.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleDeletePlatform" text="delete" />
-                                </buttons>
-                                <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                </VBox.margin>
-                            </ButtonBar>
-                        </VBox>
-                    </center>
                     <left>
                         <VBox prefHeight="520.0" prefWidth="160.0" BorderPane.alignment="CENTER">
                             <opaqueInsets>
@@ -177,6 +85,85 @@
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
+               <center>
+                        <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
+                            <ToolBar>
+                                <CustomTextField fx:id="platformNameTxtFld" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="154.0" promptText="search" styleClass="searchField">
+                                    <left>
+                                        <Label styleClass="searchBoxLabel">
+                                            <graphic>
+                                                <ImageView>
+                                                    <Image url="@textures/searchIcon.png" />
+                                                </ImageView>
+                                            </graphic>
+                                        </Label>
+                                    </left>
+                                </CustomTextField>
+                            </ToolBar>
+                             <ListView fx:id="platformLstVw" onMouseClicked="#clickPlatform" />
+                             <GridPane alignment="CENTER">
+                                 <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" />
+                                     <ColumnConstraints hgrow="SOMETIMES" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                     <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
+                                     <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
+                                     <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
+                                     <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="33.42854309082031" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <Label fx:id="platformNameLbl" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label layoutX="37.0" layoutY="67.0" text="name" GridPane.rowIndex="1">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label layoutX="32.0" layoutY="180.0" text="percent fee" GridPane.rowIndex="2">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label layoutX="37.0" layoutY="192.0" text="min fee" GridPane.rowIndex="3">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label fx:id="platformFeeLbl" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label fx:id="platformMinFeeLbl" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </Label>
+                                 <Label layoutX="15.0" layoutY="59.0" text="Platform Details:">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                     <font>
+                                         <Font name="System Bold" size="12.0" />
+                                     </font>
+                                 </Label>
+                                 <opaqueInsets>
+                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </opaqueInsets>
+                             </GridPane>
+                             <ButtonBar>
+                                 <buttons>
+                                     <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAddPlatform" text="new" />
+                                     <Button fx:id="btnEditPlatform" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="896.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleEditPlatform" text="edit" />
+                                     <Button fx:id="btnFeeCalculator" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="808.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleFeeCalculator" text="fee calculator" />
+                                     <Button fx:id="btnDeletePlatform" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="811.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleDeletePlatform" text="delete" />
+                                 </buttons>
+                             </ButtonBar>
+                        </VBox>
+               </center>
                 </BorderPane>
             </Tab>
             <Tab closable="false" text="Investments">
@@ -303,28 +290,7 @@
                         </VBox>
                     </left>
                     <center>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="537.0">
-                                <opaqueInsets>
-                                    <Insets />
-                                </opaqueInsets>
-                                <Label text="total performance:">
-                                    <HBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </HBox.margin>
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="totalPerformanceLbl">
-                                    <HBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </HBox.margin>
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                </Label>
-                            </HBox>
+                        <VBox alignment="CENTER" BorderPane.alignment="TOP_CENTER">
                             <ToolBar prefHeight="40.0" prefWidth="200.0">
                                 <CustomTextField fx:id="filterStockNameTxtFld" promptText="search" styleClass="searchField">
                                     <left>
@@ -339,193 +305,180 @@
                                 </CustomTextField>
                             </ToolBar>
                             <TableView fx:id="investmentTblVw" prefHeight="414.0" prefWidth="537.0" />
-                     <HBox>
-                        <children>
-                                  <GridPane alignment="CENTER">
-                                      <columnConstraints>
-                                          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="848.0" minWidth="378.0" prefWidth="753.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                          <RowConstraints maxHeight="44.28571237836565" minHeight="10.0" prefHeight="44.28570801871163" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="69.0" minHeight="0.0" prefHeight="37.42857769557408" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="139.0" minHeight="0.0" prefHeight="34.99999128069196" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="30.999956403459805" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="33.42854309082031" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="24.857151576450917" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="28.28570556640625" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="27.28570556640625" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="35.28573172433033" vgrow="SOMETIMES" />
-                                          <RowConstraints vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                      <Label fx:id="stockNameLbl" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="platformLbl" layoutX="15.0" layoutY="22.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label text="creation Date">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                      </Label>
-                                      <Label layoutX="37.0" layoutY="18.0" text="Status" GridPane.rowIndex="1">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="37.0" layoutY="67.0" text="Platform" GridPane.rowIndex="2">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="37.0" layoutY="67.0" text="Stock name" GridPane.rowIndex="3">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="32.0" layoutY="180.0" text="exchange rate" GridPane.rowIndex="4">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="37.0" layoutY="18.0" text="capital" GridPane.rowIndex="5">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="creationDateLbl" GridPane.columnIndex="1">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="37.0" layoutY="192.0" text="selling Price" GridPane.rowIndex="6">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="32.0" layoutY="186.0" text="Performance" GridPane.rowIndex="7">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="15.0" layoutY="209.0" text="Performance" GridPane.rowIndex="8">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="20.0" layoutY="229.0" text="cost" GridPane.rowIndex="9">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="20.0" layoutY="229.0" text="selling Date" GridPane.rowIndex="10">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="sellingDateLbl" layoutX="169.0" layoutY="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label layoutX="20.0" layoutY="264.0" text="holding Periode" GridPane.rowIndex="11">
-                                          <font>
-                                              <Font name="System Bold" size="12.0" />
-                                          </font>
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="exchangeRateLbl" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="capitalLbl" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="sellingPriceLbl" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="holdingPeriodLbl" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="11">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="percentPerformanceLbl" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="performanceLbl" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="statusLbl" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <Label fx:id="costLbl" GridPane.columnIndex="1" GridPane.rowIndex="9">
-                                          <GridPane.margin>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </GridPane.margin>
-                                      </Label>
-                                      <opaqueInsets>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                      </opaqueInsets>
-                                  </GridPane>
-                        </children>
-                     </HBox>
+                             <Label text="total performance:">
+                                 <font>
+                                     <Font size="14.0" />
+                                 </font>
+                             </Label>
+                             <Label fx:id="totalPerformanceLbl">
+                                 <font>
+                                     <Font name="System Bold" size="24.0" />
+                                 </font>
+                             </Label>
+                            <GridPane alignment="CENTER">
+                                <columnConstraints>
+                                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                </columnConstraints>
+                                <rowConstraints>
+                           <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                <Label fx:id="stockNameLbl" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="platformLbl" layoutX="15.0" layoutY="22.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label text="Creation Date" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="37.0" layoutY="18.0" text="Status" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="37.0" layoutY="67.0" text="Platform" GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="37.0" layoutY="67.0" text="Stock name" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="32.0" layoutY="180.0" text="Exchange Rate" GridPane.rowIndex="5">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="37.0" layoutY="18.0" text="Capital" GridPane.rowIndex="6">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="creationDateLbl" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="37.0" layoutY="192.0" text="Selling Price" GridPane.rowIndex="7">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="32.0" layoutY="186.0" text="Performance" GridPane.rowIndex="8">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="15.0" layoutY="209.0" text="Performance in Percent" GridPane.rowIndex="9">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="20.0" layoutY="229.0" text="Cost" GridPane.rowIndex="10">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="20.0" layoutY="229.0" text="Selling Date" GridPane.rowIndex="11">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="sellingDateLbl" layoutX="169.0" layoutY="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label layoutX="20.0" layoutY="264.0" text="Holding Periode" GridPane.rowIndex="12">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="exchangeRateLbl" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="capitalLbl" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="sellingPriceLbl" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="holdingPeriodLbl" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="12">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="percentPerformanceLbl" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="performanceLbl" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="statusLbl" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                                <Label fx:id="costLbl" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </GridPane.margin>
+                                </Label>
+                        <Label layoutX="15.0" layoutY="38.0" text="Investment Details:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                                <opaqueInsets>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </opaqueInsets>
+                            </GridPane>
+                     <ButtonBar>
+                       <buttons>
+                           <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleNewInvestment" text="new" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                           <Button fx:id="btnEditInvestment" alignment="TOP_CENTER" contentDisplay="TOP" disable="true" mnemonicParsing="false" onAction="#handleEditInvestment" text="edit" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                                    <Button fx:id="btnSellingPriceCalculator" alignment="TOP_CENTER" contentDisplay="TOP" disable="true" mnemonicParsing="false" onAction="#handleSellingPriceCalculator" text="selling price calculator" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                                    <Button fx:id="btnPerformanceCalculator" alignment="TOP_CENTER" contentDisplay="TOP" disable="true" mnemonicParsing="false" onAction="#handlePerformanceCalculator" text="performance calculator" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                           <Button fx:id="btnDeleteInvestment" alignment="TOP_CENTER" contentDisplay="TOP" disable="true" mnemonicParsing="false" onAction="#handleDeleteInvestment" text="delete" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                       </buttons>
+                     </ButtonBar>
                             <BorderPane.margin>
                                 <Insets />
                             </BorderPane.margin>
@@ -534,57 +487,6 @@
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
-               <right>
-                  <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleNewInvestment" prefHeight="100.0" prefWidth="100.0" text="add investment" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
-                           <graphic>
-                              <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@textures/addIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="btnEditInvestment" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="30.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleEditInvestment" prefHeight="100.0" prefWidth="100.0" text="edit investment" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
-                           <graphic>
-                              <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@textures/editIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                                 <Button alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleSellingPriceCalculator" prefHeight="100.0" prefWidth="100.0" text="selling price calculator" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
-                                     <graphic>
-                                         <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                 <Image url="@textures/calculatorSymbol.png" />
-                                             </image>
-                                         </ImageView>
-                                     </graphic>
-                                 </Button>
-                                 <Button alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#handlePerformanceCalculator" prefHeight="100.0" prefWidth="100.0" text="performance calculator" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
-                                     <graphic>
-                                         <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                 <Image url="@textures/calculatorSymbol.png" />
-                                             </image>
-                                         </ImageView>
-                                     </graphic>
-                                 </Button>
-                        <Button fx:id="btnDeleteInvestment" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleDeleteInvestment" prefHeight="100.0" prefWidth="100.0" text="delete investment" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
-                           <graphic>
-                              <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@textures/deleteIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </VBox>
-               </right>
                 </BorderPane>
             </Tab>
         </TabPane>

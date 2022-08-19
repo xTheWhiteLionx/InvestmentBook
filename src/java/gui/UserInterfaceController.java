@@ -1,5 +1,6 @@
 package gui;
 
+import gui.calculator.FeeCalculatorController;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
 import gui.investmentController.NewInvestmentController;
@@ -44,7 +45,6 @@ import logic.Quarter;
 import logic.State;
 import logic.investmentBook.InvestmentBook;
 import logic.investmentBook.InvestmentBookData;
-import logic.platform.AbsolutePlatform;
 import logic.platform.FeeType;
 import logic.platform.MixedPlatform;
 import logic.platform.PercentPlatform;
@@ -113,6 +113,8 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private Button btnEditPlatform;
     @FXML
+    private Button btnFeeCalculator;
+    @FXML
     private Button btnDeletePlatform;
 
     /**
@@ -175,6 +177,10 @@ public class UserInterfaceController implements Initializable {
     private Label holdingPeriodLbl;
     @FXML
     private Button btnEditInvestment;
+    @FXML
+    private Button btnSellingPriceCalculator;
+    @FXML
+    private Button btnPerformanceCalculator;
     @FXML
     private Button btnDeleteInvestment;
 
@@ -369,6 +375,7 @@ public class UserInterfaceController implements Initializable {
 
                     boolean isNull = newValue == null;
                     btnEditPlatform.setDisable(isNull);
+                    btnFeeCalculator.setDisable(isNull);
                     btnDeletePlatform.setDisable(isNull);
                 }
         );
@@ -509,6 +516,8 @@ public class UserInterfaceController implements Initializable {
                     showInvestmentDetails(currentInvestment);
                     boolean isNull = newValue == null;
                     btnEditInvestment.setDisable(isNull);
+                    btnPerformanceCalculator.setDisable(isNull);
+                    btnSellingPriceCalculator.setDisable(isNull);
                     btnDeleteInvestment.setDisable(isNull);
                 }
         );
@@ -668,7 +677,7 @@ public class UserInterfaceController implements Initializable {
                         400,
                         300
                 );
-                platformController.setDisplay(currentPlatform);
+                platformController.display(currentPlatform);
             }
         }
     }
@@ -800,13 +809,13 @@ public class UserInterfaceController implements Initializable {
 
             String fee = "";
 
-            if (platform instanceof PercentPlatform) {
-                fee = DoubleUtil.format(platform.getFee(100)) + " %";
+            if (platform instanceof PercentPlatform percentPlatform) {
+                fee = DoubleUtil.format(percentPlatform.getPercent()) + " %";
                 platformMinFeeLbl.setText("");
             } else if (platform instanceof MixedPlatform mixedPlatform) {
-                fee = DoubleUtil.format(platform.getFee(100)) + " %";
+                fee = DoubleUtil.format(mixedPlatform.getPercent()) + " %";
                 platformMinFeeLbl.setText(DoubleUtil.formatMoney(mixedPlatform.getMinFee()));
-            } else if (platform instanceof AbsolutePlatform) {
+            } else {
                 fee = DoubleUtil.formatMoney(platform.getFee(100));
                 platformMinFeeLbl.setText("");
             }
@@ -1002,8 +1011,13 @@ public class UserInterfaceController implements Initializable {
                     400,
                     300
             );
-            platformController.setDisplay(currentPlatform);
+            platformController.display(currentPlatform);
         }
+    }
+
+    @FXML
+    private void handleFeeCalculator() {
+        FeeCalculatorController.loadFeeCalculatorController(currentPlatform);
     }
 
     /**

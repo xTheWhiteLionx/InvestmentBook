@@ -2,6 +2,7 @@ package gui.platformController;
 
 import gui.DoubleUtil;
 import gui.Style;
+import gui.calculator.FeeCalculatorController;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -90,16 +91,15 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
 
     /**
      * Handles the "fee calculator" button and
-     * opens a FeeCalculator Window. Also gives the
-     * Controller the current platforms.
+     * opens a FeeCalculator Window.
      */
     @FXML
     private void handleFeeCalculator() {
-        handleFeeCalculator(currPlatform);
+        FeeCalculatorController.loadFeeCalculatorController(currPlatform);
     }
 
     @Override
-    public void setDisplay(Platform platform) {
+    public void display(Platform platform) {
         this.currPlatform = (AbsolutePlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
         feeTxtFld.setText(DoubleUtil.format(currPlatform.getFee(0)));
