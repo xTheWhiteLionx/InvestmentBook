@@ -925,7 +925,7 @@ public class UserInterfaceController implements Initializable {
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(ICON);
             alert.setHeaderText("Platform needed.\n" +
-                    "Please add a new platform");
+                    "Please add first a platform");
             alert.setContentText("Each investment needs a platform");
             alert.showAndWait();
         }
@@ -1028,7 +1028,7 @@ public class UserInterfaceController implements Initializable {
     private void handleSellingPriceCalculator() {
         SellingPriceCalculatorController sellingPriceCalculatorController =
                 DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
-                        "selling price calculator: " + currentInvestment.getStockName(),
+                        currentInvestment.getStockName() + " Selling Price Calculator",
                         350,
                         200
                 );
@@ -1043,7 +1043,7 @@ public class UserInterfaceController implements Initializable {
     private void handlePerformanceCalculator() {
         PerformanceCalculatorController performanceCalculatorController =
                 DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
-                        "performance calculator: " + currentInvestment.getStockName(),
+                         currentInvestment.getStockName() + " Performance Calculator",
                         350,
                         200
                 );
