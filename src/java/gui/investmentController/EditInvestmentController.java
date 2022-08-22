@@ -1,7 +1,7 @@
 package gui.investmentController;
 
-import gui.DoubleUtil;
 import gui.DialogWindow;
+import gui.DoubleUtil;
 import gui.Style;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
@@ -13,12 +13,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import logic.BigDecimalUtils;
 import logic.Investment;
 import logic.State;
 import logic.investmentBook.InvestmentBook;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.createStage;
@@ -116,13 +116,13 @@ public class EditInvestmentController implements Initializable {
         statusLbl.setText(investState.name());
         platformLbl.setText(this.investment.getPlatform().getName());
         stockNameTxtFld.setText(this.investment.getStockName());
-        exchangeRateTxtFld.setText(DoubleUtil.format(this.investment.getExchangeRate()));
-        capitalTxtFld.setText(DoubleUtil.format(this.investment.getCapital()));
-        performanceLbl.setText(DoubleUtil.format(investment.getPerformance()));
-        percentPerformanceLbl.setText(DoubleUtil.format(investment.getPercentPerformance()) + "%");
-        costLbl.setText(DoubleUtil.format(investment.getCost()));
+        exchangeRateTxtFld.setText(BigDecimalUtils.format(this.investment.getExchangeRate()));
+        capitalTxtFld.setText(BigDecimalUtils.format(this.investment.getCapital()));
+        performanceLbl.setText(BigDecimalUtils.format(investment.getPerformance()));
+        percentPerformanceLbl.setText(BigDecimalUtils.format(investment.getPercentPerformance()) + "%");
+        costLbl.setText(BigDecimalUtils.format(investment.getCost()));
         if (investIsClosed) {
-            sellingPriceTxtFld.setText(DoubleUtil.format(this.investment.getSellingPrice()));
+            sellingPriceTxtFld.setText(BigDecimalUtils.format(this.investment.getSellingPrice()));
             sellingDatePicker.setValue(investment.getSellingDate());
         }
 
@@ -187,11 +187,11 @@ public class EditInvestmentController implements Initializable {
     private void handleApply() {
         investment.setCreationDate(creationDatePicker.getValue());
         investment.setStockName(stockNameTxtFld.getText());
-        investment.setExchangeRate(DoubleUtil.parse(exchangeRateTxtFld.getText()));
-        investment.setCapital(DoubleUtil.parse(capitalTxtFld.getText()));
+        investment.setExchangeRate(BigDecimalUtils.parse(exchangeRateTxtFld.getText()));
+        investment.setCapital(BigDecimalUtils.parse(capitalTxtFld.getText()));
         //TODO for null
         investment.closeInvestment(sellingDatePicker.getValue(),
-                DoubleUtil.parse(sellingPriceTxtFld.getText())
+                BigDecimalUtils.parse(sellingPriceTxtFld.getText())
         );
         investmentBook.displayInvestments();
         handleCancel();

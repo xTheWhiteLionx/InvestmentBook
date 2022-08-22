@@ -1,13 +1,13 @@
 {
   "platforms": [
     {
+      "fee": 7.0,
+      "name": "Onvista Bank"
+    },
+    {
       "percent": 2.5,
       "min": 8.9,
       "name": "Max Blue"
-    },
-    {
-      "fee": 7.0,
-      "name": "Onvista Bank"
     },
     {
       "percent": 1.49,
@@ -15,6 +15,24 @@
     }
   ],
   "investments": [
+    {
+      "creationDate": 17778,
+      "state": "CLOSED",
+      "platform": {
+        "percent": 2.5,
+        "min": 8.9,
+        "name": "Max Blue"
+      },
+      "stockName": "Ubisoft",
+      "exchangeRate": 96.88,
+      "capital": 290.65,
+      "sellingPrice": 104.10,
+      "performance": -204.35,
+      "percentPerformance": -69.48,
+      "cost": 17.8,
+      "sellingDate": 19103,
+      "holdingPeriod": 1325
+    },
     {
       "creationDate": 17809,
       "state": "CLOSED",
@@ -101,23 +119,6 @@
       "holdingPeriod": 31
     },
     {
-      "creationDate": 18270,
-      "state": "CLOSED",
-      "platform": {
-        "fee": 7.0,
-        "name": "Onvista Bank"
-      },
-      "stockName": "Deutsche Bank",
-      "exchangeRate": 7.1,
-      "capital": 213.06,
-      "sellingPrice": 228.27,
-      "performance": 1.21,
-      "percentPerformance": 0.57,
-      "cost": 14.0,
-      "sellingDate": 18274,
-      "holdingPeriod": 4
-    },
-    {
       "creationDate": 18099,
       "state": "CLOSED",
       "platform": {
@@ -133,23 +134,6 @@
       "cost": 14.0,
       "sellingDate": 18305,
       "holdingPeriod": 206
-    },
-    {
-      "creationDate": 17778,
-      "state": "OPEN",
-      "platform": {
-        "percent": 2.5,
-        "min": 8.9,
-        "name": "Max Blue"
-      },
-      "stockName": "Ubisoft",
-      "exchangeRate": 96.88,
-      "capital": 290.65,
-      "sellingPrice": 0.0,
-      "performance": 0.0,
-      "percentPerformance": 0.0,
-      "cost": 8.9,
-      "holdingPeriod": 0
     },
     {
       "creationDate": 18114,
@@ -203,6 +187,23 @@
       "holdingPeriod": 192
     },
     {
+      "creationDate": 18270,
+      "state": "CLOSED",
+      "platform": {
+        "fee": 7.0,
+        "name": "Onvista Bank"
+      },
+      "stockName": "Deutsche Bank",
+      "exchangeRate": 7.1,
+      "capital": 213.06,
+      "sellingPrice": 228.27,
+      "performance": 1.21,
+      "percentPerformance": 0.57,
+      "cost": 14.0,
+      "sellingDate": 18274,
+      "holdingPeriod": 4
+    },
+    {
       "creationDate": 18823,
       "state": "CLOSED",
       "platform": {
@@ -244,7 +245,7 @@
         "name": "Coinbase"
       },
       "stockName": "Shiba Inu",
-      "exchangeRate": 3.418E-5,
+      "exchangeRate": 0.00003418,
       "capital": 2522.76,
       "sellingPrice": 3165.94,
       "performance": 558.42,
@@ -261,7 +262,7 @@
         "name": "Coinbase"
       },
       "stockName": "Shiba Inu",
-      "exchangeRate": 3.198E-5,
+      "exchangeRate": 0.00003198,
       "capital": 2939.0,
       "sellingPrice": 0.0,
       "performance": 0.0,

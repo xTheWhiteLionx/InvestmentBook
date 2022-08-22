@@ -2,19 +2,22 @@ package logic.platform;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import logic.BigDecimalUtils;
 import logic.Investment;
 
-import static helper.GeneralMethods.calcPercent;
-import static helper.GeneralMethods.round;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static logic.BigDecimalUtils.HUNDRED;
 
 /**
  * This class is contains the percent platform logic and
  * is an offshoot of the class platform
  *
+ * @author xthe_white_lionx
  * @see Platform
  * @see AbsolutePlatform
  * @see MixedPlatform
- * @author xthe_white_lionx
  */
 public class PercentPlatform extends Platform {
 
@@ -26,7 +29,7 @@ public class PercentPlatform extends Platform {
     /**
      * Constructs an {@code PercentPlatform} with the specified arguments.
      *
-     * @param name name of the platform
+     * @param name    name of the platform
      * @param percent value of the fee of the platform in percent
      */
     public PercentPlatform(String name, double percent) {
@@ -35,8 +38,8 @@ public class PercentPlatform extends Platform {
     }
 
     @Override
-    public double getFee(double price) {
-        return round((percent /100d) * price);
+    public double getFee(BigDecimal price) {
+        return price.multiply(BigDecimal.valueOf(percent / 100d)).doubleValue();
     }
 
     @Override
@@ -54,7 +57,7 @@ public class PercentPlatform extends Platform {
      *
      * @return value of the fee of the platform
      */
-    public double getPercent(){
+    public double getPercent() {
         return percent;
     }
 
@@ -70,21 +73,24 @@ public class PercentPlatform extends Platform {
     }
 
     @Override
-    public double calcSellingExchangeRate(Investment investment, double targetPerformance) {
-        double capital = investment.getCapital();
-        double sellingPrice = (capital + targetPerformance + getFee(capital)) / (1 - percent / 100d);
+    public BigDecimal calcSellingExchangeRate(Investment investment, BigDecimal targetPerformance) {
+        BigDecimal capital = investment.getCapital();
+        BigDecimal antiPercent = BigDecimal.valueOf(1 - percent / 100d);
+        BigDecimal sellingPrice = BigDecimalUtils.add(capital.add(targetPerformance),
+                getFee(capital)).divide(antiPercent, 2, RoundingMode.HALF_UP);
 
         System.out.println("expected: " + investment.getSellingPrice());
         System.out.printf("calcPercent: %.2f%n", sellingPrice);
 
         //TODO problem could be here for testSellingPriceCalculator
-        double percentPerformance = calcPercent(capital, sellingPrice);
+        BigDecimal percentPerformance = BigDecimalUtils.calcPercent(capital, sellingPrice);
 
-        if (100 > percentPerformance) {
-            percentPerformance += 100;
+        if (percentPerformance.compareTo(HUNDRED) < 0) {
+            percentPerformance = percentPerformance.add(HUNDRED);
         }
 
-        return round(investment.getExchangeRate() * (percentPerformance / 100d));
+        return investment.getExchangeRate().multiply(percentPerformance.divide(HUNDRED, 2,
+                RoundingMode.HALF_UP)).setScale(2,RoundingMode.HALF_UP);
     }
 
     @Override
@@ -95,9 +101,15 @@ public class PercentPlatform extends Platform {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PercentPlatform that)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PercentPlatform that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         return Double.compare(that.percent, percent) == 0;
     }
 }

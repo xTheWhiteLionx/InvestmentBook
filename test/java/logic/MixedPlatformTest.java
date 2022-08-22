@@ -3,6 +3,8 @@ package logic;
 import logic.platform.MixedPlatform;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +30,7 @@ public class MixedPlatformTest {
                 290.65,
                 290.65, 408.45, LocalDate.now());
 
-        double expected = 408.45;
-        assertEquals(expected, invest.getPlatform().calcSellingExchangeRate(invest, invest.getPerformance()), 0.000001);
+        BigDecimal expected = BigDecimal.valueOf(408.45).setScale(2, RoundingMode.HALF_UP);
+        assertEquals(expected, invest.getPlatform().calcSellingExchangeRate(invest, invest.getPerformance()));
     }
 }

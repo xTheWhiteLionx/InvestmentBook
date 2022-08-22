@@ -2,6 +2,8 @@ package logic;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static logic.HelperClass.ONVISTA_BANK;
@@ -26,7 +28,8 @@ public class AbsolutPlatformTest {
                 LocalDate.of(2020, 3, 12)
         );
 
-        assertEquals(168.87, invest.getPlatform().calcSellingExchangeRate(invest, 6.60), 0.00);
+        assertEquals(BigDecimal.valueOf(168.87),
+                invest.getPlatform().calcSellingExchangeRate(invest, BigDecimal.valueOf(6.60)));
     }
 
     @Test
@@ -42,7 +45,8 @@ public class AbsolutPlatformTest {
                 LocalDate.of(2020, 3, 12)
         );
 
-        assertEquals(164.2, invest.getPlatform().calcSellingExchangeRate(invest,
-                invest.getPerformance()), 0.00);
+        assertEquals(BigDecimal.valueOf(164.2).setScale(2, RoundingMode.HALF_UP),
+                invest.getPlatform().calcSellingExchangeRate(invest,
+                invest.getPerformance()));
     }
 }

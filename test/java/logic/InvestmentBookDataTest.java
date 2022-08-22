@@ -4,18 +4,15 @@ import logic.investmentBook.InvestmentBookData;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 
-import static logic.HelperClass.COINBASE;
-import static logic.HelperClass.MAX_BLUE;
-import static logic.HelperClass.ONVISTA_BANK;
-import static logic.HelperClass.createPlatforms;
+import static logic.HelperClass.*;
 import static logic.investmentBook.InvestmentBookData.fromJson;
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 //TODO JavaDoc
 public class InvestmentBookDataTest {
 
-    private final File file = new File("books/result.json");
+    private final File file = new File("test/resources/result.json");
 
     /**
      * @return
@@ -36,7 +33,7 @@ public class InvestmentBookDataTest {
     //TODO JavaDoc
     private InvestmentBookData createTestInvestmentBookJson() {
         return new InvestmentBookData(createPlatforms(),
-                List.of(
+                Arrays.asList(
                         //List of the real Investments
                         new Investment(
                                 LocalDate.of(2018, 10, 5),
@@ -112,7 +109,9 @@ public class InvestmentBookDataTest {
                                 MAX_BLUE,
                                 "Ubisoft",
                                 96.88,
-                                290.65
+                                290.65,
+                                140.10,
+                                LocalDate.of(2022,4,9)
                         ),
 
                         new Investment(
@@ -204,15 +203,10 @@ public class InvestmentBookDataTest {
      * Tests the methode readInvestmentsJson(File)
      */
     //TODO JavaDoc
-    @Test(expected = ExceptionInInitializerError.class)
-    public void testReadInvestsJsonFileDoesNotExist() {
+    @Test(expected = FileNotFoundException.class)
+    public void testReadInvestsJsonFileDoesNotExist() throws IOException {
         File testFile = new File("test.json");
-
-        try {
-            fromJson(testFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fromJson(testFile);
     }
 
     /**
@@ -220,14 +214,9 @@ public class InvestmentBookDataTest {
      */
     //TODO JavaDoc
     @Test(expected = IllegalArgumentException.class)
-    public void testIsNotAJsonFile() {
-        File testFile = new File("src/main/resources/test.txt");
-
-        try {
-            fromJson(testFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void testIsNotAJsonFile() throws IOException {
+        File testFile = new File("test/resources/test.txt");
+        fromJson(testFile);
     }
 
 //    /**

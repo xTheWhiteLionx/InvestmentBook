@@ -39,6 +39,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import logic.BigDecimalUtils;
 import logic.GUIConnector;
 import logic.Investment;
 import logic.Quarter;
@@ -52,6 +53,7 @@ import logic.platform.Platform;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
@@ -816,7 +818,7 @@ public class UserInterfaceController implements Initializable {
                 fee = DoubleUtil.format(mixedPlatform.getPercent()) + " %";
                 platformMinFeeLbl.setText(DoubleUtil.formatMoney(mixedPlatform.getMinFee()));
             } else {
-                fee = DoubleUtil.formatMoney(platform.getFee(100));
+                fee = DoubleUtil.formatMoney(platform.getFee(new BigDecimal(100)));
                 platformMinFeeLbl.setText("");
             }
             platformFeeLbl.setText(fee);
@@ -866,14 +868,14 @@ public class UserInterfaceController implements Initializable {
             statusLbl.setText(investState.name());
             platformLbl.setText(investment.getPlatform().getName());
             stockNameLbl.setText(investment.getStockName());
-            exchangeRateLbl.setText(DoubleUtil.formatMoney(investment.getExchangeRate()));
-            capitalLbl.setText(DoubleUtil.formatMoney(investment.getCapital()));
-            performanceLbl.setText(DoubleUtil.formatMoney(investment.getPerformance()));
+            exchangeRateLbl.setText(BigDecimalUtils.formatMoney(investment.getExchangeRate()));
+            capitalLbl.setText(BigDecimalUtils.formatMoney(investment.getCapital()));
+            performanceLbl.setText(BigDecimalUtils.formatMoney(investment.getPerformance()));
             percentPerformanceLbl.setText(
-                    DoubleUtil.format(investment.getPercentPerformance()) + "%");
-            costLbl.setText(DoubleUtil.formatMoney(investment.getCost()));
+                    BigDecimalUtils.format(investment.getPercentPerformance()) + "%");
+            costLbl.setText(BigDecimalUtils.formatMoney(investment.getCost()));
             if (investState == State.CLOSED) {
-                sellingPriceLbl.setText(DoubleUtil.formatMoney(investment.getSellingPrice()));
+                sellingPriceLbl.setText(BigDecimalUtils.formatMoney(investment.getSellingPrice()));
                 sellingDateLbl.setText(Style.format(investment.getSellingDate()));
             } else {
                 sellingPriceLbl.setText("");

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -120,7 +121,7 @@ public abstract class Platform {
      * @return fee of the platform (for a given price)
      * @throws IllegalArgumentException if price is negative
      */
-    public abstract double getFee(double price);
+    public abstract double getFee(BigDecimal price);
 
     /**
      * Returns the fxmlPath of the platform type
@@ -142,9 +143,9 @@ public abstract class Platform {
      * @param investment        the given investment
      * @param targetPerformance the given target performance, which should be reached
      * @return exchange rate at which the target performance will be reached
-     * @throws NullPointerException     if investment is null
+     * @throws NullPointerException if investment is null
      */
-    public abstract double calcSellingExchangeRate(Investment investment, double targetPerformance);
+    public abstract BigDecimal calcSellingExchangeRate(Investment investment, BigDecimal targetPerformance);
 
     /**
      * Returns a string representation of the platform

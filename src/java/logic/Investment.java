@@ -2,11 +2,13 @@ package logic;
 
 import logic.platform.Platform;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-import static helper.GeneralMethods.calcPercentRounded;
-import static helper.GeneralMethods.round;
+import static logic.BigDecimalUtils.*;
 import static logic.State.CLOSED;
 import static logic.State.OPEN;
 
@@ -42,33 +44,33 @@ public class Investment implements Comparable<Investment> {
     /**
      * Exchange rate of the investment at which it was bought
      */
-    private double exchangeRate;
+    private BigDecimal exchangeRate;
 
     /**
      * Capital of the investment
      */
-    private double capital;
+    private BigDecimal capital;
 
     /**
      * Selling price of the investment
      */
-    private double sellingPrice = 0;
+    private BigDecimal sellingPrice = BigDecimal.ZERO;
 
     /**
      * Performance of the investment
      */
-    private double performance = 0;
+    private BigDecimal performance = BigDecimal.ZERO;
 
     /**
      * Performance of the investment in percent,
      * depending on the capital
      */
-    private double percentPerformance = 0;
+    private BigDecimal percentPerformance = BigDecimal.ZERO;
 
     /**
      * Costs of the investment
      */
-    private double cost;
+    private BigDecimal cost;
 
     /**
      * Creation Date of the investment as
@@ -117,9 +119,51 @@ public class Investment implements Comparable<Investment> {
         this.creationDate = creationDate;
         this.platform = platform;
         this.stockName = stockName;
+        this.exchangeRate = BigDecimal.valueOf(exchangeRate);
+        this.capital = BigDecimal.valueOf(capital);
+        this.cost = BigDecimal.valueOf(platform.getFee(BigDecimal.valueOf(capital))).setScale(2,RoundingMode.HALF_UP);
+        this.holdingPeriod = DAYS.between(creationDate, LocalDate.now());
+    }
+
+    /**
+     * Constructor for a new (open) Investment, with calling of the constructor.
+     *
+     * @param creationDate
+     * @param platform     platform of the investment
+     * @param stockName    stock name of the investment
+     * @param exchangeRate exchange rate of the investment at which it was bought
+     * @param capital      capital of the investment
+     * @throws NullPointerException     if any argument is null
+     * @throws IllegalArgumentException
+     */
+    //TODO JavaDoc
+    public Investment(LocalDate creationDate, Platform platform, String stockName,
+                      BigDecimal exchangeRate, BigDecimal capital) {
+        if (creationDate == null) {
+            throw new NullPointerException();
+        }
+        if (platform == null) {
+            throw new NullPointerException();
+        }
+        if (stockName == null) {
+            throw new NullPointerException();
+        }
+        if (stockName.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (!isPositive(exchangeRate)) {
+            throw new IllegalArgumentException();
+        }
+        if (!isPositive(capital)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.creationDate = creationDate;
+        this.platform = platform;
+        this.stockName = stockName;
         this.exchangeRate = exchangeRate;
         this.capital = capital;
-        this.cost = platform.getFee(capital);
+        this.cost = BigDecimal.valueOf(platform.getFee(capital)).setScale(2,RoundingMode.HALF_UP);
         this.holdingPeriod = DAYS.between(creationDate, LocalDate.now());
     }
 
@@ -142,7 +186,7 @@ public class Investment implements Comparable<Investment> {
                       double exchangeRate, double capital, double sellingPrice,
                       LocalDate sellingDate) {
         this(creationDate, platform, stockName, exchangeRate, capital);
-        this.closeInvestment(sellingDate, sellingPrice);
+        this.closeInvestment(sellingDate, BigDecimal.valueOf(sellingPrice));
     }
 
     /**
@@ -185,7 +229,7 @@ public class Investment implements Comparable<Investment> {
                 this.holdingPeriod = DAYS.between(newCreationDate, sellingDate);
             } else {
                 throw new IllegalArgumentException("given creation date is after the selling date,"
-                                                   + " logical error");
+                        + " logical error");
             }
         } else {
             this.holdingPeriod = DAYS.between(newCreationDate, LocalDate.now());
@@ -262,7 +306,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the exchange rate
      */
-    public double getExchangeRate() {
+    public BigDecimal getExchangeRate() {
         return exchangeRate;
     }
 
@@ -274,8 +318,8 @@ public class Investment implements Comparable<Investment> {
      * @throws IllegalArgumentException
      */
     // TODO: 17.06.2022 JavaDoc
-    public void setExchangeRate(double newExchangeRate) {
-        if (!(newExchangeRate > 0)) {
+    public void setExchangeRate(BigDecimal newExchangeRate) {
+        if (!isPositive(newExchangeRate)) {
             throw new IllegalArgumentException("");
         }
         exchangeRate = newExchangeRate;
@@ -286,7 +330,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the capital
      */
-    public double getCapital() {
+    public BigDecimal getCapital() {
         return capital;
     }
 
@@ -298,15 +342,15 @@ public class Investment implements Comparable<Investment> {
      * @throws IllegalArgumentException
      */
     // TODO: 17.06.2022 JavaDoc
-    public void setCapital(double newCapital) {
-        if (newCapital <= 0) {
+    public void setCapital(BigDecimal newCapital) {
+        if (!isPositive(newCapital)) {
             throw new IllegalArgumentException("");
         }
         capital = newCapital;
         if (state == CLOSED) {
-            cost = platform.getFee(capital);
+            cost = BigDecimal.valueOf(platform.getFee(capital)).setScale(2,RoundingMode.HALF_UP);
             performance = calcPerformance(sellingPrice);
-            percentPerformance = calcPercentRounded(capital, performance);
+            percentPerformance = calcPercent(capital, performance);
         }
     }
 
@@ -315,16 +359,16 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the selling price
      */
-    public double getSellingPrice() {
+    public BigDecimal getSellingPrice() {
         return sellingPrice;
     }
 
     //TODO JavaDoc
-    public double calcPerformance(double sellingPrice) {
-        if (sellingPrice < 0) {
+    public BigDecimal calcPerformance(BigDecimal sellingPrice) {
+        if (!isPositive(sellingPrice)) {
             throw new IllegalArgumentException("");
         }
-        return round(sellingPrice - (capital + cost));
+        return sellingPrice.subtract(capital.add(cost)).setScale(2, RoundingMode.HALF_UP);
     }
 
     /**
@@ -336,37 +380,33 @@ public class Investment implements Comparable<Investment> {
      * @param newSellingPrice the given selling price on which the investment were sold
      */
     //TODO JavaDoc
-    public void closeInvestment(LocalDate newSellingDate, double newSellingPrice) {
+    public void closeInvestment(LocalDate newSellingDate, BigDecimal newSellingPrice) {
         if (newSellingDate == null) {
             throw new NullPointerException();
         }
         if (!areAcceptableDates(creationDate, newSellingDate)) {
             throw new IllegalArgumentException("creation date is after the given sellingDate, logical error");
         }
-        if (newSellingPrice < 0) {
+        if (!isPositive(newSellingPrice)) {
             throw new IllegalArgumentException();
         }
 
         if (sellingDate == null || !sellingDate.isEqual(newSellingDate)) {
-            //updates the holding period of the investment
-            holdingPeriod = DAYS.between(creationDate, newSellingDate);
-            //updates the selling Date of the investment
-            sellingDate = newSellingDate;
-        }
-        if (sellingPrice != newSellingPrice) {
-            if (state == CLOSED) {
-                //TODO explain tactic
-                cost = platform.getFee(capital);
-            } else {
+            if (sellingDate == null) {
                 state = CLOSED;
+            } else if (!sellingDate.isEqual(newSellingDate)) {
+                cost = BigDecimal.valueOf(platform.getFee(capital)).setScale(2,RoundingMode.HALF_UP);
             }
             //updates the cost of the investment
-            cost = round(cost + platform.getFee(newSellingPrice));
+            cost = add(cost, platform.getFee(newSellingPrice)).setScale(2,RoundingMode.HALF_UP);
             //calculated performance
             performance = calcPerformance(newSellingPrice);
             // rule of three
-            percentPerformance = calcPercentRounded(capital, performance);
-            sellingPrice = newSellingPrice;
+            percentPerformance = calcPercent(capital, performance);
+            sellingPrice = newSellingPrice.setScale(2, RoundingMode.HALF_UP);
+            sellingDate = newSellingDate;
+            //updates the holding period of the investment
+            holdingPeriod = DAYS.between(creationDate, newSellingDate);
         }
     }
 
@@ -379,9 +419,9 @@ public class Investment implements Comparable<Investment> {
      */
     //TODO JavaDoc
     //TODO never used?
-    public void setSellingPrice(double newSellingPrice) {
-        if (newSellingPrice >= 0) {
-            if (sellingPrice != newSellingPrice) {
+    public void setSellingPrice(BigDecimal newSellingPrice) {
+        if (isPositive(newSellingPrice)) {
+            if (!sellingPrice.equals(newSellingPrice)) {
                 closeInvestment(LocalDate.now(), newSellingPrice);
             }
         } else {
@@ -394,7 +434,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the absolute performance
      */
-    public double getPerformance() {
+    public BigDecimal getPerformance() {
         return performance;
     }
 
@@ -403,7 +443,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the performance of the investment in percent
      */
-    public double getPercentPerformance() {
+    public BigDecimal getPercentPerformance() {
         return percentPerformance;
     }
 
@@ -412,7 +452,7 @@ public class Investment implements Comparable<Investment> {
      *
      * @return the cost
      */
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
@@ -449,7 +489,7 @@ public class Investment implements Comparable<Investment> {
                 ", percentPerformance=" + percentPerformance + "\n" +
                 ", cost=" + cost + "\n" +
                 ", sellingDate=" + sellingDate + "\n" +
-                ", holdingPeriod=" + holdingPeriod + '}'+ "\n";
+                ", holdingPeriod=" + holdingPeriod + '}' + "\n";
     }
 
     /**
@@ -458,14 +498,18 @@ public class Investment implements Comparable<Investment> {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Investment that)) return false;
-        return this.exchangeRate == that.exchangeRate
-                && this.capital == that.capital
-                && this.sellingPrice == that.sellingPrice
-                && this.performance == that.performance
-                && this.percentPerformance == that.percentPerformance
-                && this.cost == that.cost
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Investment that)) {
+            return false;
+        }
+        return Objects.equals(this.exchangeRate, that.exchangeRate)
+                && Objects.equals(this.capital, that.capital)
+                && Objects.equals(this.sellingPrice, that.sellingPrice)
+                && Objects.equals(this.performance, that.performance)
+                && Objects.equals(this.percentPerformance, that.percentPerformance)
+                && Objects.equals(this.cost, that.cost)
                 && this.state == that.state
                 && this.platform.equals(that.platform)
                 && this.stockName.equals(that.stockName);

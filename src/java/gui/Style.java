@@ -3,15 +3,15 @@ package gui;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Locale;
 
-import static javafx.scene.paint.Color.BLACK;
-import static javafx.scene.paint.Color.GREEN;
-import static javafx.scene.paint.Color.RED;
 import static helper.GeneralMethods.round;
+import static javafx.scene.paint.Color.*;
+import static logic.BigDecimalUtils.formatMoney;
 
 /**
  *
@@ -70,6 +70,30 @@ public class Style {
         if (value > 0) {
             color = GREEN;
         } else if (value < 0) {
+            color = RED;
+        }
+        valueLbl.setTextFill(color);
+    }
+
+    /**
+     * Sets the given value as text of the given label and
+     * colors the text depending on his value.
+     * + = green
+     * 0 = black
+     * - = red
+     *
+     * @param value    the given value
+     * @param valueLbl label to show the value
+     */
+    public static void setAndColorsText(BigDecimal value, Label valueLbl) {
+        assert valueLbl != null;
+
+        valueLbl.setText(formatMoney(value));
+        Paint color = BLACK;
+        int compare = value.compareTo(BigDecimal.ZERO);
+        if (compare > 0) {
+            color = GREEN;
+        } else if (compare < 0) {
             color = RED;
         }
         valueLbl.setTextFill(color);

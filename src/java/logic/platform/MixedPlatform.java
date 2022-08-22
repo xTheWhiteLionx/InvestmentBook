@@ -2,19 +2,24 @@ package logic.platform;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import logic.BigDecimalUtils;
 import logic.Investment;
 
-import static helper.GeneralMethods.calcPercent;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static helper.GeneralMethods.round;
+import static logic.BigDecimalUtils.HUNDRED;
+import static logic.BigDecimalUtils.isPositive;
 
 /**
  * This class is contains the mixed platform logic and
  * is an offshoot of the class platform
  *
+ * @author xthe_white_lionx
  * @see Platform
  * @see AbsolutePlatform
  * @see PercentPlatform
- * @author xthe_white_lionx
  */
 public class MixedPlatform extends Platform {
 
@@ -31,9 +36,9 @@ public class MixedPlatform extends Platform {
     /**
      * Constructs an {@code MixedPlatform} with the specified arguments.
      *
-     * @param name of the platform
+     * @param name    of the platform
      * @param percent value of the fee of the platform
-     * @param min minimale fee of the platform as absolute value
+     * @param min     minimale fee of the platform as absolute value
      */
     public MixedPlatform(String name, double percent, double min) {
         super(name);
@@ -42,8 +47,11 @@ public class MixedPlatform extends Platform {
     }
 
     @Override
-    public double getFee(double price) {
-        return Math.max(round((percent / 100d) * price), minFee);
+    public double getFee(BigDecimal price) {
+        if (!isPositive(price)) {
+
+        }
+        return Math.max(round((percent / 100d) * price.doubleValue()), minFee);
     }
 
     @Override
@@ -61,7 +69,7 @@ public class MixedPlatform extends Platform {
      *
      * @return value of the fee of this platform
      */
-    public double getPercent(){
+    public double getPercent() {
         return percent;
     }
 
@@ -93,22 +101,25 @@ public class MixedPlatform extends Platform {
     }
 
     @Override
-    public double calcSellingExchangeRate(Investment investment, double targetPerformance) {
-        double capital = investment.getCapital();
-        double sellingPriceWithoutSellingFee = capital + targetPerformance + getFee(capital);
+    public BigDecimal calcSellingExchangeRate(Investment investment, BigDecimal targetPerformance) {
+        BigDecimal capital = investment.getCapital();
+        BigDecimal sellingPriceWithoutSellingFee =
+                BigDecimalUtils.add(capital, getFee(capital)).add(targetPerformance);
 
         //TODO reason why the testSellingPriceCalculatorReal fails!
-        double sellingPrice = sellingPriceWithoutSellingFee / (1 - (percent / 100d));
+        BigDecimal antiPercent = BigDecimal.ONE.subtract(BigDecimal.valueOf((percent / 100d)));
+        BigDecimal sellingPrice =
+        sellingPriceWithoutSellingFee.divide(antiPercent, 2, RoundingMode.HALF_UP);
 
-        if (getFee(sellingPrice) < minFee){
-            sellingPrice = sellingPriceWithoutSellingFee + minFee;
+        if (getFee(sellingPrice) < minFee) {
+            sellingPrice = BigDecimalUtils.calcPercent(sellingPriceWithoutSellingFee, BigDecimal.valueOf(minFee));
         }
-        double percentPerformance = calcPercent(capital, sellingPrice);
+        BigDecimal percentPerformance = BigDecimalUtils.calcPercent(capital, sellingPrice);
 
-        if (100 > percentPerformance) {
-            percentPerformance += 100;
+        if (percentPerformance.compareTo(HUNDRED) < 0) {
+            percentPerformance = percentPerformance.add(HUNDRED);
         }
-        return round(investment.getExchangeRate() * (percentPerformance / 100d));
+        return investment.getExchangeRate().multiply(percentPerformance.divide(HUNDRED));
     }
 
     @Override
@@ -120,9 +131,15 @@ public class MixedPlatform extends Platform {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MixedPlatform that)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MixedPlatform that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         return Double.compare(that.percent, percent) == 0 && Double.compare(that.minFee, minFee) == 0;
     }
 }

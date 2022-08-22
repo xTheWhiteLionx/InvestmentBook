@@ -16,11 +16,13 @@ import javafx.stage.Stage;
 import logic.platform.Platform;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.displayError;
 import static gui.DoubleUtil.isValidDouble;
+import static logic.BigDecimalUtils.parse;
 
 /**
  * Controller of the graphical fee calculator.
@@ -91,7 +93,7 @@ public class FeeCalculatorController implements Initializable {
     //TODO JavaDoc
     @FXML
     private void handleCalculate() {
-        double capital = DoubleUtil.parse(capitalTxtField.getText());
+        BigDecimal capital = parse(capitalTxtField.getText());
         double fee = currPlatform.getFee(capital);
         feeLbl.setText(DoubleUtil.formatMoney(fee));
     }

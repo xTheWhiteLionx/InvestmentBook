@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import logic.platform.AbsolutePlatform;
 import logic.platform.Platform;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -102,6 +103,6 @@ public class AbsolutePlatformController implements Initializable, PlatformContro
     public void display(Platform platform) {
         this.currPlatform = (AbsolutePlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
-        feeTxtFld.setText(DoubleUtil.format(currPlatform.getFee(0)));
+        feeTxtFld.setText(DoubleUtil.format(currPlatform.getFee(new BigDecimal(100))));
     }
 }

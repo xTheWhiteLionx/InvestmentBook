@@ -1,6 +1,5 @@
 package gui.calculator;
 
-import gui.DoubleUtil;
 import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,8 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import logic.BigDecimalUtils;
 import logic.Investment;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -64,7 +65,8 @@ public class PerformanceCalculatorController implements Initializable {
     @FXML
     //TODO JavaDoc
     private void handleCalculate() {
-        double performance = currInvestment.calcPerformance(DoubleUtil.parse(sellingPrice.getText()));
+        BigDecimal performance =
+                currInvestment.calcPerformance(BigDecimalUtils.parse(sellingPrice.getText()));
         Style.setAndColorsText(performance, performanceLbl);
     }
 

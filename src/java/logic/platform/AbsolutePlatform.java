@@ -4,7 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import logic.Investment;
 
-import static helper.GeneralMethods.round;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static logic.BigDecimalUtils.isPositive;
 
 /**
  * This class contains the absolute platform logic and
@@ -37,8 +40,8 @@ public class AbsolutePlatform extends Platform {
     }
 
     @Override
-    public double getFee(double price) {
-        if (price < 0) {
+    public double getFee(BigDecimal price) {
+        if (!isPositive(price)) {
             throw new IllegalArgumentException();
         }
 
@@ -69,16 +72,17 @@ public class AbsolutePlatform extends Platform {
     }
 
     @Override
-    public double calcSellingExchangeRate(Investment investment, double targetPerformance) {
+    public BigDecimal calcSellingExchangeRate(Investment investment, BigDecimal targetPerformance) {
         if (investment == null) {
             throw new NullPointerException();
         }
 
-        double capital = investment.getCapital();
-        double count = capital / investment.getExchangeRate();
-        double difference = capital + targetPerformance + 2 * fee;
+        BigDecimal capital = investment.getCapital();
+        BigDecimal count = capital.divide(investment.getExchangeRate());
+        BigDecimal difference =
+                capital.add(targetPerformance).add(new BigDecimal(2 * fee));
 
-        return round(difference / count);
+        return difference.divide(count, 2, RoundingMode.HALF_UP);
     }
 
     @Override
@@ -92,6 +96,6 @@ public class AbsolutePlatform extends Platform {
         if (this == o) return true;
         if (!(o instanceof AbsolutePlatform that)) return false;
         if (!super.equals(o)) return false;
-        return Double.compare(that.fee, fee) == 0;
+        return this.fee == that.fee;
     }
 }

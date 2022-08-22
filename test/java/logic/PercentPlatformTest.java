@@ -2,9 +2,10 @@ package logic;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
-import static helper.GeneralMethods.calcPercent;
 import static logic.HelperClass.COINBASE;
 import static org.junit.Assert.assertEquals;
 
@@ -24,11 +25,12 @@ public class PercentPlatformTest {
                 LocalDate.of(2021, 11, 18)
         );
 
-        double expected = invest.getExchangeRate() * (1 + (calcPercent(invest.getCapital(), invest.getSellingPrice()) / 100d));
+        BigDecimal expected = BigDecimal.valueOf(103800.75).setScale(2,RoundingMode.HALF_UP);
 //        System.out.println(calcPercent(invest.getCapital(), invest.getSellingPrice()));
 //        System.out.println(expected);
+        System.out.println("invest = " + invest.getPerformance());
         assertEquals(expected, invest.getPlatform().calcSellingExchangeRate(invest,
-                invest.getPerformance()), 0.00);
+                invest.getPerformance()));
     }
 
     @Test
@@ -44,10 +46,8 @@ public class PercentPlatformTest {
                 LocalDate.of(2021, 11, 18)
         );
 
-        assertEquals(
-                invest.getExchangeRate() * ((calcPercent(invest.getCapital(), invest.getSellingPrice()) / 100d)),
-                invest.getPlatform().calcSellingExchangeRate(invest, invest.getPerformance()),
-                0.0
-        );
+        BigDecimal expected = BigDecimal.valueOf(10000.0).setScale(2, RoundingMode.HALF_UP);
+
+        assertEquals(expected, invest.getPlatform().calcSellingExchangeRate(invest, invest.getPerformance()));
     }
 }

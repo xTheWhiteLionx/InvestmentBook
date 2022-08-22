@@ -9,6 +9,7 @@ import logic.GUIConnector;
 import logic.Investment;
 import logic.platform.Platform;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class JavaFXGUI implements GUIConnector {
      * sum of the total performance
      * of the displayed investments
      */
-    private double totalPerformance;
+    private BigDecimal totalPerformance;
 
     /**
      * The constructor. Gets past all components of the gui that may change
@@ -108,7 +109,7 @@ public class JavaFXGUI implements GUIConnector {
      */
     private void addInvestment(Investment investment) {
         investmentTableView.getItems().add(investment);
-        totalPerformance += investment.getPerformance();
+        totalPerformance = totalPerformance.add(investment.getPerformance());
     }
 
     @Override
@@ -122,7 +123,7 @@ public class JavaFXGUI implements GUIConnector {
     @Override
     public void displayInvestmentList(List<Investment> investmentList) {
         investmentTableView.getItems().clear();
-        totalPerformance = 0;
+        totalPerformance = BigDecimal.ZERO;
         for (Investment investment : investmentList) {
             addInvestment(investment);
         }
@@ -132,7 +133,7 @@ public class JavaFXGUI implements GUIConnector {
     @Override
     public void deleteInvestment(Investment investment) {
         investmentTableView.getItems().remove(investment);
-        totalPerformance -= investment.getPerformance();
+        totalPerformance = totalPerformance.subtract(investment.getPerformance());
         updateTotalPerformanceLabel();
         updateStatus(Status.deleted, "platform");
     }
