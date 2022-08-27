@@ -35,7 +35,7 @@ public class JavaFXGUI implements GUIConnector {
     private final ListView<Platform> platformListView;
 
     /**
-     * ChoiceBox of all platforms for the filter
+     * ChoiceBox of all platforms for the filter of the investments
      */
     private final ChoiceBox<Platform> platformFilterChoiceBox;
 
