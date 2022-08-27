@@ -1,6 +1,8 @@
 package gui.investmentController;
 
 import gui.DoubleUtil;
+import gui.JarMain;
+import gui.Settings;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -155,7 +157,6 @@ public class NewInvestmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         //all the currency labels as array
         Style.setCurrenciesForLbls(exchangeRateCurrencyLbl, capitalCurrencyLbl,
                 sellingPriceCurrencyLbl);

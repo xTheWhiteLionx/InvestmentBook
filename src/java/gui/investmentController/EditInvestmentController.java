@@ -1,8 +1,6 @@
 package gui.investmentController;
 
-import gui.DialogWindow;
-import gui.DoubleUtil;
-import gui.Style;
+import gui.*;
 import gui.calculator.PerformanceCalculatorController;
 import gui.calculator.SellingPriceCalculatorController;
 import javafx.beans.value.ChangeListener;
@@ -100,6 +98,15 @@ public class EditInvestmentController implements Initializable {
                 650,
                 600
         );
+
+        String css = Settings.getMode();
+        if (!css.isEmpty()) {
+            editInvestment.btnApply.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/" + css).toExternalForm());
+        } else {
+            editInvestment.btnApply.getScene().getStylesheets().removeAll();
+        }
+
         editInvestment.investment = selectedInvestment;
         editInvestment.investmentBook = investmentBook;
         editInvestment.initializeCurrInvestment();

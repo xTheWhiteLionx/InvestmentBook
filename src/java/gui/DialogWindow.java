@@ -126,6 +126,14 @@ public class DialogWindow {
         } catch (IOException e) {
             displayError(e);
         }
+        String css = Settings.getMode();
+        if (!css.isEmpty()) {
+            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/" + css).toExternalForm());
+        } else {
+            newStage.getScene().getStylesheets().removeAll();
+        }
+
         newStage.show();
     }
 

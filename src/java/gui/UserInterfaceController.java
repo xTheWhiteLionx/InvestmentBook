@@ -9,6 +9,8 @@ import gui.platformController.PlatformController;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -77,13 +79,16 @@ public class UserInterfaceController implements Initializable {
     /**
      *
      */
-    public static final Duration LOAD_DURATION = Duration.millis(10);
+    public static final Duration LOAD_DURATION = Duration.millis(5);
 
     /**
      *
      */
     public static final Duration SHOW_DURATION = Duration.seconds(1);
 
+    /**
+     *
+     */
     @FXML
     private CheckMenuItem autoSave;
     @FXML
@@ -97,7 +102,7 @@ public class UserInterfaceController implements Initializable {
     private ProgressBar progressBar;
 
     @FXML
-    private TextField platformNameTxtFld;
+    private TextField platformSearchbarTxtFld;
     @FXML
     private ChoiceBox<FeeType> feeTypeChcBx;
     @FXML
@@ -128,7 +133,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private ChoiceBox<Platform> platformChcBx;
     @FXML
-    private TextField filterStockNameTxtFld;
+    private TextField investmentSearchbarTxtFld;
     @FXML
     private ChoiceBox<Month> monthChcBox;
     @FXML
@@ -237,6 +242,10 @@ public class UserInterfaceController implements Initializable {
      * @param playerTypes typ of each player in an array
      * @throws NullPointerException if involved, names or playerTypes is null
      */
+    /**
+     * @param selectedFile
+     * @throws IOException
+     */
     public static void loadUserInterfaceController(File selectedFile) throws IOException {
         if (selectedFile == null) {
             throw new NullPointerException("selectedFile == null");
@@ -257,6 +266,10 @@ public class UserInterfaceController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        autoSave.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            Settings.setAutoSave(t1);
+        });
+
         platformChcBxs = new ChoiceBox[]{platformChcBx};
 
         initializeThemeMenu();
@@ -289,6 +302,14 @@ public class UserInterfaceController implements Initializable {
         } catch (IOException e) {
             displayError(e);
         }
+        String css = Settings.getMode();
+        if (!css.isEmpty()) {
+            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/" + css).toExternalForm());
+        } else {
+            newStage.getScene().getStylesheets().removeAll();
+        }
+
         newStage.show();
 
         return loader.getController();
@@ -303,7 +324,7 @@ public class UserInterfaceController implements Initializable {
         return new JavaFXGUI(
                 investmentTblVw,
                 platformLstVw,
-                platformChcBxs,
+                platformChcBx,
                 totalPerformanceLbl,
                 status);
     }
@@ -330,6 +351,7 @@ public class UserInterfaceController implements Initializable {
         light_theme.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
                 btnDeletePlatform.getScene().getStylesheets().removeAll();
+                Settings.setMode("");
             }
         });
 
@@ -347,6 +369,7 @@ public class UserInterfaceController implements Initializable {
                     if (t1) {
                         btnDeletePlatform.getScene().getStylesheets().add(getClass().getResource(
                                 "themes/" + styleSheetName).toExternalForm());
+                        Settings.setMode(styleSheetName);
                     } else {
                         btnDeletePlatform.getScene().getStylesheets().remove(getClass().getResource(
                                 "themes/" + styleSheetName).toExternalForm());
@@ -629,6 +652,8 @@ public class UserInterfaceController implements Initializable {
         cleanInvestmentFilter();
         cleanPlatformFilter();
         status.setText("");
+        platformSearchbarTxtFld.setText("");
+        investmentSearchbarTxtFld.setText("");
         status.setVisible(false);
         progressBar.setVisible(false);
     }
@@ -713,7 +738,7 @@ public class UserInterfaceController implements Initializable {
     private Task<Void> fileSaveTask(File file) {
         SequentialTransition st = new SequentialTransition();
 
-        Task<Void> saveFileTask =  new Task<>() {
+        Task<Void> saveFileTask = new Task<>() {
             @Override
             protected Void call() {
                 status.setVisible(true);
@@ -962,7 +987,7 @@ public class UserInterfaceController implements Initializable {
      */
     // TODO: 28.06.2022 JavaDoc
     private void initializePlatformSearch() {
-        platformNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
+        platformSearchbarTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
@@ -979,7 +1004,7 @@ public class UserInterfaceController implements Initializable {
      */
     // TODO: 28.06.2022 JavaDoc
     private void initializeInvestmentSearch() {
-        filterStockNameTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
+        investmentSearchbarTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
@@ -1045,7 +1070,7 @@ public class UserInterfaceController implements Initializable {
     private void handlePerformanceCalculator() {
         PerformanceCalculatorController performanceCalculatorController =
                 DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
-                         currentInvestment.getStockName() + " Performance Calculator",
+                        currentInvestment.getStockName() + " Performance Calculator",
                         350,
                         200
                 );

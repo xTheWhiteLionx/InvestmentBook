@@ -1,6 +1,10 @@
 {
   "platforms": [
     {
+      "percent": 1.49,
+      "name": "Coinbase"
+    },
+    {
       "fee": 7.0,
       "name": "Onvista Bank"
     },
@@ -8,10 +12,6 @@
       "percent": 2.5,
       "min": 8.9,
       "name": "Max Blue"
-    },
-    {
-      "percent": 1.49,
-      "name": "Coinbase"
     }
   ],
   "investments": [

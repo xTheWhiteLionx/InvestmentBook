@@ -11,15 +11,14 @@ import java.math.RoundingMode;
 public class DoubleUtils {
 
     /**
-     * Rounds the given double
+     * Rounds the specified double
      *
      * @param value
      * @return
      */
     //TODO JavaDoc
     public static double round(double value) {
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 

@@ -3,6 +3,8 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.prefs.Preferences;
+
 import static gui.DialogWindow.createLoginController;
 
 /**

@@ -88,7 +88,7 @@
                <center>
                         <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
                             <ToolBar>
-                                <CustomTextField fx:id="platformNameTxtFld" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="154.0" promptText="search" styleClass="searchField">
+                                <CustomTextField fx:id="platformSearchbarTxtFld" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="154.0" promptText="search" styleClass="searchField">
                                     <left>
                                         <Label styleClass="searchBoxLabel">
                                             <graphic>
@@ -292,7 +292,7 @@
                     <center>
                         <VBox alignment="CENTER" BorderPane.alignment="TOP_CENTER">
                             <ToolBar prefHeight="40.0" prefWidth="200.0">
-                                <CustomTextField fx:id="filterStockNameTxtFld" promptText="search" styleClass="searchField">
+                                <CustomTextField fx:id="investmentSearchbarTxtFld" promptText="search" styleClass="searchField">
                                     <left>
                                         <Label styleClass="searchBoxLabel">
                                             <graphic>
