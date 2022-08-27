@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Locale;
 
-import static helper.GeneralMethods.round;
 import static javafx.scene.paint.Color.*;
 import static logic.BigDecimalUtils.formatMoney;
 
@@ -65,7 +64,7 @@ public class Style {
     public static void setAndColorsText(double value, Label valueLbl) {
         assert valueLbl != null;
 
-        valueLbl.setText(DoubleUtil.formatMoney(round(value)));
+        valueLbl.setText(DoubleUtil.formatMoney(value));
         Paint color = BLACK;
         if (value > 0) {
             color = GREEN;

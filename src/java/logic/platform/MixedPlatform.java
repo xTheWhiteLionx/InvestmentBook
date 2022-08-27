@@ -8,7 +8,7 @@ import logic.Investment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static helper.GeneralMethods.round;
+import static logic.DoubleUtils.round;
 import static logic.BigDecimalUtils.HUNDRED;
 import static logic.BigDecimalUtils.isPositive;
 
