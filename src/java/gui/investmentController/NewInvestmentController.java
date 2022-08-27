@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -91,11 +92,31 @@ public class NewInvestmentController implements Initializable {
         };
 
         creationDatePicker.valueProperty().addListener(FieldValidityListener);
+        creationDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
+            if (t1 != null) {
+                sellingDatePicker.setDayCellFactory(d ->
+                        new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
+                                setDisable(item.isBefore(t1));
+                            }
+                        });
+            }
+        });
+
         stockNameTxtFld.textProperty().addListener(FieldValidityListener);
         exchangeRateTxtFld.textProperty().addListener(FieldValidityListener);
         capitalTxtFld.textProperty().addListener(FieldValidityListener);
         sellingPriceTxtFld.textProperty().addListener(FieldValidityListener);
         sellingDatePicker.valueProperty().addListener(FieldValidityListener);
+        sellingDatePicker.setDayCellFactory(d -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                setDisable(item.isBefore(creationDatePicker.getValue()));
+            }
+        });
     }
 
     /**

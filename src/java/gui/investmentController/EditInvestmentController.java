@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,6 +20,7 @@ import logic.State;
 import logic.investmentBook.InvestmentBook;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.createStage;
@@ -111,6 +113,19 @@ public class EditInvestmentController implements Initializable {
     private void initializeCurrInvestment() {
         State investState = this.investment.getState();
         boolean investIsClosed = investState == State.CLOSED;
+
+        creationDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
+            if (t1 != null) {
+                sellingDatePicker.setDayCellFactory(d ->
+                        new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
+                                setDisable(item.isBefore(t1));
+                            }
+                        });
+            }
+        });
 
         creationDatePicker.setValue(this.investment.getCreationDate());
         statusLbl.setText(investState.name());
