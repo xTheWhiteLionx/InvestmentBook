@@ -2,6 +2,8 @@ package gui.calculator;
 
 import gui.ApplicationMain;
 import gui.DoubleUtil;
+import gui.JarMain;
+import gui.Settings;
 import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +68,15 @@ public class FeeCalculatorController implements Initializable {
         } catch (IOException e) {
             displayError(e);
         }
+
+        String css = Settings.getMode();
+        if (!css.isEmpty()) {
+            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/" + css).toExternalForm());
+        } else {
+            newStage.getScene().getStylesheets().removeAll();
+        }
+
         newStage.show();
 
         return loader.getController();

@@ -699,17 +699,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void clickPlatform(MouseEvent event) {
         if (isDoubleClicked(event)) {
-            Platform currentPlatform = platformLstVw.getSelectionModel().getSelectedItem();
-
-            if (currentPlatform != null) {
-                PlatformController platformController = createStage(
-                        currentPlatform.getFxmlPath(),
-                        "Edit Platform",
-                        400,
-                        300
-                );
-                platformController.display(currentPlatform);
-            }
+            handleEditPlatform();
         }
     }
 
@@ -1030,12 +1020,35 @@ public class UserInterfaceController implements Initializable {
     @FXML
     public void handleEditPlatform() {
         if (currentPlatform != null) {
-            PlatformController platformController = createStage(
-                    currentPlatform.getFxmlPath(),
-                    "Edit Platform",
-                    400,
-                    300
-            );
+            final Stage newStage = new Stage();
+            FXMLLoader loader = new FXMLLoader(
+                    ApplicationMain.class.getResource(currentPlatform.getFxmlPath()));
+
+            // Icon/logo of the application
+            newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+            newStage.setTitle("Edit Platform");
+            newStage.setMinWidth(400D);
+            newStage.setMinHeight(300D);
+            newStage.setResizable(false);
+            newStage.initModality(Modality.WINDOW_MODAL);
+            try {
+                newStage.setScene(new Scene(loader.load()));
+            } catch (IOException e) {
+                displayError(e);
+            }
+
+            String css = Settings.getMode();
+            if (!css.isEmpty()) {
+                newStage.getScene().getStylesheets().add(JarMain.class.getResource(
+                        "themes/" + css).toExternalForm());
+            } else {
+                newStage.getScene().getStylesheets().removeAll();
+            }
+
+            newStage.show();
+
+            PlatformController platformController = loader.getController();
+
             platformController.display(currentPlatform);
         }
     }
