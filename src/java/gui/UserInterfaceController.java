@@ -1,16 +1,11 @@
 package gui;
 
 import gui.calculator.FeeCalculatorController;
-import gui.calculator.PerformanceCalculatorController;
-import gui.calculator.SellingPriceCalculatorController;
-import gui.investmentController.NewInvestmentController;
 import gui.platformController.NewPlatformController;
 import gui.platformController.PlatformController;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -65,7 +60,10 @@ import java.util.concurrent.ExecutionException;
 
 import static gui.DialogWindow.*;
 import static gui.Style.SYMBOL_OF_CURRENCY;
+import static gui.calculator.PerformanceCalculatorController.loadPerformanceCalculatorController;
+import static gui.calculator.SellingPriceCalculatorController.loadSellingPriceCalculatorController;
 import static gui.investmentController.EditInvestmentController.loadEditInvestmentController;
+import static gui.investmentController.NewInvestmentController.loadNewInvestmentController;
 import static javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import static logic.Quarter.getQuarterOfMonth;
 
@@ -547,9 +545,15 @@ public class UserInterfaceController implements Initializable {
                 }
         );
 
+        investmentTblVw.setOnMouseClicked(mouseEvent -> {
+            if (isDoubleClicked(mouseEvent)) {
+                Investment investment = investmentTblVw.getSelectionModel().getSelectedItem();
+                loadEditInvestmentController(investment, investmentBook);
+            }
+        });
+
         initializeInvestmentFilter();
         initializeInvestmentSearch();
-
     }
 
     /**
@@ -940,13 +944,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleNewInvestment() {
         if (!investmentBook.getPlatforms().isEmpty()) {
-            NewInvestmentController newInvestmentController = createStage(
-                    "investmentController/NewInvestmentController.fxml",
-                    "new Investment",
-                    650,
-                    600
-            );
-            newInvestmentController.setInvestmentBook(investmentBook);
+            loadNewInvestmentController(investmentBook);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -1053,13 +1051,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handleSellingPriceCalculator() {
-        SellingPriceCalculatorController sellingPriceCalculatorController =
-                DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
-                        currentInvestment.getStockName() + " Selling Price Calculator",
-                        350,
-                        200
-                );
-        sellingPriceCalculatorController.setInvestment(currentInvestment);
+        loadSellingPriceCalculatorController(currentInvestment);
     }
 
     /**
@@ -1068,13 +1060,7 @@ public class UserInterfaceController implements Initializable {
      */
     @FXML
     private void handlePerformanceCalculator() {
-        PerformanceCalculatorController performanceCalculatorController =
-                DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
-                        currentInvestment.getStockName() + " Performance Calculator",
-                        350,
-                        200
-                );
-        performanceCalculatorController.setInvestment(currentInvestment);
+        loadPerformanceCalculatorController(currentInvestment);
     }
 }
 

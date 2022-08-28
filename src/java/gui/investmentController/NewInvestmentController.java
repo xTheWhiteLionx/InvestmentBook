@@ -1,27 +1,35 @@
 package gui.investmentController;
 
+import gui.ApplicationMain;
 import gui.DoubleUtil;
 import gui.JarMain;
 import gui.Settings;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.Investment;
 import logic.State;
 import logic.investmentBook.InvestmentBook;
 import logic.platform.Platform;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import static gui.DialogWindow.displayError;
 
 public class NewInvestmentController implements Initializable {
 
@@ -58,12 +66,56 @@ public class NewInvestmentController implements Initializable {
     private InvestmentBook investmentBook;
 
     /**
+     *
+     * @param investmentBook
+     */
+    public static void loadNewInvestmentController(InvestmentBook investmentBook) {
+        NewInvestmentController newInvestmentController = createNewInvestmentController();
+        newInvestmentController.setInvestmentBook(investmentBook);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static NewInvestmentController createNewInvestmentController() {
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(
+                ApplicationMain.class.getResource("investmentController/" +
+                        "NewInvestmentController.fxml"));
+
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle("new Investment");
+        newStage.setMinWidth(650D);
+        newStage.setMinHeight(600D);
+        newStage.setResizable(false);
+        newStage.initModality(Modality.WINDOW_MODAL);
+        try {
+            newStage.setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            displayError(e);
+        }
+
+        String css = Settings.getMode();
+        if (!css.isEmpty()) {
+            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/" + css).toExternalForm());
+        } else {
+            newStage.getScene().getStylesheets().removeAll();
+        }
+
+        newStage.show();
+
+        return loader.getController();
+    }
+
+    /**
      * Sets the current {@link InvestmentBook}
      *
      * @param investmentBook the over handed investment
      */
-    public void setInvestmentBook(InvestmentBook investmentBook) {
-        assert investmentBook != null;
+    private void setInvestmentBook(InvestmentBook investmentBook) {
 
         this.investmentBook = investmentBook;
         stateChcBx.getItems().addAll(State.values());

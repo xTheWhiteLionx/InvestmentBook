@@ -1,27 +1,36 @@
 package gui.investmentController;
 
-import gui.*;
-import gui.calculator.PerformanceCalculatorController;
-import gui.calculator.SellingPriceCalculatorController;
+import gui.ApplicationMain;
+import gui.DoubleUtil;
+import gui.JarMain;
+import gui.Settings;
+import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.BigDecimalUtils;
 import logic.Investment;
 import logic.State;
 import logic.investmentBook.InvestmentBook;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import static gui.DialogWindow.createStage;
+import static gui.DialogWindow.displayError;
+import static gui.calculator.PerformanceCalculatorController.loadPerformanceCalculatorController;
+import static gui.calculator.SellingPriceCalculatorController.loadSellingPriceCalculatorController;
 
 /**
  * Controller of the graphical investment interface.
@@ -92,24 +101,46 @@ public class EditInvestmentController implements Initializable {
             throw new NullPointerException("investmentBook == null");
         }
 
-        EditInvestmentController editInvestment = createStage(
-                "investmentController/EditInvestmentController.fxml",
-                "Edit Investment",
-                650,
-                600
-        );
+        EditInvestmentController editInvestmentController = createEditInvestmentController();
+
+        editInvestmentController.investmentBook = investmentBook;
+        editInvestmentController.setInvestment(selectedInvestment);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    private static EditInvestmentController createEditInvestmentController() {
+        final Stage newStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(
+                ApplicationMain.class.getResource("investmentController/" +
+                        "EditInvestmentController.fxml"));
+
+        // Icon/logo of the application
+        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
+        newStage.setTitle("Edit Investment");
+        newStage.setMinWidth(650D);
+        newStage.setMinHeight(600D);
+        newStage.setResizable(false);
+        newStage.initModality(Modality.WINDOW_MODAL);
+        try {
+            newStage.setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            displayError(e);
+        }
 
         String css = Settings.getMode();
         if (!css.isEmpty()) {
-            editInvestment.btnApply.getScene().getStylesheets().add(JarMain.class.getResource(
+            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
                     "themes/" + css).toExternalForm());
         } else {
-            editInvestment.btnApply.getScene().getStylesheets().removeAll();
+            newStage.getScene().getStylesheets().removeAll();
         }
 
-        editInvestment.investment = selectedInvestment;
-        editInvestment.investmentBook = investmentBook;
-        editInvestment.initializeCurrInvestment();
+        newStage.show();
+
+        return loader.getController();
     }
 
     /**
@@ -117,9 +148,8 @@ public class EditInvestmentController implements Initializable {
      *
      * @param currInvestment the over handed investment
      */
-    private void initializeCurrInvestment() {
-        State investState = this.investment.getState();
-        boolean investIsClosed = investState == State.CLOSED;
+    private void setInvestment(Investment investment) {
+        State investState = investment.getState();
 
         creationDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
             if (t1 != null) {
@@ -134,21 +164,23 @@ public class EditInvestmentController implements Initializable {
             }
         });
 
-        creationDatePicker.setValue(this.investment.getCreationDate());
+        creationDatePicker.setValue(investment.getCreationDate());
         statusLbl.setText(investState.name());
-        platformLbl.setText(this.investment.getPlatform().getName());
-        stockNameTxtFld.setText(this.investment.getStockName());
-        exchangeRateTxtFld.setText(BigDecimalUtils.format(this.investment.getExchangeRate()));
-        capitalTxtFld.setText(BigDecimalUtils.format(this.investment.getCapital()));
+        platformLbl.setText(investment.getPlatform().getName());
+        stockNameTxtFld.setText(investment.getStockName());
+        exchangeRateTxtFld.setText(BigDecimalUtils.format(investment.getExchangeRate()));
+        capitalTxtFld.setText(BigDecimalUtils.format(investment.getCapital()));
         performanceLbl.setText(BigDecimalUtils.format(investment.getPerformance()));
         percentPerformanceLbl.setText(BigDecimalUtils.format(investment.getPercentPerformance()) + "%");
         costLbl.setText(BigDecimalUtils.format(investment.getCost()));
-        if (investIsClosed) {
-            sellingPriceTxtFld.setText(BigDecimalUtils.format(this.investment.getSellingPrice()));
+        if (investState == State.CLOSED) {
+            sellingPriceTxtFld.setText(BigDecimalUtils.format(investment.getSellingPrice()));
             sellingDatePicker.setValue(investment.getSellingDate());
         }
 
-        holdingPeriodLbl.setText(this.investment.getHoldingPeriod() + " days");
+        holdingPeriodLbl.setText(investment.getHoldingPeriod() + " days");
+
+        this.investment = investment;
     }
 
     /**
@@ -225,13 +257,7 @@ public class EditInvestmentController implements Initializable {
      */
     @FXML
     private void handleSellingPriceCalculator() {
-        SellingPriceCalculatorController sellingPriceCalculatorController =
-                DialogWindow.createStage("calculator/SellingPriceCalculatorController.fxml",
-                        "selling price calculator: " + investment.getStockName(),
-                        350,
-                        200
-                );
-        sellingPriceCalculatorController.setInvestment(investment);
+        loadSellingPriceCalculatorController(investment);
     }
 
     /**
@@ -240,12 +266,6 @@ public class EditInvestmentController implements Initializable {
      */
     @FXML
     private void handlePerformanceCalculator() {
-        PerformanceCalculatorController performanceCalculatorController =
-                DialogWindow.createStage("calculator/PerformanceCalculatorController.fxml",
-                        "performance calculator: " + investment.getStockName(),
-                        350,
-                        200
-                );
-        performanceCalculatorController.setInvestment(investment);
+        loadPerformanceCalculatorController(investment);
     }
 }
