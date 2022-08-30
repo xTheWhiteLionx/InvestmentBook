@@ -48,7 +48,7 @@ public class JavaFXGUI implements GUIConnector {
     /**
      * label to show the current status
      */
-    private final Label status;
+    private final Label messageBar;
 
     /**
      * sum of the total performance
@@ -65,16 +65,16 @@ public class JavaFXGUI implements GUIConnector {
      * @param platformFilterChoiceBox choiceBox of all platforms for the filter of the investments
      * @param totalPerformanceLabel   label to change the total performance
      *                                of the displayed investments
-     * @param status                  label to change the current status
+     * @param messageBar                  label to change the current status
      */
     public JavaFXGUI(TableView<Investment> investmentTableView, ListView<Platform> platformListView,
                      ChoiceBox<Platform> platformFilterChoiceBox, Label totalPerformanceLabel,
-                     Label status) {
+                     Label messageBar) {
         this.investmentTableView = investmentTableView;
         this.platformListView = platformListView;
         this.platformFilterChoiceBox = platformFilterChoiceBox;
         this.totalPerformanceLabel = totalPerformanceLabel;
-        this.status = status;
+        this.messageBar = messageBar;
     }
 
     /**
@@ -89,13 +89,13 @@ public class JavaFXGUI implements GUIConnector {
      * Updates the status and cleans it after
      */
     //TODO status enum?
-    private void updateStatus(Status status, String content) {
-        this.status.setText(status.formatMessage(content));
-        this.status.setVisible(true);
+    private void updateStatus(Message message, String content) {
+        this.messageBar.setText(message.formatMessage(content));
+        this.messageBar.setVisible(true);
         PauseTransition pt = new PauseTransition(UserInterfaceController.SHOW_DURATION);
         pt.onFinishedProperty().set(actionEvent -> {
-            this.status.setVisible(false);
-            this.status.setText("");
+            this.messageBar.setVisible(false);
+            this.messageBar.setText("");
         });
         pt.play();
     }
@@ -116,7 +116,7 @@ public class JavaFXGUI implements GUIConnector {
         addInvestment(investment);
         updateTotalPerformanceLabel();
 
-        updateStatus(Status.added, "investment");
+        updateStatus(Message.added, "investment");
     }
 
     @Override
@@ -134,7 +134,7 @@ public class JavaFXGUI implements GUIConnector {
         investmentTableView.getItems().remove(investment);
         totalPerformance = totalPerformance.subtract(investment.getPerformance());
         updateTotalPerformanceLabel();
-        updateStatus(Status.deleted, "platform");
+        updateStatus(Message.deleted, "platform");
     }
 
     private void addPlatform(Platform newPlatform) {
@@ -147,7 +147,7 @@ public class JavaFXGUI implements GUIConnector {
         assert newPlatform != null;
 
         addPlatform(newPlatform);
-        updateStatus(Status.added, "platform");
+        updateStatus(Message.added, "platform");
     }
 
     @Override
@@ -163,6 +163,6 @@ public class JavaFXGUI implements GUIConnector {
     public void deletePlatform(Platform platform) {
         platformListView.getItems().remove(platform);
         platformFilterChoiceBox.getItems().remove(platform);
-        updateStatus(Status.deleted, "platform");
+        updateStatus(Message.deleted, "platform");
     }
 }

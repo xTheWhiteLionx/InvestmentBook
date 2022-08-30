@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 import static gui.DialogWindow.createFileChooser;
 import static gui.DialogWindow.displayInvalidFile;
-import static gui.UserInterfaceController.loadUserInterfaceController;
+import static gui.UserInterfaceController.initializeUserInterfaceController;
 
 /**
  * Controller of the graphical file interface.
@@ -38,7 +38,7 @@ public class LoginController implements Initializable {
      * handles the create new Book button
      */
     public void handleCreateNewBook() {
-        UserInterfaceController.loadUserInterfaceController();
+        UserInterfaceController.initializeUserInterfaceController();
         closeWindow();
     }
 
@@ -49,7 +49,7 @@ public class LoginController implements Initializable {
         File selectedFile = createFileChooser().showOpenDialog(loadBook.getScene().getWindow());
         if (selectedFile != null) {
             try {
-                loadUserInterfaceController(selectedFile);
+                initializeUserInterfaceController(selectedFile);
             } catch (IOException e) {
                 displayInvalidFile(e);
             }

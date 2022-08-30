@@ -94,7 +94,7 @@ public class UserInterfaceController implements Initializable {
 
     //TODO implement
     @FXML
-    private Label status;
+    private Label message;
     //TODO implement
     @FXML
     private ProgressBar progressBar;
@@ -132,6 +132,8 @@ public class UserInterfaceController implements Initializable {
     private ChoiceBox<Platform> platformChcBx;
     @FXML
     private TextField investmentSearchbarTxtFld;
+    @FXML
+    private Button investmentCleanSearchBar;
     @FXML
     private ChoiceBox<Month> monthChcBox;
     @FXML
@@ -224,8 +226,8 @@ public class UserInterfaceController implements Initializable {
      * @param playerTypes typ of each player in an array
      * @throws NullPointerException if involved, names or playerTypes is null
      */
-    public static void loadUserInterfaceController() {
-        UserInterfaceController controller = createUserInterfaceController("newBook.json");
+    public static void initializeUserInterfaceController() {
+        UserInterfaceController controller = loadUserInterfaceController("newBook.json");
 
         controller.setCurrFile(new File(DIRECTORY + "/newBook.json"));
         controller.investmentBook = new InvestmentBook(controller.createJavaFXGUI());
@@ -244,13 +246,13 @@ public class UserInterfaceController implements Initializable {
      * @param selectedFile
      * @throws IOException
      */
-    public static void loadUserInterfaceController(File selectedFile) throws IOException {
+    public static void initializeUserInterfaceController(File selectedFile) throws IOException {
         if (selectedFile == null) {
             throw new NullPointerException("selectedFile == null");
         }
 
         InvestmentBookData investmentBookData = InvestmentBookData.fromJson(selectedFile);
-        UserInterfaceController controller = createUserInterfaceController(selectedFile.getName());
+        UserInterfaceController controller = loadUserInterfaceController(selectedFile.getName());
 
         controller.setCurrFile(selectedFile);
         controller.investmentBook = new InvestmentBook(investmentBookData, controller.createJavaFXGUI());
@@ -283,7 +285,7 @@ public class UserInterfaceController implements Initializable {
      * @param selectedFile the chosen file which should be
      *                     transmitted to the created UserInterfaceController
      */
-    private static UserInterfaceController createUserInterfaceController(String fileName) {
+    private static UserInterfaceController loadUserInterfaceController(String fileName) {
         final Stage newStage = new Stage();
         FXMLLoader loader = new FXMLLoader(
                 ApplicationMain.class.getResource("UserInterfaceController.fxml"));
@@ -300,6 +302,7 @@ public class UserInterfaceController implements Initializable {
         } catch (IOException e) {
             displayError(e);
         }
+
         String css = Settings.getMode();
         if (!css.isEmpty()) {
             newStage.getScene().getStylesheets().add(JarMain.class.getResource(
@@ -324,7 +327,7 @@ public class UserInterfaceController implements Initializable {
                 platformLstVw,
                 platformChcBx,
                 totalPerformanceLbl,
-                status);
+                message);
     }
 
     /**
@@ -591,7 +594,7 @@ public class UserInterfaceController implements Initializable {
         Task<InvestmentBookData> loadFileTask = new Task<>() {
             @Override
             protected InvestmentBookData call() throws Exception {
-                status.setVisible(true);
+                message.setVisible(true);
                 progressBar.setVisible(true);
                 List<Animation> children = st.getChildren();
 
@@ -614,12 +617,12 @@ public class UserInterfaceController implements Initializable {
                     setCurrFile(file);
                     this.investmentBook = new InvestmentBook(investmentBookData, createJavaFXGUI());
                     toDefault();
-                    status.setText(Status.loaded.formatMessage(file.getName()));
-                    status.setVisible(true);
+                    message.setText(Message.loaded.formatMessage(file.getName()));
+                    message.setVisible(true);
                     PauseTransition pt = new PauseTransition(SHOW_DURATION);
                     pt.setOnFinished(actionEvent2 -> {
-                        status.setVisible(false);
-                        status.setText("");
+                        message.setVisible(false);
+                        message.setText("");
                     });
                     pt.play();
 
@@ -655,10 +658,10 @@ public class UserInterfaceController implements Initializable {
         btnDeleteInvestment.setDisable(true);
         cleanInvestmentFilter();
         cleanPlatformFilter();
-        status.setText("");
+        message.setText("");
         platformSearchbarTxtFld.setText("");
         investmentSearchbarTxtFld.setText("");
-        status.setVisible(false);
+        message.setVisible(false);
         progressBar.setVisible(false);
     }
 
@@ -735,7 +738,7 @@ public class UserInterfaceController implements Initializable {
         Task<Void> saveFileTask = new Task<>() {
             @Override
             protected Void call() {
-                status.setVisible(true);
+                message.setVisible(true);
                 progressBar.setVisible(true);
                 List<Animation> children = st.getChildren();
 
@@ -759,11 +762,11 @@ public class UserInterfaceController implements Initializable {
 
         saveFileTask.setOnSucceeded(workerStateEvent -> {
             st.setOnFinished(actionEvent -> {
-                status.setText(Status.saved.formatMessage(file.getName()));
+                message.setText(Message.saved.formatMessage(file.getName()));
                 PauseTransition pt = new PauseTransition(SHOW_DURATION);
                 pt.setOnFinished(actionEvent2 -> {
-                    status.setText("");
-                    status.setVisible(false);
+                    message.setText("");
+                    message.setVisible(false);
                     progressBar.setVisible(false);
                 });
                 pt.play();
@@ -997,9 +1000,10 @@ public class UserInterfaceController implements Initializable {
                 // Compare name of every investment with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
                 investmentBook.filterInvestmentsByName(lowerCaseFilter);
+                investmentCleanSearchBar.setVisible(true);
             } else {
                 // If filter text is empty, display all investments.
-                investmentBook.displayInvestments();
+                handleInvestmentCleanSearchBar();
             }
         });
     }
@@ -1074,6 +1078,13 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handlePerformanceCalculator() {
         loadPerformanceCalculatorController(currentInvestment);
+    }
+
+    @FXML
+    private void handleInvestmentCleanSearchBar(){
+        investmentSearchbarTxtFld.setText("");
+        investmentBook.displayInvestments();
+        investmentCleanSearchBar.setVisible(false);
     }
 }
 

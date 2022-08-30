@@ -1,13 +1,13 @@
 {
   "platforms": [
     {
-      "fee": 7.0,
-      "name": "Onvista Bank"
-    },
-    {
       "percent": 2.5,
       "min": 8.9,
       "name": "Max Blue"
+    },
+    {
+      "fee": 7.0,
+      "name": "Onvista Bank"
     },
     {
       "percent": 1.49,

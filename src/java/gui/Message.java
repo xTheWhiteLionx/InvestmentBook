@@ -1,22 +1,22 @@
 package gui;
 
-public enum Status {
+public enum Message {
     added("successfully added"),
     deleted("successfully deleted"),
     loaded("successfully loaded"),
     saved("successfully saved");
 
-    private final String message;
+    private final String text;
 
-    Status(String message) {
-        this.message = message;
+    Message(String text) {
+        this.text = text;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
     public String formatMessage(String string) {
-        return string + " " + message;
+        return string + " " + text;
     }
 }
