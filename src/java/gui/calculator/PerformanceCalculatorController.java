@@ -70,7 +70,7 @@ public class PerformanceCalculatorController implements Initializable {
         newStage.setMinWidth(350D);
         newStage.setMinHeight(200D);
         newStage.setResizable(false);
-        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initModality(Modality.APPLICATION_MODAL);
         try {
             newStage.setScene(new Scene(loader.load()));
         } catch (IOException e) {

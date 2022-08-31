@@ -123,7 +123,7 @@ public class EditInvestmentController implements Initializable {
         newStage.setMinWidth(650D);
         newStage.setMinHeight(600D);
         newStage.setResizable(false);
-        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initModality(Modality.APPLICATION_MODAL);
         try {
             newStage.setScene(new Scene(loader.load()));
         } catch (IOException e) {

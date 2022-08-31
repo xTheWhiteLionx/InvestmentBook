@@ -10,104 +10,98 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.platformController.NewPlatformController">
     <center>
-        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-            <BorderPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </BorderPane.margin>
-            <GridPane alignment="CENTER">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.714234488351" minWidth="75.99995531354631" prefWidth="113.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="286.28575897216797" minWidth="205.71419852120533" prefWidth="212.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.1429443359375" minWidth="22.1429443359375" prefWidth="76.4285888671875" />
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints maxHeight="44.28571237836565" minHeight="10.0" prefHeight="44.28570801871163" vgrow="SOMETIMES" />
-                    <RowConstraints maxHeight="139.0" minHeight="0.0" prefHeight="34.99999128069196" vgrow="SOMETIMES" />
-                    <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
-                    <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
-                </rowConstraints>
-                <TextField fx:id="nameTxtFld" GridPane.columnIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-                <ChoiceBox fx:id="feeTypeChcBx" prefHeight="25.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin></ChoiceBox>
-                <Label layoutX="37.0" layoutY="67.0" text="fee type" GridPane.rowIndex="1">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label layoutX="37.0" layoutY="67.0" text="platform name">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label layoutX="32.0" layoutY="180.0" text="fee" GridPane.rowIndex="2">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label layoutX="37.0" layoutY="18.0" text="min fee" GridPane.rowIndex="3">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <TextField fx:id="feeTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-                <TextField fx:id="minTxtFld" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-            <Label fx:id="minFeeCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="feeTypeSymbolLbl" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                <opaqueInsets>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                </opaqueInsets>
-                <VBox.margin>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                </VBox.margin>
-            </GridPane>
-           <ButtonBar>
-               <buttons>
-                   <Button fx:id="btnApply" mnemonicParsing="false" onAction="#handleApply" text="apply" />
-                   <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
-               </buttons>
-            <VBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </VBox.margin>
-           </ButtonBar>
-        </VBox>
+         <GridPane alignment="CENTER">
+             <columnConstraints>
+                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.714234488351" minWidth="75.99995531354631" prefWidth="113.0" />
+                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="286.28575897216797" minWidth="205.71419852120533" prefWidth="212.0" />
+                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.1429443359375" minWidth="22.1429443359375" prefWidth="76.4285888671875" />
+             </columnConstraints>
+             <rowConstraints>
+                 <RowConstraints maxHeight="44.28571237836565" minHeight="10.0" prefHeight="44.28570801871163" vgrow="SOMETIMES" />
+                 <RowConstraints maxHeight="139.0" minHeight="0.0" prefHeight="34.99999128069196" vgrow="SOMETIMES" />
+                 <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
+                 <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
+             </rowConstraints>
+             <TextField fx:id="nameTxtFld" GridPane.columnIndex="1">
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </TextField>
+             <ChoiceBox fx:id="feeTypeChcBx" prefHeight="25.0" prefWidth="253.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+         </ChoiceBox>
+             <Label layoutX="37.0" layoutY="67.0" text="fee type" GridPane.rowIndex="1">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </Label>
+             <Label layoutX="37.0" layoutY="67.0" text="platform name">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </Label>
+             <Label layoutX="32.0" layoutY="180.0" text="fee" GridPane.rowIndex="2">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </Label>
+             <Label layoutX="37.0" layoutY="18.0" text="min fee" GridPane.rowIndex="3">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </Label>
+             <TextField fx:id="feeTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </TextField>
+             <TextField fx:id="minTxtFld" layoutX="165.0" layoutY="171.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </GridPane.margin>
+             </TextField>
+         <Label fx:id="minFeeCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+         <Label fx:id="feeTypeSymbolLbl" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+             <opaqueInsets>
+                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+             </opaqueInsets>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         </GridPane>
     </center>
     <bottom>
     </bottom>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
+   <bottom>
+        <ButtonBar BorderPane.alignment="CENTER">
+            <buttons>
+                <Button fx:id="btnApply" mnemonicParsing="false" onAction="#handleApply" text="apply" />
+                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" text="cancel" />
+            </buttons>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+        </ButtonBar>
+   </bottom>
 </BorderPane>

@@ -102,6 +102,8 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private TextField platformSearchbarTxtFld;
     @FXML
+    public Button platformCleanSearchBar;
+    @FXML
     private ChoiceBox<FeeType> feeTypeChcBx;
     @FXML
     private Button btnApplyPlatformFilter;
@@ -406,7 +408,7 @@ public class UserInterfaceController implements Initializable {
                 }
         );
 
-        initializePlatformSearch();
+        initializePlatformSearchBar();
     }
 
     /**
@@ -556,7 +558,7 @@ public class UserInterfaceController implements Initializable {
         });
 
         initializeInvestmentFilter();
-        initializeInvestmentSearch();
+        initializeInvestmentSearchBar();
     }
 
     /**
@@ -935,7 +937,7 @@ public class UserInterfaceController implements Initializable {
      * a new Investment.
      */
     @FXML
-    private void handleNewInvestment() {
+    private void handleAddInvestment() {
         if (!investmentBook.getPlatforms().isEmpty()) {
             loadNewInvestmentController(investmentBook);
         } else {
@@ -977,15 +979,16 @@ public class UserInterfaceController implements Initializable {
      *
      */
     // TODO: 28.06.2022 JavaDoc
-    private void initializePlatformSearch() {
+    private void initializePlatformSearchBar() {
         platformSearchbarTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
                 investmentBook.filterPlatformsByName(lowerCaseFilter);
+                platformCleanSearchBar.setVisible(true);
             } else {
                 // If filter text is empty, display all platforms.
-                investmentBook.displayPlatforms();
+                handlePlatformCleanSearchBar();
             }
         });
     }
@@ -994,7 +997,7 @@ public class UserInterfaceController implements Initializable {
      *
      */
     // TODO: 28.06.2022 JavaDoc
-    private void initializeInvestmentSearch() {
+    private void initializeInvestmentSearchBar() {
         investmentSearchbarTxtFld.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 // Compare name of every investment with filter text.
@@ -1014,9 +1017,9 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private void handleExit() {
         //TODO AutoSave?
-        if (autoSave.isSelected()) {
-            handleSaveBook();
-        }
+//        if (autoSave.isSelected()) {
+//            handleSaveBook();
+//        }
         Stage stage = (Stage) investmentTblVw.getScene().getWindow();
         stage.close();
     }
@@ -1034,7 +1037,7 @@ public class UserInterfaceController implements Initializable {
             newStage.setMinWidth(400D);
             newStage.setMinHeight(300D);
             newStage.setResizable(false);
-            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.initModality(Modality.APPLICATION_MODAL);
             try {
                 newStage.setScene(new Scene(loader.load()));
             } catch (IOException e) {
@@ -1085,6 +1088,13 @@ public class UserInterfaceController implements Initializable {
         investmentSearchbarTxtFld.setText("");
         investmentBook.displayInvestments();
         investmentCleanSearchBar.setVisible(false);
+    }
+
+    @FXML
+    public void handlePlatformCleanSearchBar() {
+        platformSearchbarTxtFld.setText("");
+        investmentBook.displayPlatforms();
+        platformCleanSearchBar.setVisible(false);
     }
 }
 
