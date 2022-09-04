@@ -60,6 +60,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
 import static gui.DialogWindow.*;
+import static gui.SaleController.loadSaleController;
 import static gui.Style.SYMBOL_OF_CURRENCY;
 import static gui.calculator.PerformanceCalculatorController.loadPerformanceCalculatorController;
 import static gui.calculator.SellingPriceCalculatorController.loadSellingPriceCalculatorController;
@@ -113,6 +114,8 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private ListView<Platform> platformLstVw;
     @FXML
+    private VBox wrapVBoxPlatforms;
+    @FXML
     private Label platformNameLbl;
     @FXML
     private Label platformFeeLbl;
@@ -159,6 +162,8 @@ public class UserInterfaceController implements Initializable {
     @FXML
     private TableView<Investment> investmentTblVw;
     @FXML
+    private VBox wrapVBoxInvestments;
+    @FXML
     private Label totalPerformanceLbl;
 
     @FXML
@@ -187,6 +192,8 @@ public class UserInterfaceController implements Initializable {
     private Label holdingPeriodLbl;
     @FXML
     private Button btnEditInvestment;
+    @FXML
+    private Button btnSaleInvestment;
     @FXML
     private Button btnSellingPriceCalculator;
     @FXML
@@ -219,12 +226,6 @@ public class UserInterfaceController implements Initializable {
      * The current file
      */
     private File currFile;
-    @FXML
-    private VBox wrapVBoxInvestments;
-    @FXML
-    private VBox wrapVBoxPlatforms;
-    @FXML
-    private Button btnSaleInvestment;
 
     /**
      * Initialize a new game with the specified arguments by using the
@@ -554,6 +555,7 @@ public class UserInterfaceController implements Initializable {
                     showInvestmentDetails(currentInvestment);
                     boolean isNull = newValue == null;
                     btnEditInvestment.setDisable(isNull);
+                    btnSaleInvestment.setDisable(isNull || !currentInvestment.getState().isOpen());
                     btnPerformanceCalculator.setDisable(isNull);
                     btnSellingPriceCalculator.setDisable(isNull);
                     btnDeleteInvestment.setDisable(isNull);
@@ -1110,7 +1112,7 @@ public class UserInterfaceController implements Initializable {
 
     @FXML
     private void handleSaleInvestment() {
-
+        loadSaleController(currentInvestment, investmentBook);
     }
 }
 

@@ -19,7 +19,7 @@ public class BigDecimalUtils {
     public static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     public static boolean isPositive(BigDecimal number){
-        return number.compareTo(BigDecimal.ZERO) > 0;
+        return number.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     public static BigDecimal calcPercent(BigDecimal base, BigDecimal pct){

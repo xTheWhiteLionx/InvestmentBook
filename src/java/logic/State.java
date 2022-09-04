@@ -6,7 +6,16 @@ package logic;
  * @author xthe_white_lionx
  */
 public enum State {
-    OPEN, CLOSED
+    OPEN, CLOSED;
+
+    /**
+     * Returns
+     *
+     * @return
+     */
+    public boolean isOpen(){
+        return this == OPEN;
+    }
 }
 
 

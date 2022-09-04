@@ -153,14 +153,13 @@ public class EditInvestmentController implements Initializable {
 
         creationDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
             if (t1 != null) {
-                sellingDatePicker.setDayCellFactory(d ->
-                        new DateCell() {
-                            @Override
-                            public void updateItem(LocalDate item, boolean empty) {
-                                super.updateItem(item, empty);
-                                setDisable(item.isBefore(t1));
-                            }
-                        });
+                sellingDatePicker.setDayCellFactory(d -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setDisable(item.isBefore(t1));
+                    }
+                });
             }
         });
 

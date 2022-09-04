@@ -5,7 +5,7 @@
     <map/>
     <node name="gui">
       <map>
-        <entry key="Style" value=""/>
+        <entry key="Style" value="Darkmode 1.css"/>
       </map>
     </node>
   </root>
