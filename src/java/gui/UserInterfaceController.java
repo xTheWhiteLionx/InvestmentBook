@@ -32,6 +32,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -218,6 +219,12 @@ public class UserInterfaceController implements Initializable {
      * The current file
      */
     private File currFile;
+    @FXML
+    private VBox wrapVBoxInvestments;
+    @FXML
+    private VBox wrapVBoxPlatforms;
+    @FXML
+    private Button btnSaleInvestment;
 
     /**
      * Initialize a new game with the specified arguments by using the
@@ -395,6 +402,8 @@ public class UserInterfaceController implements Initializable {
             btnResetPlatformFilter.setDisable(b);
         });
 
+        platformLstVw.prefHeightProperty().bind(wrapVBoxPlatforms.heightProperty());
+
         //changeListener to regular the accessibility of the delete row button
         platformLstVw.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -537,6 +546,7 @@ public class UserInterfaceController implements Initializable {
                 costColumn
         );
         investmentTblVw.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        investmentTblVw.prefHeightProperty().bind(wrapVBoxInvestments.heightProperty());
 
         investmentTblVw.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -747,7 +757,8 @@ public class UserInterfaceController implements Initializable {
                 int full = 100;
 
                 for (int i = 1; i <= full; i++) {
-                    PauseTransition pt = new PauseTransition(LOAD_DURATION);
+                    PauseTransition pt =
+                            new PauseTransition(LOAD_DURATION);
                     int finalI = i;
                     pt.setOnFinished(actionEvent -> updateProgress(finalI, full));
                     children.add(pt);
@@ -1095,6 +1106,11 @@ public class UserInterfaceController implements Initializable {
         platformSearchbarTxtFld.setText("");
         investmentBook.displayPlatforms();
         platformCleanSearchBar.setVisible(false);
+    }
+
+    @FXML
+    private void handleSaleInvestment() {
+
     }
 }
 
