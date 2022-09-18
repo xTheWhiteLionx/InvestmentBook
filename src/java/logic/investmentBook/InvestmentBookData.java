@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 import logic.Investment;
 import logic.platform.Platform;
 
@@ -14,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -71,10 +69,6 @@ public class InvestmentBookData extends InvestmentBookImpl {
                         (json, type, jsonDeserializationContext) -> json == null ? null :
                                 Platform.fromJson(json.getAsJsonObject()))
                 .create();
-
-        Type listType = new TypeToken<InvestmentBookData>() {
-        }.getType();
-
 
         if (file.getName().contains(".json")) {
             FileReader fileReader = new FileReader(file.getAbsoluteFile());

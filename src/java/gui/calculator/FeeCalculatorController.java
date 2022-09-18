@@ -2,8 +2,6 @@ package gui.calculator;
 
 import gui.ApplicationMain;
 import gui.DoubleUtil;
-import gui.JarMain;
-import gui.Settings;
 import gui.Style;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.platform.Platform;
@@ -23,6 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.displayError;
+import static gui.DialogWindow.styleStage;
 import static gui.DoubleUtil.isValidDouble;
 import static logic.BigDecimalUtils.parse;
 
@@ -57,7 +55,6 @@ public class FeeCalculatorController implements Initializable {
                 ApplicationMain.class.getResource("calculator/FeeCalculatorController.fxml"));
 
         // Icon/logo of the application
-        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
         newStage.setTitle(currPlatform.getName() + " Fee Calculator");
         newStage.setMinWidth(400D);
         newStage.setMinHeight(200D);
@@ -69,13 +66,7 @@ public class FeeCalculatorController implements Initializable {
             displayError(e);
         }
 
-        String css = Settings.getMode();
-        if (!css.isEmpty()) {
-            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
-                    "themes/" + css).toExternalForm());
-        } else {
-            newStage.getScene().getStylesheets().removeAll();
-        }
+        styleStage(newStage);
 
         newStage.show();
 

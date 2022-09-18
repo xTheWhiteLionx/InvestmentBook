@@ -9,7 +9,6 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.BigDecimalUtils;
@@ -23,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.displayError;
+import static gui.DialogWindow.styleStage;
 import static gui.DoubleUtil.isValidDouble;
 
 public class SaleController implements Initializable {
@@ -67,7 +67,6 @@ public class SaleController implements Initializable {
                 ApplicationMain.class.getResource("SaleController.fxml"));
 
         // Icon/logo of the application
-        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
         newStage.setTitle("sale");
         newStage.setMinWidth(350D);
         newStage.setMinHeight(200D);
@@ -79,13 +78,7 @@ public class SaleController implements Initializable {
             displayError(e);
         }
 
-        String css = Settings.getMode();
-        if (!css.isEmpty()) {
-            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
-                    "themes/" + css).toExternalForm());
-        } else {
-            newStage.getScene().getStylesheets().removeAll();
-        }
+        styleStage(newStage);
 
         newStage.show();
 

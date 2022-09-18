@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<Tab xmlns="http://javafx.com/javafx"
+     xmlns:fx="http://javafx.com/fxml"
+     fx:controller="gui.tabs.PlatformTab">
+
+    <BorderPane prefHeight="200.0" prefWidth="200.0">
+        <left>
+            <VBox prefHeight="520.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+                <BorderPane.margin>
+                    <Insets/>
+                </BorderPane.margin>
+                <Label alignment="CENTER" text="Filter" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </VBox.margin>
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Separator prefWidth="200.0"/>
+                <Label layoutX="127.0" layoutY="59.0" text="fee type">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <ChoiceBox fx:id="feeTypeChcBx" prefHeight="25.0" prefWidth="157.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"/>
+                    </items>
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </VBox.margin>
+                </ChoiceBox>
+                <ButtonBar buttonMinWidth="0.0" buttonOrder="BUTTON_ORDER_NONE">
+                    <buttons>
+                        <Button fx:id="btnApplyPlatformFilter" alignment="CENTER"
+                                contentDisplay="CENTER" mnemonicParsing="false"
+                                onAction="#handleApplyPlatformFilter" text="apply"
+                                textAlignment="CENTER"/>
+                        <Button fx:id="btnResetPlatformFilter" mnemonicParsing="false"
+                                onAction="#handleResetPlatformFilter" text="Reset"/>
+                    </buttons>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </ButtonBar>
+            </VBox>
+        </left>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <center>
+            <SplitPane dividerPositions="0.7" BorderPane.alignment="TOP_CENTER">
+                <VBox fx:id="wrapVBoxPlatforms" alignment="TOP_CENTER">
+                    <ToolBar>
+                        <CustomTextField fx:id="platformSearchbarTxtFld"
+                                         nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0"
+                                         prefWidth="154.0" promptText="search"
+                                         styleClass="searchField">
+                            <left>
+                                <Label styleClass="searchBoxLabel">
+                                    <graphic>
+                                        <ImageView>
+                                            <Image url="@../textures/searchIcon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Label>
+                            </left>
+                            <right>
+                                <Button fx:id="platformCleanSearchBar"
+                                        onAction="#handlePlatformCleanSearchBar"
+                                        style="-fx-background-color: transparent;" text="x"
+                                        textAlignment="CENTER" visible="false">
+                                </Button>
+                            </right>
+                        </CustomTextField>
+                    </ToolBar>
+                    <TableView fx:id="platformTableView"/>
+                </VBox>
+                <GridPane alignment="TOP_CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                        <RowConstraints vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Label fx:id="platformNameLbl" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label layoutX="37.0" layoutY="67.0" text="name" GridPane.rowIndex="1">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label layoutX="32.0" layoutY="180.0" text="percent fee" GridPane.rowIndex="2">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label layoutX="37.0" layoutY="192.0" text="min fee" GridPane.rowIndex="3">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label fx:id="platformFeeLbl" layoutX="169.0" layoutY="135.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label fx:id="platformMinFeeLbl" layoutX="165.0" layoutY="204.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                    </Label>
+                    <Label layoutX="15.0" layoutY="59.0" text="Platform Details:">
+                        <GridPane.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </GridPane.margin>
+                        <font>
+                            <Font name="System Bold" size="12.0"/>
+                        </font>
+                    </Label>
+                    <opaqueInsets>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </opaqueInsets>
+                </GridPane>
+            </SplitPane>
+        </center>
+        <right>
+            <VBox prefWidth="120.0" BorderPane.alignment="CENTER">
+                <Button alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false"
+                        onAction="#handleAddPlatform" prefHeight="120.0" prefWidth="120.0"
+                        text="add" textOverrun="CLIP">
+                    <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../textures/addIcon.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnEditPlatform" alignment="CENTER" contentDisplay="TOP"
+                        disable="true" mnemonicParsing="false" onAction="#handleEditPlatform"
+                        prefHeight="120.0" prefWidth="120.0" text="edit">
+                    <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../textures/editIcon.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnFeeCalculator" alignment="CENTER" contentDisplay="TOP"
+                        disable="true" mnemonicParsing="false" onAction="#handleFeeCalculator"
+                        prefHeight="120.0" prefWidth="120.0" text="fee calculator">
+                    <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../textures/calculatorSymbol.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnDeletePlatform" alignment="CENTER" contentDisplay="TOP"
+                        disable="true" mnemonicParsing="false" onAction="#handleDeletePlatform"
+                        prefHeight="120.0" prefWidth="120.0" text="delete" textOverrun="CLIP">
+                    <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../textures/deleteIcon.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </right>
+    </BorderPane>
+
+</Tab>

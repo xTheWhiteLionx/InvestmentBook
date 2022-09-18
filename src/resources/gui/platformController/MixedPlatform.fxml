@@ -21,6 +21,7 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="254.0" minHeight="10.0" prefHeight="37.8571275983538" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="257.0" minHeight="10.0" prefHeight="33.42854309082031" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
          </rowConstraints>
@@ -37,7 +38,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Label>
-         <Label layoutX="32.0" layoutY="180.0" text="percent fee" GridPane.rowIndex="2">
+         <Label layoutX="32.0" layoutY="180.0" text="percent fee" GridPane.rowIndex="3">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
@@ -45,7 +46,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Label>
-         <Label layoutX="37.0" layoutY="192.0" text="min fee" GridPane.rowIndex="1">
+         <Label layoutX="37.0" layoutY="192.0" text="min fee" GridPane.rowIndex="2">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
@@ -53,18 +54,31 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Label>
-         <TextField fx:id="percentTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <TextField fx:id="percentTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <GridPane.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </TextField>
-         <TextField fx:id="minFeeTxtFld" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <TextField fx:id="minFeeTxtFld" layoutX="165.0" layoutY="204.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </TextField>
-         <Label fx:id="minFeeCurrencyLbl" layoutX="287.0" layoutY="197.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-         <Label text="\%" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         <Label fx:id="minFeeCurrencyLbl" layoutX="287.0" layoutY="197.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         <Label text="\%" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+         <Label layoutX="15.0" layoutY="21.0" text="typ" GridPane.rowIndex="1">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Label>
+         <Label fx:id="typLbl" layoutX="10.0" layoutY="59.0" text="typ" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Label>
          <opaqueInsets>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </opaqueInsets>

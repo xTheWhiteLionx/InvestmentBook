@@ -2,8 +2,6 @@ package gui.investmentController;
 
 import gui.ApplicationMain;
 import gui.DoubleUtil;
-import gui.JarMain;
-import gui.Settings;
 import gui.Style;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -15,7 +13,6 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.BigDecimalUtils;
@@ -29,6 +26,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static gui.DialogWindow.displayError;
+import static gui.DialogWindow.styleStage;
 import static gui.calculator.PerformanceCalculatorController.loadPerformanceCalculatorController;
 import static gui.calculator.SellingPriceCalculatorController.loadSellingPriceCalculatorController;
 
@@ -118,7 +116,6 @@ public class EditInvestmentController implements Initializable {
                         "EditInvestmentController.fxml"));
 
         // Icon/logo of the application
-        newStage.getIcons().add(new Image("gui/textures/investmentBookIcon.png"));
         newStage.setTitle("Edit Investment");
         newStage.setMinWidth(650D);
         newStage.setMinHeight(600D);
@@ -130,13 +127,7 @@ public class EditInvestmentController implements Initializable {
             displayError(e);
         }
 
-        String css = Settings.getMode();
-        if (!css.isEmpty()) {
-            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
-                    "themes/" + css).toExternalForm());
-        } else {
-            newStage.getScene().getStylesheets().removeAll();
-        }
+        styleStage(newStage);
 
         newStage.show();
 

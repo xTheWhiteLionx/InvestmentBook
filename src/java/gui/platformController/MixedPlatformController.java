@@ -2,7 +2,6 @@ package gui.platformController;
 
 import gui.DoubleUtil;
 import gui.Style;
-import gui.calculator.FeeCalculatorController;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +25,8 @@ public class MixedPlatformController implements Initializable, PlatformControlle
 
     @FXML
     private TextField nameTxtFld;
+    @FXML
+    private Label typLbl;
     @FXML
     private TextField percentTxtFld;
     @FXML
@@ -111,21 +112,13 @@ public class MixedPlatformController implements Initializable, PlatformControlle
         handleCancel();
     }
 
-    /**
-     * Handles the "fee calculator" button and
-     * opens a FeeCalculator Window.
-     */
-    @FXML
-    private void handleFeeCalculator() {
-        FeeCalculatorController.loadFeeCalculatorController(currPlatform);
-    }
-
     @Override
     public void display(Platform platform) {
         assert platform != null;
 
         this.currPlatform = (MixedPlatform) platform;
         nameTxtFld.setText(currPlatform.getName());
+        typLbl.setText(currPlatform.getType().getName());
         percentTxtFld.setText(DoubleUtil.format(currPlatform.getPercent()));
         minFeeTxtFld.setText(DoubleUtil.format(currPlatform.getMinFee()));
     }

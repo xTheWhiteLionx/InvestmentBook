@@ -6,5 +6,9 @@ package logic.platform;
  * @author xthe_white_lionx
  */
 public enum FeeType {
-    PERCENT, ABSOLUTE, MIXED
+    PERCENT, ABSOLUTE, MIXED;
+
+    public String getName(){
+        return this.name().toLowerCase();
+    }
 }

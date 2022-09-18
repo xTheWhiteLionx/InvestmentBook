@@ -64,6 +64,9 @@ public class DialogWindow {
         } catch (IOException e) {
             displayError(e);
         }
+
+        styleStage(newStage);
+
         newStage.show();
 
         return loader.getController();
@@ -97,6 +100,8 @@ public class DialogWindow {
     //TODO JavaDoc
     public static boolean acceptedDeleteAlert() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        styleStage(stage);
         alert.setContentText("Are your sure you want to delete the selected item?");
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
@@ -116,7 +121,6 @@ public class DialogWindow {
         FXMLLoader loader = new FXMLLoader(ApplicationMain.class.getResource("LoginController.fxml"));
 
         // Icon/logo of the application
-        newStage.getIcons().add(ICON);
         newStage.setTitle("Investment Book");
         newStage.setMinWidth(width);
         newStage.setMinHeight(height);
@@ -126,14 +130,8 @@ public class DialogWindow {
         } catch (IOException e) {
             displayError(e);
         }
-        String css = Settings.getMode();
-        if (!css.isEmpty()) {
-            newStage.getScene().getStylesheets().add(JarMain.class.getResource(
-                    "themes/" + css).toExternalForm());
-        } else {
-            newStage.getScene().getStylesheets().removeAll();
-        }
 
+        styleStage(newStage);
         newStage.show();
     }
 
@@ -150,7 +148,8 @@ public class DialogWindow {
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(ICON);
+            styleStage(stage);
+
             ex.printStackTrace(printWriter);
             printWriter.close();
 
@@ -178,7 +177,7 @@ public class DialogWindow {
             PrintWriter printWriter = new PrintWriter(stringWriter);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(ICON);
+            styleStage(stage);
 
             alert.setHeaderText("Die ausgewählte Datei ist fehlerhaft!");
 
@@ -196,6 +195,17 @@ public class DialogWindow {
             alert.showAndWait();
         } else {
             throw new NullPointerException("exception == null");
+        }
+    }
+
+    public static void styleStage(Stage stage){
+        stage.getIcons().add(ICON);
+
+        if (Settings.isLightMode()) {
+            stage.getScene().getStylesheets().clear();
+        } else {
+            stage.getScene().getStylesheets().add(JarMain.class.getResource(
+                    "themes/Darkmode 1.css").toExternalForm());
         }
     }
 

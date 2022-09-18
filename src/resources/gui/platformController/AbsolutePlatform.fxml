@@ -21,6 +21,7 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="303.0" minHeight="10.0" prefHeight="33.85713304792134" vgrow="SOMETIMES" />
          </rowConstraints>
          <TextField fx:id="nameTxtFld" GridPane.columnIndex="1">
@@ -36,7 +37,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Label>
-         <Label layoutX="32.0" layoutY="180.0" text="fee" GridPane.rowIndex="1">
+         <Label layoutX="32.0" layoutY="180.0" text="fee" GridPane.rowIndex="2">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
@@ -44,12 +45,25 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </Label>
-         <TextField fx:id="feeTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <TextField fx:id="feeTxtFld" layoutX="169.0" layoutY="135.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
          </TextField>
-         <Label fx:id="feeCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         <Label fx:id="feeCurrencyLbl" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         <Label layoutX="15.0" layoutY="20.0" text="typ" GridPane.rowIndex="1">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Label>
+         <Label fx:id="typLbl" layoutX="15.0" layoutY="52.0" text="typ" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Label>
          <opaqueInsets>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </opaqueInsets>
