@@ -54,6 +54,7 @@ public class PlatformTab implements Initializable {
     private VBox wrapVBoxPlatforms;
     @FXML
     private Label platformNameLbl;
+
     // TODO: 18.09.2022 include to the fxml
     @FXML
     private Label platformTypLbl;
