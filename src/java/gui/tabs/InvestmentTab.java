@@ -19,6 +19,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.BigDecimalUtils;
@@ -135,6 +136,8 @@ public class InvestmentTab implements Initializable {
      */
     private Tab tab;
 
+    private BorderPane borderPane;
+
     /**
      *
      * @return
@@ -143,18 +146,16 @@ public class InvestmentTab implements Initializable {
         FXMLLoader loader = new FXMLLoader(
                 ApplicationMain.class.getResource("tabs/InvestmentTab.fxml"));
 
-        Tab tab;
         try {
-            tab = loader.load();
+            BorderPane borderPane = loader.load();
+            InvestmentTab investmentTab = loader.getController();
+            investmentTab.borderPane = borderPane;
+//            tab.setText("Investments");
+//            tab.setClosable(false);
+            return investmentTab;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        InvestmentTab investmentTab = loader.getController();
-        investmentTab.tab = tab;
-        tab.setText("Investments");
-        tab.setClosable(false);
-
-        return investmentTab;
     }
 
     /**
@@ -163,6 +164,14 @@ public class InvestmentTab implements Initializable {
      */
     public Tab getTab() {
         return tab;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public BorderPane getBorderPane() {
+        return borderPane;
     }
 
     /**

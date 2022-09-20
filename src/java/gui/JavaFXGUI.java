@@ -28,11 +28,9 @@ public class JavaFXGUI implements GUIConnector {
      */
     private final TableView<Investment> investmentTableView;
 
-//    /**
-//     * All {@link Platform}s in a Listview
-//     */
-//    private final ListView<Platform> platformListView;
-
+    /**
+     * All {@link Platform}s in a Tableview
+     */
     private final TableView<Platform> platformTableView;
 
     /**
@@ -57,35 +55,23 @@ public class JavaFXGUI implements GUIConnector {
      */
     private BigDecimal totalPerformance;
 
-//    /**
-//     * The constructor. Gets past all components of the gui that may change
-//     * due to actions in the logic.
-//     *
-//     * @param investmentTableView     all investments in a Tableview
-//     * @param platformListView        all platforms in a Listview
-//     * @param platformFilterChoiceBox choiceBox of all platforms for the filter of the investments
-//     * @param totalPerformanceLabel   label to change the total performance
-//     *                                of the displayed investments
-//     * @param messageBar                  label to change the current status
-//     */
-//    public JavaFXGUI(TableView<Investment> investmentTableView, ListView<Platform> platformListView,
-//                     ChoiceBox<Platform> platformFilterChoiceBox, Label totalPerformanceLabel,
-//                     Label messageBar) {
-//        this.investmentTableView = investmentTableView;
-//        this.platformListView = platformListView;
-//        this.platformFilterChoiceBox = platformFilterChoiceBox;
-//        this.totalPerformanceLabel = totalPerformanceLabel;
-//        this.messageBar = messageBar;
-//    }
-
+        /**
+     * The constructor. Gets past all components of the gui that may change
+     * due to actions in the logic.
+     *
+     * @param investmentTableView     all investments in a Tableview
+     * @param platformTableView        all platforms in a Tableview
+     * @param platformFilterChoiceBox choiceBox of all platforms for the filter of the investments
+     * @param totalPerformanceLabel   label to change the total performance
+     *                                of the displayed investments
+     * @param messageBar                  label to change the current status
+     */
     public JavaFXGUI(TableView<Investment> investmentTableView, TableView<Platform> platformTableView,
                      ChoiceBox<Platform> platformFilterChoiceBox, Label totalPerformanceLabel,
                      Label messageBar) {
         this.investmentTableView = investmentTableView;
         this.platformTableView = platformTableView;
         this.platformFilterChoiceBox = platformFilterChoiceBox;
-        System.out.println("JavaFXGUI.JavaFXGUI");
-        System.out.println("platformFilterChoiceBox = " + platformFilterChoiceBox);
         this.totalPerformanceLabel = totalPerformanceLabel;
         this.messageBar = messageBar;
     }
@@ -151,7 +137,6 @@ public class JavaFXGUI implements GUIConnector {
     }
 
     private void addPlatform(Platform newPlatform) {
-//        platformListView.getItems().add(newPlatform);
         platformTableView.getItems().add(newPlatform);
         platformFilterChoiceBox.getItems().add(newPlatform);
     }
@@ -166,7 +151,6 @@ public class JavaFXGUI implements GUIConnector {
 
     @Override
     public void displayPlatforms(Set<Platform> platforms) {
-//        platformListView.getItems().clear();
         platformTableView.getItems().clear();
         platformFilterChoiceBox.getItems().clear();
         for (Platform platform : platforms) {
@@ -176,7 +160,6 @@ public class JavaFXGUI implements GUIConnector {
 
     @Override
     public void deletePlatform(Platform platform) {
-//        platformListView.getItems().remove(platform);
         platformTableView.getItems().remove(platform);
         platformFilterChoiceBox.getItems().remove(platform);
         updateStatus(Message.deleted, "platform");

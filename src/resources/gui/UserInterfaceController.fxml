@@ -9,27 +9,38 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserInterfaceController">
-    <center>
-        <VBox alignment="TOP_RIGHT" BorderPane.alignment="TOP_RIGHT">
-            <Button contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleMode" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 100;" text="Button">
-                <VBox.margin>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                </VBox.margin>
+<BorderPane fx:id="mainBorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@themes/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UserInterfaceController">
+    <left>
+        <VBox>
+            <ToggleButton fx:id="btnPlatformPane" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="sidebarItem" text="platforms" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                 <graphic>
-                    <ImageView fx:id="modeImageView" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                    <ImageView fx:id="platformsImageview" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@textures/platform_icon_black.png" />
+                    </ImageView>
                 </graphic>
-            </Button>
-            <TabPane fx:id="tabPane" side="RIGHT" tabClosingPolicy="UNAVAILABLE">
-            </TabPane>
+            </ToggleButton>
+         <ToggleButton fx:id="btnInvestmentPane" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="sidebarItem" text="investments" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+            <graphic>
+               <ImageView fx:id="investmentsImageview" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@textures/investment_icon_black.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+         </ToggleButton>
         </VBox>
+    </left>
+    <center>
+<!--      <StackPane fx:id="mainPage" />-->
     </center>
     <bottom>
         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
@@ -44,38 +55,60 @@
         </HBox>
     </bottom>
    <top>
-        <MenuBar BorderPane.alignment="CENTER">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" onAction="#handleNewBook" text="New Book">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                    </accelerator>
-                </MenuItem>
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#handleOpenBook" text="Open...">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                    </accelerator>
-                </MenuItem>
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <CheckMenuItem fx:id="autoSaveMenuItem" mnemonicParsing="false" selected="true" text="Autosave" />
-                <MenuItem mnemonicParsing="false" onAction="#handleSaveBook" text="Save">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                    </accelerator>
-                </MenuItem>
-                <MenuItem mnemonicParsing="false" onAction="#handleSaveBookAs" text="Save As...">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
-                    </accelerator>
-                </MenuItem>
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Add">
-                <MenuItem mnemonicParsing="false" onAction="#handleAddPlatform" text="Add Platform" />
-                <MenuItem mnemonicParsing="false" onAction="#handleAddInvestment" text="Add Investment" />
-            </Menu>
-        </MenuBar>
+      <VBox alignment="TOP_RIGHT" BorderPane.alignment="TOP_RIGHT">
+         <children>
+              <MenuBar>
+                  <Menu mnemonicParsing="false" text="File">
+                      <MenuItem mnemonicParsing="false" onAction="#handleNewBook" text="New Book">
+                          <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                          </accelerator>
+                      </MenuItem>
+                      <SeparatorMenuItem mnemonicParsing="false" />
+                      <MenuItem mnemonicParsing="false" onAction="#handleOpenBook" text="Open...">
+                          <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                          </accelerator>
+                      </MenuItem>
+                      <SeparatorMenuItem mnemonicParsing="false" />
+                      <CheckMenuItem fx:id="autoSaveMenuItem" mnemonicParsing="false" selected="true" text="Autosave" />
+                      <MenuItem mnemonicParsing="false" onAction="#handleSaveBook" text="Save">
+                          <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                          </accelerator>
+                      </MenuItem>
+                      <MenuItem mnemonicParsing="false" onAction="#handleSaveBookAs" text="Save As...">
+                          <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                          </accelerator>
+                      </MenuItem>
+                      <SeparatorMenuItem mnemonicParsing="false" />
+                      <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Add">
+                      <MenuItem mnemonicParsing="false" onAction="#handleAddPlatform" text="Add Platform" />
+                      <MenuItem mnemonicParsing="false" onAction="#handleAddInvestment" text="Add Investment" />
+                  </Menu>
+              </MenuBar>
+               <Button contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleMode" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 100;" text="Button">
+                   <VBox.margin>
+                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                   </VBox.margin>
+                   <graphic>
+                       <ImageView fx:id="modeImageView" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@textures/moon_icon_black.png" />
+                     </image>
+                  </ImageView>
+                   </graphic>
+               </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" />
+         </padding>
+      </VBox>
    </top>
 </BorderPane>

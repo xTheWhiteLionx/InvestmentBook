@@ -11,10 +11,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public abstract class InvestmentBookImpl {
+
     /**
      * Platforms of the InvestmentBook
      */
     final Set<Platform> platforms;
+
 
     /**
      * Investments of the InvestmentBook
@@ -30,7 +32,6 @@ public abstract class InvestmentBookImpl {
     }
 
     /**
-     *
      * @param platforms
      * @param investments
      */
@@ -48,7 +49,6 @@ public abstract class InvestmentBookImpl {
     }
 
     /**
-     *
      * @return
      */
     //TODO JavaDoc
@@ -57,7 +57,6 @@ public abstract class InvestmentBookImpl {
     }
 
     /**
-     *
      * @return
      */
     //TODO JavaDoc
@@ -66,7 +65,6 @@ public abstract class InvestmentBookImpl {
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -78,14 +76,17 @@ public abstract class InvestmentBookImpl {
     }
 
     /**
-     *
      * @param o
      * @return
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InvestmentBookImpl that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof InvestmentBookImpl that)) {
+            return false;
+        }
         return Objects.equals(platforms, that.platforms)
                 && Objects.equals(investments, that.investments);
     }

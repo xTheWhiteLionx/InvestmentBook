@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,7 +55,6 @@ public class PlatformTab implements Initializable {
     private VBox wrapVBoxPlatforms;
     @FXML
     private Label platformNameLbl;
-    // TODO: 18.09.2022 include to the fxml
     @FXML
     private Label platformTypLbl;
     @FXML
@@ -83,6 +83,8 @@ public class PlatformTab implements Initializable {
      */
     private Tab tab;
 
+    private BorderPane borderPane;
+
     /**
      * @return
      */
@@ -90,18 +92,17 @@ public class PlatformTab implements Initializable {
         FXMLLoader loader = new FXMLLoader(
                 ApplicationMain.class.getResource("tabs/PlatformTab.fxml"));
 
-        Tab tab;
         try {
-            tab = loader.load();
+            BorderPane borderPane = loader.load();
+            PlatformTab platformTab = loader.getController();
+            platformTab.borderPane = borderPane;
+//            tab.setText("Platforms");
+//            tab.setClosable(false);
+            return platformTab;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        PlatformTab platformTab = loader.getController();
-        platformTab.tab = tab;
-        tab.setText("Platforms");
-        tab.setClosable(false);
 
-        return platformTab;
     }
 
     /**
@@ -109,6 +110,14 @@ public class PlatformTab implements Initializable {
      */
     public Tab getTab() {
         return tab;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public BorderPane getBorderPane() {
+        return borderPane;
     }
 
     /**

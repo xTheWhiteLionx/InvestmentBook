@@ -29,6 +29,7 @@ public class PercentPlatform extends Platform {
     /**
      * Constructs an {@code PercentPlatform} with the specified arguments.
      *
+     * @param id
      * @param name    name of the platform
      * @param percent value of the fee of the platform in percent
      */

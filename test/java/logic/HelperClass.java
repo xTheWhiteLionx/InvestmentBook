@@ -16,20 +16,22 @@ public class HelperClass {
      *
      */
     //TODO JavaDoc
-    static final PercentPlatform COINBASE = new PercentPlatform("Coinbase", 1.49);
-
-    /**
-     *
-     */
-    //TODO JavaDoc
-    static final AbsolutePlatform ONVISTA_BANK = new AbsolutePlatform("Onvista Bank", 7);
-
-    /**
-     *
-     */
-    //TODO JavaDoc
     //0,25% of Order Value (min. 8,90 EUR, max. 58,90 EUR)
-    static final MixedPlatform MAX_BLUE = new MixedPlatform("Max Blue", 2.5, 8.90);
+    static final MixedPlatform MAX_BLUE = new MixedPlatform(1, "Max Blue", 2.5, 8.90);
+
+    /**
+     *
+     */
+    //TODO JavaDoc
+    static final AbsolutePlatform ONVISTA_BANK = new AbsolutePlatform(2, "Onvista Bank", 7);
+
+    /**
+     *
+     */
+    //TODO JavaDoc
+    static final PercentPlatform COINBASE = new PercentPlatform(3, "Coinbase", 1.49);
+
+
 
     /**
      *

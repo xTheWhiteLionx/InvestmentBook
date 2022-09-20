@@ -23,7 +23,6 @@ public abstract class Platform {
     String name;
 
     /**
-     *
      * @param name
      */
     // TODO: 22.06.2022 JavaDoc
@@ -40,8 +39,8 @@ public abstract class Platform {
     /**
      * Constructs an {@code MixedPlatform} with the specified arguments.
      *
-     * @param name of the platform
-     * @param fee value of the fee of the platform
+     * @param name   of the platform
+     * @param fee    value of the fee of the platform
      * @param minFee minimale fee of the platform as absolute value
      */
     public static Platform create(FeeType feeType, String name, double fee, double minFee) {
@@ -62,8 +61,8 @@ public abstract class Platform {
         if (jsonObject.has("fee")) {
             return new AbsolutePlatform(name, jsonObject.get("fee").getAsDouble());
         } else if (jsonObject.has("min")) {
-            return new MixedPlatform(name, jsonObject.get("percent").getAsDouble(),
-                    jsonObject.get("min").getAsDouble());
+            return new MixedPlatform(name,
+                    jsonObject.get("percent").getAsDouble(), jsonObject.get("min").getAsDouble());
         } else {
             return new PercentPlatform(name, jsonObject.get("percent").getAsDouble());
         }
@@ -124,14 +123,13 @@ public abstract class Platform {
     public abstract double getFee(BigDecimal price);
 
     /**
-     * Returns the fxmlPath of the platform type
+     * Returns the fxmlPath of the platform
      *
-     * @return fxmlPath of the platform type
+     * @return fxmlPath of the platform
      */
     public abstract String getFxmlPath();
 
     /**
-     *
      * @return
      */
     public abstract FeeType getType();
@@ -154,7 +152,9 @@ public abstract class Platform {
      */
     @Override
     public String toString() {
-        return name;
+        return "Platform{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     /**
@@ -163,8 +163,12 @@ public abstract class Platform {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Platform platform)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Platform platform)) {
+            return false;
+        }
         return Objects.equals(name, platform.name);
     }
 }

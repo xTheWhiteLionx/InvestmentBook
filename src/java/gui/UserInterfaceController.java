@@ -5,6 +5,7 @@ import gui.tabs.PlatformTab;
 import gui.tabs.PortfolioTab;
 import gui.tasks.LoadTask;
 import gui.tasks.SaveTask;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -75,12 +79,6 @@ public class UserInterfaceController implements Initializable {
     private ProgressBar progressBar;
 
     /**
-     *
-     */
-    @FXML
-    private TabPane tabPane;
-
-    /**
      * The current {@link InvestmentBook}
      */
     private InvestmentBook investmentBook;
@@ -90,10 +88,14 @@ public class UserInterfaceController implements Initializable {
      */
     private InvestmentTab investmentTab;
 
+    private BorderPane investmentPane;
+
     /**
      *
      */
     private PlatformTab platformTab;
+
+    private BorderPane platformPane;
 
     /**
      *
@@ -109,6 +111,16 @@ public class UserInterfaceController implements Initializable {
      *
      */
     private boolean isLightMode;
+    @FXML
+    private ToggleButton btnInvestmentPane;
+    @FXML
+    private ImageView platformsImageview;
+    @FXML
+    private ToggleButton btnPlatformPane;
+    @FXML
+    private ImageView investmentsImageview;
+    @FXML
+    private BorderPane mainBorderPane;
 
     /**
      * Initialize a new game with the specified arguments by using the
@@ -148,7 +160,6 @@ public class UserInterfaceController implements Initializable {
         UserInterfaceController controller = loadUserInterfaceController(selectedFile.getName());
 
         controller.setCurrFile(selectedFile);
-//        controller.initializeMode();
         if (investmentBookData != null) {
             controller.investmentBook = new InvestmentBook(investmentBookData, controller.createJavaFXGUI());
             controller.platformTab.setInvestmentBook(controller.investmentBook);
@@ -173,6 +184,7 @@ public class UserInterfaceController implements Initializable {
         initializeModeImage();
         initializePlatformTab();
         initializeInvestmentTab();
+        initializeSideBar();
         toDefault();
     }
 
@@ -192,7 +204,7 @@ public class UserInterfaceController implements Initializable {
         // Icon/logo of the application
         newStage.setTitle(title);
         newStage.setMinWidth(1200D);
-        newStage.setMinHeight(650D);
+        newStage.setMinHeight(850D);
         newStage.initModality(Modality.WINDOW_MODAL);
         try {
             newStage.setScene(new Scene(loader.load()));
@@ -222,14 +234,53 @@ public class UserInterfaceController implements Initializable {
                 message);
     }
 
+    private void initializeSideBar() {
+        btnPlatformPane.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (t1) {
+                btnPlatformPane.setStyle("-fx-border-color: GREEN;" +
+                        "-fx-border-width: 0px 0px 0px 5px;");
+                mainBorderPane.setCenter(platformPane);
+            } else {
+                btnPlatformPane.setStyle(null);
+            }
+        });
+        btnInvestmentPane.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (t1) {
+                btnInvestmentPane.setStyle("-fx-border-color: GREEN;" +
+                        "-fx-border-width: 0px 0px 0px 5px;");
+                mainBorderPane.setCenter(investmentPane);
+            } else {
+                btnInvestmentPane.setStyle(null);
+            }
+        });
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        ObservableList<Toggle> toggles = toggleGroup.getToggles();
+        toggles.add(btnPlatformPane);
+        toggles.add(btnInvestmentPane);
+        btnPlatformPane.setSelected(true);
+    }
+
     private void initializePlatformTab() {
         platformTab = PlatformTab.createPlatformTab();
-        tabPane.getTabs().add(platformTab.getTab());
+        platformPane = platformTab.getBorderPane();
     }
 
     private void initializeInvestmentTab() {
         investmentTab = InvestmentTab.createInvestmentTab();
-        tabPane.getTabs().add(investmentTab.getTab());
+        investmentPane = investmentTab.getBorderPane();
+    }
+
+    private void setImages(boolean isLightMode) {
+        if (isLightMode) {
+            modeImageView.setImage(new Image("gui/textures/moon_icon_black.png"));
+            platformsImageview.setImage(new Image("gui/textures/platform_icon_black.png"));
+            investmentsImageview.setImage(new Image("gui/textures/investment_icon_black.png"));
+        } else {
+            modeImageView.setImage(new Image("gui/textures/sun_icon_white.png"));
+            platformsImageview.setImage(new Image("gui/textures/platform_icon_white.png"));
+            investmentsImageview.setImage(new Image("gui/textures/investment_icon_white.png"));
+        }
     }
 
     /**
@@ -237,11 +288,7 @@ public class UserInterfaceController implements Initializable {
      */
     private void initializeModeImage() {
         isLightMode = Settings.isLightMode();
-        if (isLightMode) {
-            modeImageView.setImage(new Image("gui/textures/moonIcon.png"));
-        } else {
-            modeImageView.setImage(new Image("gui/textures/sunIcon.png"));
-        }
+        setImages(isLightMode);
     }
 
     /**
@@ -313,7 +360,9 @@ public class UserInterfaceController implements Initializable {
         FileChooser fileChooser = createFileChooser();
         fileChooser.setTitle("Open JSON Graph-File");
         File selectedFile = fileChooser.showOpenDialog(progressBar.getScene().getWindow());
-        loadInvestmentBook(selectedFile);
+        if (selectedFile != null) {
+            loadInvestmentBook(selectedFile);
+        }
     }
 
     /**
@@ -376,12 +425,12 @@ public class UserInterfaceController implements Initializable {
         isLightMode = !isLightMode;
         if (isLightMode) {
             progressBar.getScene().getStylesheets().clear();
-            modeImageView.setImage(new Image("gui/textures/moonIcon.png"));
+            setImages(true);
             Settings.setLightMode(true);
         } else {
             progressBar.getScene().getStylesheets().add(getClass().getResource(
-                    "themes/Darkmode 1.css").toExternalForm());
-            modeImageView.setImage(new Image("gui/textures/sunIcon.png"));
+                    "themes/Darkmode.css").toExternalForm());
+            setImages(false);
             Settings.setLightMode(false);
         }
     }

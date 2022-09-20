@@ -28,6 +28,7 @@ public class AbsolutePlatform extends Platform {
     /**
      * Constructs an {@code AbsolutePlatform} with the specified arguments.
      *
+     * @param id
      * @param name of the platform
      * @param fee  of the platform as absolute value
      */
@@ -93,9 +94,15 @@ public class AbsolutePlatform extends Platform {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbsolutePlatform that)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AbsolutePlatform that)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         return this.fee == that.fee;
     }
 }

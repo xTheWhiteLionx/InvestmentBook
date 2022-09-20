@@ -15,7 +15,7 @@ public class MixedPlatformTest {
      */
     //TODO JavaDoc
     //0,25% of Order Value (min. 8,90 EUR, max. 58,90 EUR)
-    private final MixedPlatform MAX_BLUE = new MixedPlatform("Max Blue", 2.5, 8.90);
+    private final MixedPlatform MAX_BLUE = new MixedPlatform(, "Max Blue", 2.5, 8.90);
 
     /**
      * Tests the methode readGson() and reads a Json file

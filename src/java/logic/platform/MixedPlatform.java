@@ -36,6 +36,7 @@ public class MixedPlatform extends Platform {
     /**
      * Constructs an {@code MixedPlatform} with the specified arguments.
      *
+     * @param id
      * @param name    of the platform
      * @param percent value of the fee of the platform
      * @param min     minimale fee of the platform as absolute value
@@ -109,7 +110,7 @@ public class MixedPlatform extends Platform {
         //TODO reason why the testSellingPriceCalculatorReal fails!
         BigDecimal antiPercent = BigDecimal.ONE.subtract(BigDecimal.valueOf((percent / 100d)));
         BigDecimal sellingPrice =
-        sellingPriceWithoutSellingFee.divide(antiPercent, 2, RoundingMode.HALF_UP);
+                sellingPriceWithoutSellingFee.divide(antiPercent, 2, RoundingMode.HALF_UP);
 
         if (getFee(sellingPrice) < minFee) {
             sellingPrice = BigDecimalUtils.calcPercent(sellingPriceWithoutSellingFee, BigDecimal.valueOf(minFee));

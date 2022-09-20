@@ -205,7 +205,7 @@ public class DialogWindow {
             stage.getScene().getStylesheets().clear();
         } else {
             stage.getScene().getStylesheets().add(JarMain.class.getResource(
-                    "themes/Darkmode 1.css").toExternalForm());
+                    "themes/Darkmode.css").toExternalForm());
         }
     }
 

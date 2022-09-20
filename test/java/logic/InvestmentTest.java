@@ -14,7 +14,7 @@ public class InvestmentTest {
      *
      */
     //TODO JavaDoc
-    private final AbsolutePlatform ONVISTA_BANK = new AbsolutePlatform("Onvista Bank", 7);
+    private final AbsolutePlatform ONVISTA_BANK = new AbsolutePlatform(id, "Onvista Bank", 7);
 
 
     /**
